@@ -7,7 +7,7 @@
 //! One vault = one owner. The vault holds the owner's tokens and tracks a single
 //! thing: **time since the owner's last check-in.** While the owner keeps checking
 //! in they retain full control. If the owner ever goes silent past
-//! `interval + grace`, the pre-configured beneficiaries can `claim` their shares —
+//! `interval + grace`, the pre-configured beneficiaries can `claim` their shares,
 //! and only their shares, because the split is locked in the contract, not decided
 //! by whoever triggers the payout.
 //!
@@ -26,7 +26,7 @@ const BPS_DENOM: u32 = 10_000;
 /// Minimum check-in interval: 1 day (seconds). Prevents lock-out footguns.
 const MIN_INTERVAL: u64 = 86_400;
 
-/// Ledgers per day (~5s close time) — used for storage TTL management.
+/// Ledgers per day (~5s close time), used for storage TTL management.
 const DAY_IN_LEDGERS: u32 = 17_280;
 /// Extend instance storage by ~30 days on each write.
 const BUMP_AMOUNT: u32 = 30 * DAY_IN_LEDGERS;
@@ -213,7 +213,7 @@ impl InheritVault {
     }
 
     /// Distribute the vault's entire balance to the beneficiaries by share.
-    /// **Permissionless** — a keeper bot, an heir, or anyone may call it, but it
+    /// **Permissionless**, a keeper bot, an heir, or anyone may call it, but it
     /// only succeeds after the deadline, and funds only ever go to the
     /// pre-configured beneficiaries. Runs exactly once.
     pub fn claim(env: Env) -> Result<(), Error> {
