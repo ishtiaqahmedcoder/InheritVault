@@ -29,3 +29,7 @@ secrets.json
 # Local testnet demo ids
 .demo_contract_id
 .demo_token_id
+
+# Local preview helpers (machine-specific)
+.claude/
+web/_serve.js

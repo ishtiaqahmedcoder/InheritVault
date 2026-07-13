@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>InheritVault — dashboard demo</title>
+<style>
+  :root{
+    --bg:#0b0c10; --bg2:#111319; --card:#151822; --line:#232838;
+    --tx:#e9ecf3; --tx2:#9aa3b5; --acc:#5b8def; --acc2:#7c5cff;
+    --ok:#37c98b; --warn:#f0a93b; --danger:#ef5b6b; --radius:14px;
+  }
+  @media (prefers-color-scheme: light){
+    :root{ --bg:#f7f8fb; --bg2:#eef1f6; --card:#ffffff; --line:#e5e8ef;
+      --tx:#12151c; --tx2:#5a6274; }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--tx);line-height:1.55;-webkit-font-smoothing:antialiased}
+  a{color:var(--acc);text-decoration:none}
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px}
+  header{border-bottom:1px solid var(--line);background:var(--bg)}
+  nav{display:flex;align-items:center;justify-content:space-between;height:62px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:700}
+  .logo{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--acc),var(--acc2));
+    display:grid;place-items:center;color:#fff;font-weight:800;font-size:13px}
+  .demo-badge{font-size:12px;color:var(--warn);border:1px solid var(--line);border-radius:999px;padding:4px 11px}
+  .live{font-size:13px;color:var(--tx2)}
+
+  main{padding:28px 0 60px}
+  .row{display:grid;grid-template-columns:1.3fr 1fr;gap:18px}
+  @media(max-width:760px){.row{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+  .card h2{font-size:15px;color:var(--tx2);font-weight:600;margin-bottom:16px;text-transform:uppercase;letter-spacing:.06em}
+
+  .status{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:14px;
+    padding:6px 13px;border-radius:999px;border:1px solid var(--line)}
+  .status .d{width:8px;height:8px;border-radius:50%}
+  .s-active{color:var(--ok)} .s-active .d{background:var(--ok)}
+  .s-claimable{color:var(--warn)} .s-claimable .d{background:var(--warn)}
+  .s-claimed{color:var(--tx2)} .s-claimed .d{background:var(--tx2)}
+
+  .bal{font-size:40px;font-weight:800;letter-spacing:-.02em;margin:14px 0 2px}
+  .bal small{font-size:18px;color:var(--tx2);font-weight:600}
+  .muted{color:var(--tx2);font-size:14px}
+
+  .track{height:10px;background:var(--bg2);border-radius:999px;overflow:hidden;margin:18px 0 8px}
+  .fill{height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));width:100%;transition:width .4s}
+  .fill.warn{background:var(--warn)}
+  .count{font-variant-numeric:tabular-nums;font-weight:700;font-size:15px}
+
+  .heirs{display:flex;flex-direction:column;gap:10px}
+  .heir{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;
+    background:var(--bg2);border-radius:10px;font-size:14px}
+  .heir .addr{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;color:var(--tx2)}
+  .heir .amt{font-weight:700}
+
+  .btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+  button{font-family:inherit;font-size:14px;font-weight:600;padding:10px 16px;border-radius:10px;
+    border:1px solid var(--line);background:var(--card);color:var(--tx);cursor:pointer;transition:.15s}
+  button:hover{border-color:var(--acc)}
+  button.primary{background:var(--acc);color:#fff;border-color:var(--acc)}
+  button.warn{background:var(--warn);color:#1a1200;border-color:var(--warn)}
+  button:disabled{opacity:.4;cursor:not-allowed}
+
+  .log{list-style:none;display:flex;flex-direction:column;gap:9px;max-height:280px;overflow:auto}
+  .log li{font-size:13.5px;color:var(--tx2);display:flex;gap:9px;padding-bottom:9px;border-bottom:1px solid var(--line)}
+  .log li b{color:var(--tx);font-weight:600}
+  .log .t{color:var(--acc);flex:0 0 auto}
+  .payout{background:color-mix(in srgb,var(--ok) 12%,transparent);border:1px solid var(--ok);
+    color:var(--tx);border-radius:10px;padding:12px 14px;margin-top:14px;font-size:14px;display:none}
+</style>
+</head>
+<body>
+<header><div class="wrap"><nav>
+  <div class="brand"><div class="logo">IV</div> InheritVault
+    <span class="demo-badge">interactive demo</span></div>
+  <div class="live">Live contract:
+    <a id="live" target="_blank" rel="noopener">on testnet ↗</a></div>
+</nav></div></header>
+
+<main><div class="wrap">
+  <div class="row">
+    <div class="card">
+      <h2>Your vault</h2>
+      <span id="status" class="status s-active"><span class="d"></span> Active</span>
+      <div class="bal"><span id="bal">5.00</span> <small>XLM</small></div>
+      <div class="muted" id="checkinfo">Last check-in just now</div>
+
+      <div class="track"><div class="fill" id="fill"></div></div>
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span class="muted">Time until claimable</span>
+        <span class="count" id="count">00:60</span>
+      </div>
+
+      <div class="btns">
+        <button class="primary" onclick="checkIn()">Check in</button>
+        <button onclick="deposit()">Deposit</button>
+        <button onclick="withdraw()">Withdraw</button>
+        <button class="warn" onclick="goSilent()">Simulate going silent</button>
+        <button id="claimBtn" onclick="claim()" disabled>Claim</button>
+      </div>
+      <div class="payout" id="payout"></div>
+    </div>
+
+    <div class="card">
+      <h2>Beneficiaries</h2>
+      <div class="heirs" id="heirs"></div>
+      <h2 style="margin-top:22px">Activity</h2>
+      <ul class="log" id="log"></ul>
+    </div>
+  </div>
+</div></main>
+
+<script>
+  var LIVE_CONTRACT = 'CAWHXHUN2UG5C7VQNIO5UAIPIINVBQKGHN5YZN62B3ZF4OKTARLO7FPZ';
+  document.getElementById('live').href =
+    'https://stellar.expert/explorer/testnet/contract/' + LIVE_CONTRACT;
+
+  var INTERVAL = 60; // demo interval in seconds
+  var state = {
+    balance: 5.0,
+    lastCheckIn: Date.now(),
+    claimed: false,
+    heirs: [
+      { name: 'Wallet A (spouse)', addr: 'GBZW…O5QC3', bps: 6000 },
+      { name: 'Wallet B (child)',  addr: 'GCLD…6FVRF', bps: 4000 }
+    ]
+  };
+
+  function now(){ return Date.now(); }
+  function deadline(){ return state.lastCheckIn + INTERVAL*1000; }
+  function timeLeft(){ return Math.max(0, Math.round((deadline()-now())/1000)); }
+  function claimable(){ return !state.claimed && now() >= deadline(); }
+
+  function fmt(t){ var m=Math.floor(t/60), s=t%60; return (m<10?'0':'')+m+':'+(s<10?'0':'')+s; }
+
+  function log(msg){
+    var li=document.createElement('li');
+    var d=new Date();
+    var hh=('0'+d.getHours()).slice(-2), mm=('0'+d.getMinutes()).slice(-2), ss=('0'+d.getSeconds()).slice(-2);
+    li.innerHTML='<span class="t">'+hh+':'+mm+':'+ss+'</span> <span>'+msg+'</span>';
+    var ul=document.getElementById('log'); ul.insertBefore(li, ul.firstChild);
+  }
+
+  function renderHeirs(){
+    var el=document.getElementById('heirs'); el.innerHTML='';
+    state.heirs.forEach(function(h){
+      var pct=(h.bps/100).toFixed(0);
+      var amt=(state.balance*h.bps/10000);
+      var d=document.createElement('div'); d.className='heir';
+      d.innerHTML='<div><div>'+h.name+'</div><div class="addr">'+h.addr+'</div></div>'+
+        '<div style="text-align:right"><div class="amt">'+pct+'%</div>'+
+        '<div class="addr">'+amt.toFixed(2)+' XLM</div></div>';
+      el.appendChild(d);
+    });
+  }
+
+  function render(){
+    document.getElementById('bal').textContent = state.balance.toFixed(2);
+    var st=document.getElementById('status');
+    var claimBtn=document.getElementById('claimBtn');
+    var tl=timeLeft();
+    if(state.claimed){
+      st.className='status s-claimed'; st.innerHTML='<span class="d"></span> Claimed';
+      document.getElementById('count').textContent='—';
+      document.getElementById('fill').style.width='0%';
+      claimBtn.disabled=true;
+    } else if(claimable()){
+      st.className='status s-claimable'; st.innerHTML='<span class="d"></span> Claimable';
+      document.getElementById('count').textContent='00:00';
+      var f=document.getElementById('fill'); f.style.width='100%'; f.classList.add('warn');
+      claimBtn.disabled=false;
+    } else {
+      st.className='status s-active'; st.innerHTML='<span class="d"></span> Active';
+      document.getElementById('count').textContent=fmt(tl);
+      var pct=100*(1-tl/INTERVAL);
+      var f2=document.getElementById('fill'); f2.style.width=pct+'%'; f2.classList.remove('warn');
+      claimBtn.disabled=true;
+    }
+    var since=Math.round((now()-state.lastCheckIn)/1000);
+    document.getElementById('checkinfo').textContent =
+      state.claimed ? 'Funds distributed to beneficiaries' :
+      'Last check-in '+since+'s ago  ·  interval '+INTERVAL+'s';
+    renderHeirs();
+  }
+
+  function checkIn(){
+    if(state.claimed) return;
+    state.lastCheckIn=now();
+    document.getElementById('fill').classList.remove('warn');
+    log('<b>check_in()</b> countdown reset. You are active.');
+    render();
+  }
+  function deposit(){
+    if(state.claimed) return;
+    var a=parseFloat(prompt('Deposit how many XLM?','5'));
+    if(!a||a<=0) return;
+    state.balance+=a; log('<b>deposit()</b> +'+a.toFixed(2)+' XLM into the vault.'); render();
+  }
+  function withdraw(){
+    if(state.claimed) return;
+    var a=parseFloat(prompt('Withdraw how many XLM?','2'));
+    if(!a||a<=0) return;
+    if(a>state.balance){ alert('Not enough balance.'); return; }
+    state.balance-=a; state.lastCheckIn=now();
+    log('<b>withdraw()</b> -'+a.toFixed(2)+' XLM (also proves life, timer reset).'); render();
+  }
+  function goSilent(){
+    if(state.claimed) return;
+    state.lastCheckIn = now() - (INTERVAL+1)*1000;
+    log('<b>Owner goes silent.</b> No check-in past the deadline.');
+    render();
+  }
+  function claim(){
+    if(!claimable()) return;
+    var total=state.balance, lines=[];
+    var dist=0;
+    state.heirs.forEach(function(h,i){
+      var amt = i===state.heirs.length-1 ? (total-dist) : Math.floor(total*h.bps/10000*100)/100;
+      dist+=amt; lines.push(h.name+' received '+amt.toFixed(2)+' XLM');
+    });
+    state.balance=0; state.claimed=true;
+    log('<b>claim()</b> permissionless payout executed. Vault emptied.');
+    var p=document.getElementById('payout');
+    p.style.display='block';
+    p.innerHTML='<b>Payout complete.</b><br>'+lines.join('<br>');
+    render();
+  }
+
+  log('Vault created, funded with 5.00 XLM, 2 beneficiaries set.');
+  render();
+  setInterval(render, 1000);
+</script>
+</body>
+</html>

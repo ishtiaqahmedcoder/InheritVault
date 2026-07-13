@@ -39,6 +39,18 @@ runs in CI on every push (see the badge above).
 
 See [KEEPER.md](KEEPER.md) for the full roadmap and grant plan.
 
+## Live on testnet
+
+The contract is deployed and the full lifecycle has been verified on-chain. A vault
+was created, funded, checked in, left to go silent past its deadline, and claimed.
+The heir received the funds automatically in one atomic transaction, and the vault
+was emptied and marked claimed.
+
+- Vault contract (testnet): `CAWHXHUN2UG5C7VQNIO5UAIPIINVBQKGHN5YZN62B3ZF4OKTARLO7FPZ`
+- Full transcript: [docs/testnet-demo.md](docs/testnet-demo.md)
+- Interactive dashboard demo: [web/app.html](web/app.html)
+- Landing page: [web/index.html](web/index.html)
+
 ## Contract API
 
 | Function | Who | Purpose |
