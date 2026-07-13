@@ -55,23 +55,23 @@
   .cta{display:flex;gap:14px;flex-wrap:wrap}
   @media(max-width:900px){.cta{justify-content:center}}
 
-  /* 3D coins */
-  .stage{position:relative;perspective:1200px;height:400px}
-  @media(max-width:900px){.stage{height:350px;margin-top:10px}}
-  .cluster{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .18s ease-out}
-  .anchor{position:absolute;transform-style:preserve-3d}
-  .floaty{position:relative;transform-style:preserve-3d;animation:bob 5s ease-in-out infinite}
-  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
-  .coin3d{position:relative;transform-style:preserve-3d;animation:spin 6s linear infinite}
-  @keyframes spin{from{transform:rotateY(0) rotateX(10deg)}to{transform:rotateY(360deg) rotateX(10deg)}}
-  @keyframes spinrev{from{transform:rotateY(360deg) rotateX(10deg)}to{transform:rotateY(0) rotateX(10deg)}}
-  .disc{position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 0 6px #ffffff22,inset 0 0 22px #00000040}
-  .face-mark{position:absolute;inset:0;display:grid;place-items:center;z-index:2}
-  .glyph{font-weight:900;line-height:1;filter:drop-shadow(0 1px 1px #00000040)}
-  .cglow{position:absolute;inset:-28px;border-radius:50%;filter:blur(24px);z-index:0}
-  .lbl{position:absolute;bottom:-2px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;
-    letter-spacing:.09em;color:var(--tx2);background:var(--card);border:1px solid var(--line);
-    border-radius:999px;padding:3px 10px;white-space:nowrap;z-index:3}
+  /* orbiting metallic 3D coins */
+  .stage{position:relative;height:430px}
+  @media(max-width:900px){.stage{height:360px;margin-top:6px}}
+  .orbit-stage{position:absolute;inset:0;transition:transform .2s ease-out}
+  .center{position:absolute;left:50%;top:50%;width:98px;height:98px;margin:-49px 0 0 -49px;
+    display:grid;place-items:center;z-index:55;filter:drop-shadow(0 8px 22px #6b5cff55)}
+  .center svg{width:74px;height:74px}
+  .center::after{content:"";position:absolute;width:158px;height:158px;border-radius:50%;z-index:-1;
+    background:radial-gradient(circle,#6b5cff2e,transparent 66%);animation:pulseC 3s ease-in-out infinite}
+  @keyframes pulseC{0%,100%{transform:scale(1);opacity:.65}50%{transform:scale(1.18);opacity:1}}
+  .orbiter{position:absolute;left:0;top:0;will-change:transform}
+  .coin3d{position:relative;transform-style:preserve-3d;animation:spin 5.5s linear infinite}
+  @keyframes spin{from{transform:rotateY(0)}to{transform:rotateY(360deg)}}
+  @keyframes spinrev{from{transform:rotateY(360deg)}to{transform:rotateY(0)}}
+  .disc{position:absolute;inset:0;border-radius:50%}
+  .face-mark{position:absolute;inset:0;backface-visibility:hidden}
+  .face-mark svg{width:100%;height:100%;display:block;filter:drop-shadow(0 0 1px #00000030)}
 
   section{padding:80px 0;position:relative;z-index:2}
   .eyebrow{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
@@ -159,34 +159,41 @@
         <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener" class="btn ghost">View the code</a>
       </div>
     </div>
-    <div class="stage"><div class="cluster" id="cluster">
-      <div class="anchor" style="left:calc(50% - 97px);top:100px">
-        <div class="floaty" style="animation-delay:0s">
-          <div class="cglow" style="background:radial-gradient(circle,#5b8def70,transparent 66%)"></div>
-          <div class="coin3d c-xlm" style="width:194px;height:194px;animation-duration:6.5s">
-            <div class="face-mark"><span class="glyph"><svg width="76" height="76" viewBox="0 0 24 24" fill="none"><path d="M12 2.4c3 2.8 4.5 6.4 4.5 9.7l-1.6 3.5H9.1L7.5 12.1C7.5 8.8 9 5.2 12 2.4Z" fill="#fff"/><circle cx="12" cy="9.4" r="1.8" fill="#26509f"/><path d="M9 15.2l-2.5 2 .3-3.7zM15 15.2l2.5 2-.3-3.7z" fill="#fff"/><path d="M10.7 15.6h2.6L12 19.4z" fill="#ffd06b"/></svg></span></div>
-          </div>
-          <div class="lbl">XLM</div>
-        </div>
-      </div>
-      <div class="anchor" style="left:-6px;top:24px">
-        <div class="floaty" style="animation-delay:.7s">
-          <div class="cglow" style="background:radial-gradient(circle,#f7931a70,transparent 66%)"></div>
-          <div class="coin3d c-btc" style="width:120px;height:120px;animation-name:spinrev;animation-duration:5.2s">
-            <div class="face-mark"><span class="glyph" style="font-size:52px;color:#8a4e07">&#8383;</span></div>
-          </div>
-          <div class="lbl">BTC</div>
-        </div>
-      </div>
-      <div class="anchor" style="right:-6px;bottom:30px">
-        <div class="floaty" style="animation-delay:1.4s">
-          <div class="cglow" style="background:radial-gradient(circle,#2775ca70,transparent 66%)"></div>
-          <div class="coin3d c-usdc" style="width:120px;height:120px;animation-duration:7.5s">
-            <div class="face-mark"><span class="glyph" style="font-size:46px;color:#123c70">$</span></div>
-          </div>
-          <div class="lbl">USDC</div>
-        </div>
-      </div>
+    <div class="stage"><div class="orbit-stage" id="orbitStage">
+      <div class="center"><svg viewBox="0 0 48 48"><path d="M24 3l18 7v13c0 11-8 19-18 22C14 42 6 34 6 23V10l18-7z" fill="url(#ivg)"/><path d="M24 17a5 5 0 00-2 9.6V31a2 2 0 004 0v-4.4A5 5 0 0024 17z" fill="#fff"/></svg></div>
+
+      <div class="orbiter"><div class="coin3d c-btc" style="width:130px;height:130px;animation-name:spinrev;animation-duration:5s"><div class="face-mark">
+        <svg viewBox="0 0 200 200"><defs><path id="rB" d="M100 100 m0 -78 a78 78 0 1 1 -0.1 0" fill="none"/></defs>
+          <circle cx="100" cy="100" r="98" fill="none" stroke="#00000040" stroke-width="9" stroke-dasharray="2.6 3.2"/>
+          <circle cx="100" cy="100" r="90" fill="none" stroke="#ffffff40" stroke-width="1.5"/>
+          <text font-size="12.5" font-weight="800" fill="#00000055" letter-spacing="2.3"><textPath href="#rB" startOffset="0">BITCOIN &#9733; DIGITAL &#9733; DECENTRALIZED &#9733; PEER TO PEER &#9733; </textPath></text>
+          <circle cx="100" cy="100" r="62" fill="#ffffff14" stroke="#00000028" stroke-width="1.5"/>
+          <text x="100" y="132" font-size="86" font-weight="900" text-anchor="middle" fill="#ffffff40">&#8383;</text>
+          <text x="100" y="130" font-size="86" font-weight="900" text-anchor="middle" fill="#00000058">&#8383;</text>
+        </svg></div></div></div>
+
+      <div class="orbiter"><div class="coin3d c-xlm" style="width:130px;height:130px;animation-duration:6s"><div class="face-mark">
+        <svg viewBox="0 0 200 200"><defs><path id="rX" d="M100 100 m0 -78 a78 78 0 1 1 -0.1 0" fill="none"/></defs>
+          <circle cx="100" cy="100" r="98" fill="none" stroke="#00000038" stroke-width="9" stroke-dasharray="2.6 3.2"/>
+          <circle cx="100" cy="100" r="90" fill="none" stroke="#ffffff55" stroke-width="1.5"/>
+          <text font-size="12" font-weight="800" fill="#00000050" letter-spacing="2.4"><textPath href="#rX" startOffset="0">STELLAR &#9733; SCALABLE &#9733; QUICK &#9733; MICROPAYMENTS &#9733; </textPath></text>
+          <circle cx="100" cy="100" r="62" fill="#ffffff20" stroke="#00000024" stroke-width="1.5"/>
+          <g transform="translate(100 100)"><g transform="translate(-30 -30) scale(2.5)" fill="none">
+            <path d="M6 6.5c4 3.7 6 8.5 6 12.9l-2.1 4.6H8.1L6 19.4C6 15 8 10.2 12 6.5Z" fill="#ffffff40" transform="translate(-0.6 -0.6)"/>
+            <path d="M6 6.5c4 3.7 6 8.5 6 12.9l-2.1 4.6H8.1L6 19.4C6 15 8 10.2 12 6.5Z" fill="#00000052"/>
+            <circle cx="9" cy="12.4" r="2.3" fill="#ffffff45"/>
+            <path d="M4.4 20.2l-3 2.5.4-4.6zM13.6 20.2l3 2.5-.4-4.6z" fill="#00000052"/></g></g>
+        </svg></div></div></div>
+
+      <div class="orbiter"><div class="coin3d c-usdt" style="width:130px;height:130px;animation-duration:5.5s"><div class="face-mark">
+        <svg viewBox="0 0 200 200"><defs><path id="rU" d="M100 100 m0 -78 a78 78 0 1 1 -0.1 0" fill="none"/></defs>
+          <circle cx="100" cy="100" r="98" fill="none" stroke="#00000038" stroke-width="9" stroke-dasharray="2.6 3.2"/>
+          <circle cx="100" cy="100" r="90" fill="none" stroke="#ffffff45" stroke-width="1.5"/>
+          <text font-size="12.5" font-weight="800" fill="#00000052" letter-spacing="2.6"><textPath href="#rU" startOffset="0">TETHER &#9733; USDT &#9733; DIGITAL MONEY &#9733; STABLE &#9733; </textPath></text>
+          <circle cx="100" cy="100" r="62" fill="#ffffff1c" stroke="#00000026" stroke-width="1.5"/>
+          <g transform="translate(100 106)"><g fill="#00000055"><rect x="-30" y="-42" width="60" height="14" rx="3"/><rect x="-8" y="-40" width="16" height="58" rx="4"/><ellipse cx="0" cy="-16" rx="28" ry="11" fill="none" stroke="#00000055" stroke-width="9"/></g>
+            <g fill="#ffffff35" transform="translate(-0.6 -0.6)"><rect x="-30" y="-42" width="60" height="4" rx="2"/></g></g>
+        </svg></div></div></div>
     </div></div>
   </section>
 </div>
@@ -284,29 +291,46 @@
 </div></footer>
 
 <script>
-  // build each 3D coin from stacked discs (BTC, XLM, USDC)
-  [['c-xlm',194,'#e6edff','#5b8def','#26509f'],
-   ['c-btc',120,'#ffe4ad','#f7931a','#a75f08'],
-   ['c-usdc',120,'#d5e6ff','#2775ca','#173f70']].forEach(function(c){
+  // build each coin body from stacked metallic discs (gold, silver, teal)
+  [['c-btc','#ffe9b0','#efa62a','#9c6410'],
+   ['c-xlm','#f4f6fa','#c2c8d2','#7b828f'],
+   ['c-usdt','#8fe6c9','#26a17b','#0f6b50']].forEach(function(c){
     var el=document.querySelector('.'+c[0]); if(!el)return;
-    var size=c[1], N=15, t=size*0.085;
+    var N=14, t=130*0.09;
     for(var i=-N;i<=N;i++){
       var d=document.createElement('div'); d.className='disc';
       var sh=1-Math.abs(i)/(N*1.5);
-      d.style.background='radial-gradient(circle at 34% 30%,'+c[2]+','+c[3]+' 46%,'+c[4]+' 100%)';
+      d.style.background='radial-gradient(circle at 36% 30%,'+c[1]+','+c[2]+' 50%,'+c[3]+' 100%)';
       d.style.transform='translateZ('+(i/N*t)+'px)';
-      if(Math.abs(i)<N) d.style.filter='brightness('+(0.72+0.28*sh)+')';
+      if(Math.abs(i)<N) d.style.filter='brightness('+(0.7+0.3*sh)+')';
       el.insertBefore(d, el.firstChild);
     }
-    var fm=el.querySelector('.face-mark'); fm.style.transform='translateZ('+(t+1)+'px)';
+    var fm=el.querySelector('.face-mark'); fm.style.transform='translateZ('+(t+0.5)+'px)';
   });
 
-  // 3D parallax tilt of the coin cluster on mouse move
+  // orbit the coins around the central vault
   (function(){
-    var cl=document.getElementById('cluster'); if(!cl)return;
+    var st=document.getElementById('orbitStage'); if(!st)return;
+    var obs=[].slice.call(st.querySelectorAll('.orbiter'));
+    var cx,cy,Rx,Ry;
+    function layout(){cx=st.clientWidth/2;cy=st.clientHeight/2;Rx=Math.min(cx-74,195);Ry=Math.min(cy-58,118);}
+    layout(); addEventListener('resize',layout);
+    function frame(ts){
+      var a=ts/4200;
+      obs.forEach(function(o,i){
+        var ang=a+i*(2*Math.PI/obs.length);
+        var x=cx+Rx*Math.cos(ang), y=cy+Ry*Math.sin(ang);
+        var depth=(Math.sin(ang)+1)/2;
+        var s=0.58+0.56*depth;
+        o.style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px) translate(-50%,-50%) scale('+s.toFixed(3)+')';
+        o.style.zIndex=(10+Math.round(depth*90));
+        o.style.opacity=(0.5+0.5*depth).toFixed(2);
+      });
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
     addEventListener('mousemove',function(e){
-      var rx=((e.clientY/innerHeight)-.5)*-10, ry=((e.clientX/innerWidth)-.5)*14;
-      cl.style.transform='rotateX('+rx.toFixed(2)+'deg) rotateY('+ry.toFixed(2)+'deg)';
+      st.style.transform='translate('+((e.clientX/innerWidth-.5)*16).toFixed(1)+'px,'+((e.clientY/innerHeight-.5)*11).toFixed(1)+'px)';
     });
   })();
 
