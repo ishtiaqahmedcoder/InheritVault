@@ -27,8 +27,8 @@
 
   .logo{display:flex;align-items:center;gap:11px;font-weight:800;font-size:19px}
   .logo svg{width:36px;height:36px;filter:drop-shadow(0 0 12px #a855f780)}
-  .logo .mark{width:60px;height:38px;flex:0 0 auto;background:url(logo-bg-remove.png) no-repeat;
-    background-size:168% auto;background-position:50% 23%;filter:drop-shadow(0 0 10px #a855f780)}
+  .logo .fulllogo{height:70px;width:auto;display:block;filter:drop-shadow(0 0 16px #a855f766)}
+  @media(max-width:600px){.logo .fulllogo{height:56px}}
   .logo b{font-weight:800}
   .logo b span{background:linear-gradient(120deg,var(--cyan),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent}
 
@@ -41,7 +41,7 @@
 
   header{position:sticky;top:0;z-index:40;backdrop-filter:blur(16px);
     background:#05060ecc;border-bottom:1px solid var(--line)}
-  nav{display:flex;align-items:center;justify-content:space-between;height:72px}
+  nav{display:flex;align-items:center;justify-content:space-between;height:104px}
   .navlinks{display:flex;gap:30px;align-items:center;font-size:15px;color:var(--tx2)}
   .navlinks a:hover{color:var(--tx)}
   @media(max-width:860px){.navlinks{display:none}}
@@ -148,10 +148,7 @@
 </defs></svg>
 
 <header><div class="wrap"><nav>
-  <a class="logo" href="#top">
-    <span class="mark"></span>
-    <b><span>Inherit</span>Vault</b>
-  </a>
+  <a class="logo" href="#top"><img class="fulllogo" src="logo-bg-remove.png" alt="InheritVault" /></a>
   <div class="navlinks">
     <a href="#how">How it works</a><a href="#why">Why Stellar</a>
     <a href="#proof">Live on testnet</a><a href="#waitlist">Waitlist</a>
@@ -264,7 +261,7 @@
 <footer><div class="wrap">
   <div class="foot-top">
     <div class="foot-brand">
-      <a class="logo" href="#top"><span class="mark"></span><b><span>Inherit</span>Vault</b></a>
+      <a class="logo" href="#top"><img class="fulllogo" src="logo-bg-remove.png" alt="InheritVault" style="height:58px" /></a>
       <p>Non-custodial on-chain inheritance for Stellar. Your crypto reaches your family, even if you never come back.</p>
     </div>
     <div class="foot-links">
@@ -293,25 +290,28 @@
     var ROCKET='<svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2.4c3 2.8 4.5 6.4 4.5 9.7l-1.6 3.5H9.1L7.5 12.1C7.5 8.8 9 5.2 12 2.4Z"/><circle cx="12" cy="9.4" r="1.9" fill="#18233a"/><path d="M9 15.2l-2.5 2 .3-3.7zM15 15.2l2.5 2-.3-3.7z"/><path d="M10.7 15.6h2.6L12 19.6z" fill="#ffd06b"/></svg>';
     var TETHER='<svg viewBox="0 0 32 32" fill="#fff"><path d="M17.9 17.4v-3.08h6.05V10.3H8.06v4.02h6.04v3.08c-4.92.22-8.62 1.2-8.62 2.36 0 1.17 3.7 2.14 8.62 2.36v6.84h3.8v-6.84c4.9-.22 8.6-1.2 8.6-2.36 0-1.17-3.7-2.14-8.6-2.36zm0 4v-.01c-.12.01-.74.05-2.12.05-1.1 0-1.87-.03-2.14-.05v.01c-4.2-.19-7.34-.92-7.34-1.8 0-.88 3.14-1.61 7.34-1.8v2.86c.28.02 1.06.07 2.16.07 1.32 0 1.98-.06 2.1-.07v-2.86c4.2.19 7.32.92 7.32 1.8 0 .88-3.13 1.61-7.32 1.8z"/></svg>';
     var COINS=[
-      {c1:'#ffca7a',c2:'#f7931a',c3:'#c97b12',halo:'#f7931a',logo:BTC,ring:1,size:54,speed:1},
-      {c1:'#aab8f5',c2:'#627eea',c3:'#3a4fa0',halo:'#627eea',glyph:'Ξ',ring:2,size:58,speed:-0.72},
-      {c1:'#3d4d67',c2:'#18233a',c3:'#0c1424',halo:'#5b8def',logo:ROCKET,ring:0,size:50,speed:0.86},
-      {c1:'#57d7ad',c2:'#26a17b',c3:'#1a7d5e',halo:'#26a17b',logo:TETHER,ring:3,size:56,speed:0.5},
-      {c1:'#8bc0f5',c2:'#2775ca',c3:'#184e86',halo:'#2775ca',glyph:'$',ring:2,size:48,speed:1.05},
-      {c1:'#c9a6ff',c2:'#9945ff',c3:'#5a1f9e',halo:'#9945ff',glyph:'◎',ring:1,size:46,speed:-0.6},
-      {c1:'#ffe07a',c2:'#f0b90b',c3:'#b98c06',halo:'#f0b90b',glyph:'◆',ring:3,size:44,speed:-0.9},
-      {c1:'#7a838f',c2:'#23292f',c3:'#0e1216',halo:'#98a4b3',glyph:'✕',ring:0,size:42,speed:0.66},
-      {c1:'#5f8bff',c2:'#0033ad',c3:'#001f6b',halo:'#3468ff',glyph:'₳',ring:2,size:46,speed:-0.5},
-      {c1:'#e8d08a',c2:'#c2a633',c3:'#8f7a20',halo:'#c2a633',glyph:'Ð',ring:3,size:48,speed:0.78}
+      {c1:'#ffca7a',c2:'#f7931a',c3:'#c97b12',halo:'#f7931a',logo:BTC,ring:1},
+      {c1:'#aab8f5',c2:'#627eea',c3:'#3a4fa0',halo:'#627eea',glyph:'Ξ',ring:2},
+      {c1:'#3d4d67',c2:'#18233a',c3:'#0c1424',halo:'#5b8def',logo:ROCKET,ring:0},
+      {c1:'#57d7ad',c2:'#26a17b',c3:'#1a7d5e',halo:'#26a17b',logo:TETHER,ring:3},
+      {c1:'#8bc0f5',c2:'#2775ca',c3:'#184e86',halo:'#2775ca',glyph:'$',ring:2},
+      {c1:'#c9a6ff',c2:'#9945ff',c3:'#5a1f9e',halo:'#9945ff',glyph:'◎',ring:1},
+      {c1:'#ffe07a',c2:'#f0b90b',c3:'#b98c06',halo:'#f0b90b',glyph:'◆',ring:3},
+      {c1:'#7a838f',c2:'#23292f',c3:'#0e1216',halo:'#98a4b3',glyph:'✕',ring:0},
+      {c1:'#5f8bff',c2:'#0033ad',c3:'#001f6b',halo:'#3468ff',glyph:'₳',ring:2},
+      {c1:'#e8d08a',c2:'#c2a633',c3:'#8f7a20',halo:'#c2a633',glyph:'Ð',ring:3}
     ];
+    var SIZE=50, speeds=[0.9,0.7,0.55,0.44], counts={}, idx={};
+    COINS.forEach(function(c){counts[c.ring]=(counts[c.ring]||0)+1;});
     var planets=COINS.map(function(co){
+      var n=counts[co.ring]; idx[co.ring]=idx[co.ring]||0; var pi=idx[co.ring]++;
       var el=document.createElement('div'); el.className='planet';
-      el.style.width=el.style.height=co.size+'px';
-      var logo=co.logo||('<span style="font-weight:800;font-size:'+Math.round(co.size*0.5)+'px;color:#fff;line-height:1">'+co.glyph+'</span>');
+      el.style.width=el.style.height=SIZE+'px';
+      var logo=co.logo||('<span style="font-weight:800;font-size:'+Math.round(SIZE*0.5)+'px;color:#fff;line-height:1">'+co.glyph+'</span>');
       el.innerHTML='<div class="halo" style="background:radial-gradient(circle,'+co.halo+'99,transparent 66%)"></div>'+
         '<div class="disc" style="background:radial-gradient(circle at 36% 30%,'+co.c1+','+co.c2+' 60%,'+co.c3+')">'+logo+'</div>';
       sys.appendChild(el);
-      return {el:el,ring:co.ring,size:co.size,speed:co.speed,phase:Math.random()*6.28};
+      return {el:el,ring:co.ring,size:SIZE,speed:speeds[co.ring],phase:(pi/n)*Math.PI*2};
     });
     function frame(ts){
       var W=sys.clientWidth, H=sys.clientHeight, cx=W/2, cy=H/2, sx=W/900, sy=H/520;
@@ -334,12 +334,14 @@
     var c=document.getElementById('stars'), x=c.getContext('2d'), W,H,st=[],sh=[];
     function size(){W=c.width=innerWidth;H=c.height=innerHeight;}
     size(); addEventListener('resize',size);
-    for(var i=0;i<220;i++)st.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.4+.3,t:Math.random()*6.28,tw:Math.random()*.04+.01});
+    for(var i=0;i<230;i++){var d=Math.random();st.push({x:Math.random()*W,y:Math.random()*H,r:d*1.4+.35,t:Math.random()*6.28,tw:Math.random()*.04+.01,vx:(Math.random()-.5)*.10,vy:.05+d*.20});}
     var tick=0;
     function shoot(){var sy=Math.random()*H*.5;sh.push({x:-40,y:sy,vx:6+Math.random()*4,vy:1.6+Math.random()*1.4,life:0});}
     function loop(){
       x.clearRect(0,0,W,H); tick++;
-      for(var i=0;i<st.length;i++){var s=st[i];s.t+=s.tw;var a=.35+.4*(Math.sin(s.t)*.5+.5);
+      for(var i=0;i<st.length;i++){var s=st[i];s.t+=s.tw;s.x+=s.vx;s.y+=s.vy;
+        if(s.y>H+2){s.y=-2;s.x=Math.random()*W;} if(s.x<-2)s.x=W+2; else if(s.x>W+2)s.x=-2;
+        var a=.35+.45*(Math.sin(s.t)*.5+.5);
         x.globalAlpha=a;x.fillStyle='#dfe7ff';x.beginPath();x.arc(s.x,s.y,s.r,0,7);x.fill();}
       if(tick%150===0)shoot();
       for(var j=sh.length-1;j>=0;j--){var m=sh[j];m.x+=m.vx;m.y+=m.vy;m.life++;
