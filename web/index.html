@@ -3,196 +3,240 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>InheritVault — on-chain inheritance for Stellar</title>
+<title>InheritVault: on-chain inheritance for Stellar</title>
 <meta name="description" content="A non-custodial dead-man's switch for crypto on Stellar. Check in periodically; if you go silent, your funds pass automatically to the people you chose." />
 <style>
   :root{
-    --bg:#0b0c10; --bg2:#111319; --card:#151822; --line:#232838;
-    --tx:#e9ecf3; --tx2:#9aa3b5; --acc:#5b8def; --acc2:#7c5cff;
-    --ok:#37c98b; --warn:#f0a93b; --radius:14px; --max:1080px;
+    --bg:#08090d; --bg2:#0e1017; --card:#12151e; --line:#20243250;
+    --tx:#eaedf5; --tx2:#98a1b5; --acc:#5b8def; --acc2:#8b5cff;
+    --gold:#f6c453; --gold2:#c98a2b; --ok:#37c98b; --radius:16px; --max:1120px;
   }
   @media (prefers-color-scheme: light){
-    :root{ --bg:#f7f8fb; --bg2:#eef1f6; --card:#ffffff; --line:#e5e8ef;
-      --tx:#12151c; --tx2:#5a6274; }
+    :root{ --bg:#f6f8fc; --bg2:#eef2f9; --card:#ffffff; --line:#e4e9f2;
+      --tx:#0f1420; --tx2:#586074; }
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{scroll-behavior:smooth}
   body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:var(--bg);color:var(--tx);line-height:1.6;-webkit-font-smoothing:antialiased}
+    background:var(--bg);color:var(--tx);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
   a{color:inherit;text-decoration:none}
-  .wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
-  .btn{display:inline-block;padding:12px 22px;border-radius:10px;font-weight:600;font-size:15px;
-    border:1px solid var(--line);transition:.15s;cursor:pointer}
-  .btn.primary{background:var(--acc);color:#fff;border-color:var(--acc)}
-  .btn.primary:hover{filter:brightness(1.08)}
-  .btn.ghost:hover{border-color:var(--acc)}
+  canvas#bg{position:fixed;inset:0;z-index:0;opacity:.55;pointer-events:none}
+  .wrap{max-width:var(--max);margin:0 auto;padding:0 24px;position:relative;z-index:2}
 
-  header{position:sticky;top:0;z-index:20;backdrop-filter:blur(10px);
-    background:color-mix(in srgb,var(--bg) 82%,transparent);border-bottom:1px solid var(--line)}
-  nav{display:flex;align-items:center;justify-content:space-between;height:64px}
-  .brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px}
-  .logo{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--acc),var(--acc2));
-    display:grid;place-items:center;color:#fff;font-weight:800}
-  .navlinks{display:flex;gap:26px;align-items:center;font-size:15px;color:var(--tx2)}
-  .navlinks a:hover{color:var(--tx)}
-  @media(max-width:720px){.navlinks{display:none}}
+  .logo{display:flex;align-items:center;gap:11px;font-weight:700;font-size:19px;letter-spacing:-.01em}
+  .logo svg{width:34px;height:34px;filter:drop-shadow(0 3px 8px #5b8def40)}
+  .logo b{font-weight:800}
+  .logo b span{background:linear-gradient(120deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
 
-  .hero{padding:96px 0 72px;text-align:center}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border-radius:12px;font-weight:600;
+    font-size:15px;border:1px solid var(--line);transition:.2s;cursor:pointer;background:transparent;color:inherit}
+  .btn.primary{background:linear-gradient(120deg,var(--acc),var(--acc2));color:#fff;border:none;
+    box-shadow:0 8px 24px #6b5cff35}
+  .btn.primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px #6b5cff55}
+  .btn.ghost:hover{border-color:var(--acc);transform:translateY(-2px)}
+
+  header{position:sticky;top:0;z-index:30;backdrop-filter:blur(14px);
+    background:color-mix(in srgb,var(--bg) 75%,transparent);border-bottom:1px solid var(--line)}
+  nav{display:flex;align-items:center;justify-content:space-between;height:70px}
+  .navlinks{display:flex;gap:28px;align-items:center;font-size:15px;color:var(--tx2)}
+  .navlinks a{transition:.15s}.navlinks a:hover{color:var(--tx)}
+  @media(max-width:820px){.navlinks{display:none}}
+
+  .hero{display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:30px;padding:70px 0 60px}
+  @media(max-width:900px){.hero{grid-template-columns:1fr;text-align:center;padding:44px 0}}
   .pill{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2);
-    border:1px solid var(--line);border-radius:999px;padding:6px 14px;margin-bottom:26px}
-  .dot{width:7px;height:7px;border-radius:50%;background:var(--ok)}
-  .hero h1{font-size:clamp(34px,6vw,60px);line-height:1.08;letter-spacing:-.02em;font-weight:800;
-    max-width:16ch;margin:0 auto 22px}
-  .hero h1 span{background:linear-gradient(120deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .hero p{font-size:clamp(17px,2.4vw,21px);color:var(--tx2);max-width:60ch;margin:0 auto 36px}
-  .cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+    border:1px solid var(--line);border-radius:999px;padding:7px 15px;margin-bottom:24px;background:var(--card)}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 #37c98b90;animation:pulse 2s infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 #37c98b80}70%{box-shadow:0 0 0 9px #37c98b00}100%{box-shadow:0 0 0 0 #37c98b00}}
+  h1{font-size:clamp(36px,5.6vw,62px);line-height:1.05;letter-spacing:-.025em;font-weight:800;margin-bottom:22px}
+  h1 span{background:linear-gradient(120deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p{font-size:clamp(17px,2.2vw,20px);color:var(--tx2);max-width:52ch;margin-bottom:32px}
+  @media(max-width:900px){.hero p{margin-left:auto;margin-right:auto}}
+  .cta{display:flex;gap:14px;flex-wrap:wrap}
+  @media(max-width:900px){.cta{justify-content:center}}
 
-  section{padding:72px 0;border-top:1px solid var(--line)}
-  .eyebrow{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);text-align:center}
-  h2{font-size:clamp(26px,4vw,38px);letter-spacing:-.02em;text-align:center;margin:12px 0 12px;font-weight:800}
-  .lead{text-align:center;color:var(--tx2);max-width:60ch;margin:0 auto 48px;font-size:18px}
+  /* 3D coin */
+  .stage{display:flex;justify-content:center;align-items:center;perspective:1000px;height:340px}
+  .coin{position:relative;width:210px;height:210px;transform-style:preserve-3d;
+    animation:spin 6.5s linear infinite}
+  @keyframes spin{from{transform:rotateY(0) rotateX(12deg)}to{transform:rotateY(360deg) rotateX(12deg)}}
+  .disc{position:absolute;inset:0;border-radius:50%;background:
+    radial-gradient(circle at 34% 30%,#ffe9a8,var(--gold) 45%,var(--gold2) 100%);
+    box-shadow:inset 0 0 0 8px #ffffff22, inset 0 0 26px #00000030}
+  .coin .face-mark{position:absolute;inset:0;display:grid;place-items:center;transform:translateZ(15px)}
+  .coin .face-mark svg{width:96px;height:96px;filter:drop-shadow(0 2px 3px #00000030)}
+  .glow{position:absolute;width:300px;height:300px;border-radius:50%;
+    background:radial-gradient(circle,#6b5cff40,transparent 62%);filter:blur(14px);z-index:0}
 
-  .grid{display:grid;gap:20px}
-  .cols-3{grid-template-columns:repeat(3,1fr)}
-  .cols-2{grid-template-columns:repeat(2,1fr)}
+  section{padding:80px 0;position:relative;z-index:2}
+  .eyebrow{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    background:linear-gradient(120deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent;text-align:center}
+  h2{font-size:clamp(28px,4vw,40px);letter-spacing:-.02em;text-align:center;margin:12px 0;font-weight:800}
+  .lead{text-align:center;color:var(--tx2);max-width:58ch;margin:0 auto 52px;font-size:18px}
+
+  .reveal{opacity:0;transform:translateY(28px);transition:.7s cubic-bezier(.2,.7,.2,1)}
+  .reveal.show{opacity:1;transform:none}
+
+  .grid{display:grid;gap:20px}.cols-3{grid-template-columns:repeat(3,1fr)}.cols-2{grid-template-columns:repeat(2,1fr)}
   @media(max-width:820px){.cols-3,.cols-2{grid-template-columns:1fr}}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px}
-  .card h3{font-size:19px;margin-bottom:8px;font-weight:700}
-  .card p{color:var(--tx2);font-size:15.5px}
-  .ico{width:44px;height:44px;border-radius:11px;background:var(--bg2);display:grid;place-items:center;
-    font-size:22px;margin-bottom:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px;transition:.25s}
+  .card:hover{transform:translateY(-4px);border-color:var(--acc)}
+  .card h3{font-size:19px;margin-bottom:8px;font-weight:700}.card p{color:var(--tx2);font-size:15.5px}
+  .ico{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#5b8def25,#8b5cff25);
+    display:grid;place-items:center;font-size:24px;margin-bottom:18px}
 
-  .steps{counter-reset:s;display:grid;gap:16px;max-width:760px;margin:0 auto}
-  .step{display:flex;gap:18px;align-items:flex-start;background:var(--card);border:1px solid var(--line);
-    border-radius:var(--radius);padding:22px 24px}
-  .step .n{counter-increment:s;flex:0 0 auto;width:34px;height:34px;border-radius:9px;
-    background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-weight:800;display:grid;place-items:center}
-  .step .n::before{content:counter(s)}
-  .step h3{font-size:18px;margin-bottom:3px}
-  .step p{color:var(--tx2);font-size:15px}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:760px;margin:0 auto}
+  @media(max-width:700px){.stats{grid-template-columns:1fr}}
+  .stat{text-align:center;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px}
+  .stat .num{font-size:40px;font-weight:800;background:linear-gradient(120deg,var(--acc),var(--acc2));
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat .lab{color:var(--tx2);font-size:14px;margin-top:4px}
 
-  .proof{background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);
-    padding:30px;text-align:center;max-width:760px;margin:0 auto}
-  .proof code{display:inline-block;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;
-    background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin:8px 0;
-    word-break:break-all}
+  .steps{display:grid;gap:16px;max-width:780px;margin:0 auto}
+  .step{display:flex;gap:20px;align-items:flex-start;background:var(--card);border:1px solid var(--line);
+    border-radius:var(--radius);padding:24px 26px;transition:.25s}
+  .step:hover{transform:translateX(6px);border-color:var(--acc)}
+  .step .n{flex:0 0 auto;width:40px;height:40px;border-radius:12px;
+    background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-weight:800;display:grid;place-items:center;font-size:17px}
+  .step h3{font-size:18px;margin-bottom:3px}.step p{color:var(--tx2);font-size:15px}
+
+  .proof{background:linear-gradient(135deg,var(--card),var(--bg2));border:1px solid var(--line);
+    border-radius:20px;padding:38px;text-align:center;max-width:780px;margin:0 auto}
+  .proof code{display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:13px;
+    background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:9px 13px;margin:10px 0;word-break:break-all}
   .badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px}
-  .tag{font-size:12.5px;color:var(--tx2);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+  .tag{font-size:12.5px;color:var(--tx2);border:1px solid var(--line);border-radius:999px;padding:6px 13px;background:var(--card)}
 
   form{max-width:520px;margin:0 auto;display:flex;gap:10px;flex-wrap:wrap}
-  input[type=email]{flex:1;min-width:220px;padding:13px 16px;border-radius:10px;border:1px solid var(--line);
-    background:var(--card);color:var(--tx);font-size:15px}
-  input[type=email]:focus{outline:none;border-color:var(--acc)}
+  input[type=email]{flex:1;min-width:220px;padding:15px 18px;border-radius:12px;border:1px solid var(--line);
+    background:var(--card);color:var(--tx);font-size:15px;transition:.15s}
+  input[type=email]:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 4px #5b8def25}
   .note{text-align:center;color:var(--tx2);font-size:13.5px;margin-top:14px}
-  .ok-msg{text-align:center;color:var(--ok);font-weight:600;margin-top:14px;display:none}
+  .ok-msg{text-align:center;color:var(--ok);font-weight:600;margin-top:16px;display:none;font-size:17px}
 
-  footer{border-top:1px solid var(--line);padding:36px 0;color:var(--tx2);font-size:14px}
-  .footrow{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-  .disc{max-width:70ch;margin-top:16px;font-size:12.5px;color:var(--tx2);opacity:.8}
+  footer{border-top:1px solid var(--line);padding:40px 0;color:var(--tx2);font-size:14px;position:relative;z-index:2}
+  .footrow{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+  .disc{max-width:72ch;margin-top:18px;font-size:12.5px;opacity:.75}
 </style>
 </head>
 <body>
+<canvas id="bg"></canvas>
 
-<header>
-  <div class="wrap"><nav>
-    <div class="brand"><div class="logo">IV</div> InheritVault</div>
-    <div class="navlinks">
-      <a href="#how">How it works</a>
-      <a href="#why">Why Stellar</a>
-      <a href="#proof">Live on testnet</a>
-      <a href="#waitlist">Waitlist</a>
-      <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener">GitHub</a>
+<svg width="0" height="0" style="position:absolute"><defs>
+  <linearGradient id="ivg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#5b8def"/><stop offset="1" stop-color="#8b5cff"/>
+  </linearGradient>
+</defs></svg>
+
+<header><div class="wrap"><nav>
+  <a class="logo" href="#top">
+    <svg viewBox="0 0 48 48" fill="none"><path d="M24 3l18 7v13c0 11-8 19-18 22C14 42 6 34 6 23V10l18-7z" fill="url(#ivg)"/><path d="M24 17a5 5 0 00-2 9.6V31a2 2 0 004 0v-4.4A5 5 0 0024 17z" fill="#fff"/></svg>
+    <b>Inherit<span>Vault</span></b>
+  </a>
+  <div class="navlinks">
+    <a href="#how">How it works</a><a href="#why">Why Stellar</a>
+    <a href="#proof">Live on testnet</a><a href="#waitlist">Waitlist</a>
+    <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener">GitHub</a>
+  </div>
+  <a href="#waitlist" class="btn primary">Join waitlist</a>
+</nav></div></header>
+
+<div class="wrap" id="top">
+  <section class="hero" style="padding-top:64px">
+    <div>
+      <div class="pill"><span class="dot"></span> Live on Stellar testnet</div>
+      <h1>Your crypto should reach your family, <span>even if you never come back.</span></h1>
+      <p>InheritVault is a non-custodial dead-man's switch. Lock your funds, check in
+         from time to time, and if you ever go silent your assets pass automatically
+         to the people you chose. No lawyer, no company holding your keys.</p>
+      <div class="cta">
+        <a href="#waitlist" class="btn primary">Join the waitlist →</a>
+        <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener" class="btn ghost">View the code</a>
+      </div>
     </div>
-    <a href="#waitlist" class="btn primary">Join waitlist</a>
-  </nav></div>
-</header>
-
-<div class="wrap">
-  <section class="hero" style="border:none">
-    <div class="pill"><span class="dot"></span> Live on Stellar testnet</div>
-    <h1>Your crypto should reach your family, <span>even if you never come back.</span></h1>
-    <p>InheritVault is a non-custodial dead-man's switch. Lock your funds, check in
-       from time to time, and if you ever go silent your assets pass automatically
-       to the people you chose. No lawyer, no company holding your keys.</p>
-    <div class="cta">
-      <a href="#waitlist" class="btn primary">Join the waitlist</a>
-      <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener" class="btn ghost">View the code</a>
+    <div class="stage">
+      <div class="glow"></div>
+      <div class="coin" id="coin">
+        <div class="face-mark">
+          <svg viewBox="0 0 48 48" fill="none"><path d="M24 6l15 6v11c0 9-6.7 16-15 18.4C15.7 39 9 32 9 23V12l15-6z" fill="#00000018" stroke="#a6741e" stroke-width="1.4"/><path d="M24 18a4.6 4.6 0 00-1.8 8.8V30a1.8 1.8 0 003.6 0v-3.2A4.6 4.6 0 0024 18z" fill="#8a5f18"/></svg>
+        </div>
+      </div>
     </div>
   </section>
 </div>
 
-<section id="problem">
-  <div class="wrap">
-    <div class="eyebrow">The problem</div>
-    <h2>Self-custody has one fatal edge case</h2>
-    <p class="lead">A wallet is controlled entirely by whoever holds the key. No bank,
-      no reset, no court order can recover it. When the only person who knows the key
-      is gone, the funds are frozen on-chain forever.</p>
-    <div class="grid cols-3">
-      <div class="card"><div class="ico">🔑</div><h3>Keys die with you</h3><p>Over 20% of all Bitcoin is estimated lost forever, much of it because the holder is gone.</p></div>
-      <div class="card"><div class="ico">👪</div><h3>Families locked out</h3><p>Around 60% of holders never shared access with anyone. The money is visible but unreachable.</p></div>
-      <div class="card"><div class="ico">⚖️</div><h3>A will cannot help</h3><p>A legal will cannot move an on-chain wallet, and probate can take many months.</p></div>
+<section id="stats">
+  <div class="wrap reveal">
+    <div class="stats">
+      <div class="stat"><div class="num">20%+</div><div class="lab">of all Bitcoin is estimated lost forever</div></div>
+      <div class="stat"><div class="num">60%</div><div class="lab">of holders never shared access with family</div></div>
+      <div class="stat"><div class="num">~5s</div><div class="lab">to settle a payout on Stellar</div></div>
     </div>
   </div>
 </section>
 
-<section id="how">
-  <div class="wrap">
-    <div class="eyebrow">How it works</div>
+<section id="problem"><div class="wrap">
+  <div class="reveal"><div class="eyebrow">The problem</div>
+    <h2>Self-custody has one fatal edge case</h2>
+    <p class="lead">A wallet is controlled entirely by whoever holds the key. When the
+      only person who knows it is gone, the funds are frozen on-chain forever, visible
+      but unreachable.</p></div>
+  <div class="grid cols-3 reveal">
+    <div class="card"><div class="ico">🔑</div><h3>Keys die with you</h3><p>There is no reset and no recovery. If the key is lost, so is the money.</p></div>
+    <div class="card"><div class="ico">👪</div><h3>Families locked out</h3><p>Heirs can see the balance on-chain but have no way to ever reach it.</p></div>
+    <div class="card"><div class="ico">⚖️</div><h3>A will cannot help</h3><p>A legal will cannot move an on-chain wallet, and probate takes months.</p></div>
+  </div>
+</div></section>
+
+<section id="how"><div class="wrap">
+  <div class="reveal"><div class="eyebrow">How it works</div>
     <h2>Silence is the only trigger</h2>
     <p class="lead">The contract never decides that anyone died. It only measures the
-      time since your last check-in. That simplicity is what makes it auditable.</p>
-    <div class="steps">
-      <div class="step"><div class="n"></div><div><h3>Create your vault</h3><p>Deploy your own vault, lock USDC or XLM, and name your heirs with exact shares.</p></div></div>
-      <div class="step"><div class="n"></div><div><h3>Check in to stay in control</h3><p>A single check-in resets the countdown. Deposit, withdraw, or change heirs any time.</p></div></div>
-      <div class="step"><div class="n"></div><div><h3>Reminders keep you safe</h3><p>Before every deadline you get reminders by email and phone, so a payout never triggers by accident.</p></div></div>
-      <div class="step"><div class="n"></div><div><h3>Heirs are paid automatically</h3><p>If you go silent past the deadline, your funds pass directly to your heirs in one atomic transaction.</p></div></div>
-    </div>
+      time since your last check-in. That simplicity is what makes it auditable.</p></div>
+  <div class="steps reveal">
+    <div class="step"><div class="n">1</div><div><h3>Create your vault</h3><p>Deploy your own vault, lock USDC or XLM, and name your heirs with exact shares.</p></div></div>
+    <div class="step"><div class="n">2</div><div><h3>Check in to stay in control</h3><p>A single check-in resets the countdown. Deposit, withdraw, or change heirs any time.</p></div></div>
+    <div class="step"><div class="n">3</div><div><h3>Reminders keep you safe</h3><p>Before every deadline you get reminders, so a payout never triggers by accident.</p></div></div>
+    <div class="step"><div class="n">4</div><div><h3>Heirs are paid automatically</h3><p>If you go silent past the deadline, your funds pass directly to your heirs in one atomic transaction.</p></div></div>
   </div>
-</section>
+</div></section>
 
-<section id="why">
-  <div class="wrap">
-    <div class="eyebrow">Why Stellar</div>
+<section id="why"><div class="wrap">
+  <div class="reveal"><div class="eyebrow">Why Stellar</div>
     <h2>A new primitive, built for people</h2>
     <p class="lead">No inheritance vault like this exists on Stellar today. It is a
-      public good that protects ordinary families, not traders.</p>
-    <div class="grid cols-2">
-      <div class="card"><h3>Non-custodial by design</h3><p>Keys never leave your wallet. No backend can move your funds, and the payout is permissionless, so it works even if we disappear.</p></div>
-      <div class="card"><h3>Fast and near-free</h3><p>Stellar settles in about five seconds with fees well under a cent, which is exactly what a long-lived, low-touch vault needs.</p></div>
-      <div class="card"><h3>Exact, locked shares</h3><p>Beneficiary splits are fixed in the contract, so whoever triggers the payout cannot change who gets what.</p></div>
-      <div class="card"><h3>Open source and audited</h3><p>The contract is small, readable, and covered by tests, with an independent security audit planned before mainnet.</p></div>
-    </div>
+      public good that protects ordinary families, not traders.</p></div>
+  <div class="grid cols-2 reveal">
+    <div class="card"><h3>Non-custodial by design</h3><p>Keys never leave your wallet. The payout is permissionless, so it works even if we disappear.</p></div>
+    <div class="card"><h3>Fast and near-free</h3><p>Stellar settles in about five seconds with fees under a cent, exactly what a long-lived vault needs.</p></div>
+    <div class="card"><h3>Exact, locked shares</h3><p>Splits are fixed in the contract, so whoever triggers the payout cannot change who gets what.</p></div>
+    <div class="card"><h3>Open source and audited</h3><p>The contract is small, tested, and gets an independent security audit before mainnet.</p></div>
   </div>
-</section>
+</div></section>
 
-<section id="proof">
-  <div class="wrap">
-    <div class="eyebrow">Proof</div>
+<section id="proof"><div class="wrap">
+  <div class="reveal"><div class="eyebrow">Proof</div>
     <h2>Already live on Stellar testnet</h2>
-    <p class="lead">The core vault contract is deployed and working today. The full
-      create, fund, check-in, and claim lifecycle runs on-chain.</p>
-    <div class="proof">
-      <div style="color:var(--tx2);font-size:14px">Vault contract (testnet)</div>
-      <code id="cid">CAWHXHUN2UG5C7VQNIO5UAIPIINVBQKGHN5YZN62B3ZF4OKTARLO7FPZ</code>
-      <div class="badges">
-        <span class="tag">14 unit tests passing</span>
-        <span class="tag">Rust / Soroban</span>
-        <span class="tag">MIT licensed</span>
-      </div>
-      <div style="margin-top:18px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-        <a class="btn ghost" id="explorer" target="_blank" rel="noopener">View on Stellar Expert</a>
-        <a class="btn ghost" href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener">Read the contract</a>
-      </div>
+    <p class="lead">The core vault is deployed and working today. The full create, fund,
+      check-in, and claim lifecycle runs on-chain.</p></div>
+  <div class="proof reveal">
+    <div style="color:var(--tx2);font-size:14px">Vault contract (testnet)</div>
+    <code id="cid">CAWHXHUN2UG5C7VQNIO5UAIPIINVBQKGHN5YZN62B3ZF4OKTARLO7FPZ</code>
+    <div class="badges">
+      <span class="tag">14 unit tests passing</span><span class="tag">Rust / Soroban</span><span class="tag">MIT licensed</span>
+    </div>
+    <div style="margin-top:20px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a class="btn ghost" id="explorer" target="_blank" rel="noopener">View on Stellar Expert</a>
+      <a class="btn ghost" href="app.html">Open the dashboard demo</a>
     </div>
   </div>
-</section>
+</div></section>
 
-<section id="waitlist">
-  <div class="wrap">
-    <div class="eyebrow">Early access</div>
+<section id="waitlist"><div class="wrap">
+  <div class="reveal"><div class="eyebrow">Early access</div>
     <h2>Be first to protect your family's crypto</h2>
-    <p class="lead">Join the waitlist. We will let you know the moment vaults open on mainnet.</p>
+    <p class="lead">Join the waitlist. We will let you know the moment vaults open on mainnet.</p></div>
+  <div class="reveal">
     <form id="wl" onsubmit="return joinWaitlist(event)">
       <input type="email" id="email" placeholder="you@email.com" required />
       <button class="btn primary" type="submit">Join waitlist</button>
@@ -200,41 +244,59 @@
     <div class="ok-msg" id="ok">You are on the list. Thank you for supporting a safer way to inherit.</div>
     <p class="note">No spam. We only email you about launch and safety updates.</p>
   </div>
-</section>
+</div></section>
 
-<footer>
-  <div class="wrap">
-    <div class="footrow">
-      <div class="brand"><div class="logo">IV</div> InheritVault</div>
-      <div style="display:flex;gap:22px">
-        <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener">GitHub</a>
-        <a href="#how">How it works</a>
-        <a href="#waitlist">Waitlist</a>
-      </div>
-    </div>
-    <p class="disc">InheritVault is open-source, non-custodial software. It is not a
-      legal will, a bank, or an estate-planning or financial service. On-chain
-      inheritance complements, and does not replace, proper legal documents.
-      Nothing here is legal or financial advice.</p>
+<footer><div class="wrap">
+  <div class="footrow">
+    <a class="logo" href="#top"><svg viewBox="0 0 48 48" fill="none"><path d="M24 3l18 7v13c0 11-8 19-18 22C14 42 6 34 6 23V10l18-7z" fill="url(#ivg)"/><path d="M24 17a5 5 0 00-2 9.6V31a2 2 0 004 0v-4.4A5 5 0 0024 17z" fill="#fff"/></svg><b>Inherit<span>Vault</span></b></a>
+    <div style="display:flex;gap:24px"><a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener">GitHub</a><a href="#how">How it works</a><a href="#waitlist">Waitlist</a></div>
   </div>
-</footer>
+  <p class="disc">InheritVault is open-source, non-custodial software. It is not a legal
+    will, a bank, or an estate-planning or financial service. On-chain inheritance
+    complements, and does not replace, proper legal documents. Nothing here is legal
+    or financial advice.</p>
+</div></footer>
 
 <script>
-  var CID = document.getElementById('cid').textContent.trim();
-  document.getElementById('explorer').href =
-    'https://stellar.expert/explorer/testnet/contract/' + CID;
+  // build the 3D coin body from stacked discs
+  (function(){
+    var coin=document.getElementById('coin'), N=18, t=15;
+    for(var i=-N;i<=N;i++){
+      var d=document.createElement('div'); d.className='disc';
+      var shade = 1 - Math.abs(i)/(N*1.6);
+      d.style.transform='translateZ('+(i/N*t)+'px)';
+      if(Math.abs(i)<N) d.style.filter='brightness('+(0.7+0.3*shade)+')';
+      coin.insertBefore(d, coin.firstChild);
+    }
+  })();
+
+  // live contract link
+  var CID=document.getElementById('cid').textContent.trim();
+  document.getElementById('explorer').href='https://stellar.expert/explorer/testnet/contract/'+CID;
+
+  // scroll reveal
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target);}});},{threshold:.15});
+  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+
+  // floating particle background
+  (function(){
+    var c=document.getElementById('bg'), x=c.getContext('2d'), W,H,ps=[];
+    function size(){W=c.width=innerWidth;H=c.height=innerHeight;}
+    size(); addEventListener('resize',size);
+    for(var i=0;i<46;i++)ps.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*2.4+.6,s:Math.random()*.4+.15,o:Math.random()*.5+.2});
+    function tick(){
+      x.clearRect(0,0,W,H);
+      for(var i=0;i<ps.length;i++){var p=ps[i];p.y-=p.s;if(p.y<-6){p.y=H+6;p.x=Math.random()*W;}
+        var g=x.createLinearGradient(p.x,p.y-p.r,p.x,p.y+p.r);g.addColorStop(0,'#8b5cff');g.addColorStop(1,'#5b8def');
+        x.globalAlpha=p.o;x.fillStyle=g;x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fill();}
+      x.globalAlpha=1;requestAnimationFrame(tick);
+    } tick();
+  })();
 
   function joinWaitlist(e){
     e.preventDefault();
-    var email = document.getElementById('email').value.trim();
-    if(!email) return false;
-    // Store locally for the demo. Replace this with a POST to your backend
-    // (Laravel) or a Formspree endpoint to collect real signups.
-    try{
-      var list = JSON.parse(localStorage.getItem('iv_waitlist')||'[]');
-      list.push({email:email, at:new Date().toISOString()});
-      localStorage.setItem('iv_waitlist', JSON.stringify(list));
-    }catch(_){}
+    var email=document.getElementById('email').value.trim(); if(!email)return false;
+    try{var l=JSON.parse(localStorage.getItem('iv_waitlist')||'[]');l.push({email:email,at:new Date().toISOString()});localStorage.setItem('iv_waitlist',JSON.stringify(l));}catch(_){}
     document.getElementById('wl').style.display='none';
     document.getElementById('ok').style.display='block';
     return false;
