@@ -27,8 +27,8 @@
 
   .logo{display:flex;align-items:center;gap:11px;font-weight:800;font-size:19px}
   .logo svg{width:36px;height:36px;filter:drop-shadow(0 0 12px #a855f780)}
-  .logo .fulllogo{height:98px;width:auto;display:block;filter:drop-shadow(0 0 20px #a855f77a)}
-  @media(max-width:600px){.logo .fulllogo{height:70px}}
+  .logo .fulllogo{height:120px;width:auto;display:block;filter:drop-shadow(0 0 22px #a855f77a)}
+  @media(max-width:600px){.logo .fulllogo{height:88px}}
   .logo b{font-weight:800}
   .logo b span{background:linear-gradient(120deg,var(--cyan),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent}
 
@@ -39,13 +39,21 @@
     box-shadow:0 0 30px #a855f755}
   .btn.primary:hover{box-shadow:0 0 44px #22d3ee88}
 
-  header{position:sticky;top:0;z-index:40;background:transparent}
-  nav{display:flex;align-items:center;justify-content:space-between;height:120px}
+  header{position:sticky;top:0;z-index:60;background:transparent}
+  nav{display:flex;align-items:center;justify-content:space-between;height:146px}
   .navpill{display:flex;gap:4px;align-items:center;background:#0f1330cc;border:1px solid #ffffff20;
     border-radius:999px;padding:7px 9px;backdrop-filter:blur(14px);box-shadow:0 12px 34px -14px #00000099}
   .navpill a{font-size:14.5px;color:var(--tx2);padding:9px 17px;border-radius:999px;transition:.16s;white-space:nowrap}
   .navpill a:hover{color:var(--tx);background:#ffffff14}
-  @media(max-width:900px){.navpill{display:none}}
+  .menu-btn{display:none;width:50px;height:50px;flex:0 0 auto;border-radius:14px;background:#0f1330cc;
+    border:1px solid #ffffff20;color:var(--tx);align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(14px);transition:.15s}
+  .menu-btn.active{background:#1a2148;border-color:#ffffff45}
+  .mobile-menu{display:none;position:fixed;left:0;right:0;top:0;z-index:55;flex-direction:column;gap:9px;
+    padding:120px 22px 28px;background:#070a14f2;backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+  .mobile-menu.open{display:flex}
+  .mobile-menu a{padding:15px 18px;border-radius:14px;color:var(--tx);font-size:17px;background:#ffffff0a;border:1px solid var(--line);text-align:center}
+  .mobile-menu a:hover{background:#ffffff16}
+  @media(max-width:900px){.navpill{display:none}.header-cta{display:none}.menu-btn{display:flex}}
 
   /* hero */
   .hero{text-align:center;padding:60px 0 20px}
@@ -155,8 +163,18 @@
     <a href="#proof">Live on testnet</a><a href="#waitlist">Waitlist</a>
     <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener">GitHub</a>
   </div>
-  <a href="#waitlist" class="btn primary">Join waitlist</a>
+  <a href="#waitlist" class="btn primary header-cta">Join waitlist</a>
+  <button class="menu-btn" id="menuBtn" aria-label="Menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
 </nav></div></header>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#how">How it works</a>
+  <a href="#why">Why Stellar</a>
+  <a href="#proof">Live on testnet</a>
+  <a href="#waitlist">Waitlist</a>
+  <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener">GitHub</a>
+  <a href="#waitlist" class="btn primary" style="justify-content:center;margin-top:6px">Join waitlist</a>
+</div>
 
 <div class="wrap" id="top">
   <section class="hero">
@@ -262,7 +280,7 @@
 <footer><div class="wrap">
   <div class="foot-top">
     <div class="foot-brand">
-      <a class="logo" href="#top"><img class="fulllogo" src="logo-bg-remove.png" alt="InheritVault" style="height:58px" /></a>
+      <a class="logo" href="#top"><img class="fulllogo" src="logo-bg-remove.png" alt="InheritVault" style="height:104px" /></a>
       <p>Non-custodial on-chain inheritance for Stellar. Your crypto reaches your family, even if you never come back.</p>
     </div>
     <div class="foot-links">
@@ -282,6 +300,13 @@
 
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target);}});},{threshold:.12});
   document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+
+  (function(){
+    var mb=document.getElementById('menuBtn'), mm=document.getElementById('mobileMenu'); if(!mb)return;
+    mb.addEventListener('click',function(){mm.classList.toggle('open');mb.classList.toggle('active');});
+    mm.addEventListener('click',function(e){if(e.target===mm){mm.classList.remove('open');mb.classList.remove('active');}});
+    mm.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){mm.classList.remove('open');mb.classList.remove('active');});});
+  })();
 
   // orbital planets: a solar system of coins around the vault core
   (function(){
