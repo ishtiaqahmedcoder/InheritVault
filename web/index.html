@@ -25,12 +25,14 @@
   .neb.c{width:520px;height:520px;top:1400px;left:-120px;background:radial-gradient(circle,#4338ca70,transparent 70%)}
   .wrap{max-width:var(--max);margin:0 auto;padding:0 24px;position:relative;z-index:3}
 
-  .logo{display:flex;align-items:center;gap:11px;font-weight:800;font-size:19px}
-  .logo svg{width:36px;height:36px;filter:drop-shadow(0 0 12px #a855f780)}
-  .logo .fulllogo{height:158px;width:auto;display:block;filter:drop-shadow(0 0 24px #a855f77a)}
-  @media(max-width:600px){.logo .fulllogo{height:112px}}
-  .logo b{font-weight:800}
-  .logo b span{background:linear-gradient(120deg,var(--cyan),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .logo{display:flex;align-items:center;gap:14px;text-decoration:none}
+  .logo .licon{width:92px;height:82px;flex:0 0 auto;background:url(logo-bg-remove.png) no-repeat;
+    background-size:200% auto;background-position:50% 9%;filter:drop-shadow(0 0 18px #a855f77a)}
+  .logo .ltext{display:flex;flex-direction:column;line-height:1.02}
+  .logo .lname{font-size:34px;font-weight:800;letter-spacing:-.02em;color:#eef1fb}
+  .logo .lname span{background:linear-gradient(120deg,#8b5cff,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .logo .ltag{font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;margin-top:7px;color:#828db0}
+  @media(max-width:600px){.logo{gap:11px}.logo .licon{width:62px;height:62px}.logo .lname{font-size:23px}.logo .ltag{font-size:9.5px;letter-spacing:.15em;margin-top:5px}}
 
   .btn{display:inline-flex;align-items:center;gap:9px;padding:14px 26px;border-radius:999px;font-weight:600;
     font-size:15px;border:1px solid var(--line);transition:.2s;cursor:pointer;background:#ffffff08;color:var(--tx)}
@@ -40,7 +42,7 @@
   .btn.primary:hover{box-shadow:0 0 44px #22d3ee88}
 
   header{position:sticky;top:0;z-index:60;background:transparent}
-  nav{display:flex;align-items:center;justify-content:space-between;height:184px}
+  nav{display:flex;align-items:center;justify-content:space-between;height:116px}
   .navpill{display:flex;gap:4px;align-items:center;background:#0f1330cc;border:1px solid #ffffff20;
     border-radius:999px;padding:7px 9px;backdrop-filter:blur(14px);box-shadow:0 12px 34px -14px #00000099}
   .navpill a{font-size:14.5px;color:var(--tx2);padding:9px 17px;border-radius:999px;transition:.16s;white-space:nowrap}
@@ -157,7 +159,10 @@
 </defs></svg>
 
 <header><div class="wrap"><nav>
-  <a class="logo" href="#top"><img class="fulllogo" src="logo-bg-remove.png" alt="InheritVault" /></a>
+  <a class="logo" href="#top">
+    <span class="licon"></span>
+    <span class="ltext"><span class="lname"><span>Inherit</span>Vault</span><span class="ltag">Lock today. Protect forever.</span></span>
+  </a>
   <div class="navpill">
     <a href="#how">How it works</a><a href="#why">Why Stellar</a>
     <a href="#proof">Live on testnet</a><a href="#waitlist">Waitlist</a>
@@ -280,7 +285,10 @@
 <footer><div class="wrap">
   <div class="foot-top">
     <div class="foot-brand">
-      <a class="logo" href="#top"><img class="fulllogo" src="logo-bg-remove.png" alt="InheritVault" style="height:150px" /></a>
+      <a class="logo" href="#top">
+        <span class="licon"></span>
+        <span class="ltext"><span class="lname"><span>Inherit</span>Vault</span><span class="ltag">Lock today. Protect forever.</span></span>
+      </a>
       <p>Non-custodial on-chain inheritance for Stellar. Your crypto reaches your family, even if you never come back.</p>
     </div>
     <div class="foot-links">
