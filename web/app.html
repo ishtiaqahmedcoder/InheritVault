@@ -4,257 +4,353 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>InheritVault dashboard</title>
+<link rel="icon" type="image/png" href="only-logo-t.png" />
 <style>
   :root{
-    --bg:#08090d; --bg2:#0e1017; --card:#12151e; --line:#20243255;
-    --tx:#eaedf5; --tx2:#98a1b5; --acc:#5b8def; --acc2:#8b5cff;
-    --ok:#37c98b; --warn:#f0a93b; --danger:#ef5b6b; --gold:#f6c453; --radius:16px;
-  }
-  @media (prefers-color-scheme: light){
-    :root{ --bg:#f6f8fc; --bg2:#eef2f9; --card:#ffffff; --line:#e4e9f2;
-      --tx:#0f1420; --tx2:#586074; }
+    --bg:#05060e; --card:#0d1120; --line:#ffffff16; --tx:#eaeefb; --tx2:#8b93ad;
+    --cyan:#22d3ee; --purple:#a855f7; --ok:#34d399; --warn:#f0a93b; --gold:#f6c453; --radius:16px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     background:var(--bg);color:var(--tx);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-  a{color:var(--acc);text-decoration:none}
-  canvas#bg{position:fixed;inset:0;z-index:0;opacity:.4;pointer-events:none}
-  .wrap{max-width:1000px;margin:0 auto;padding:0 20px;position:relative;z-index:2}
+  a{color:var(--cyan);text-decoration:none}
+  canvas#stars{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5}
+  .neb{position:fixed;border-radius:50%;filter:blur(120px);z-index:0;pointer-events:none;opacity:.5}
+  .neb.a{width:520px;height:520px;top:-160px;left:-140px;background:radial-gradient(circle,#6d28d980,transparent 70%)}
+  .neb.b{width:480px;height:480px;top:340px;right:-160px;background:radial-gradient(circle,#0891b280,transparent 70%)}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 20px;position:relative;z-index:3}
 
-  .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px}
-  .logo svg{width:30px;height:30px;filter:drop-shadow(0 3px 8px #5b8def40)}
-  .logo b span{background:linear-gradient(120deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .logo{display:flex;align-items:center;gap:12px}
+  .licon{width:64px;height:56px;flex:0 0 auto;background:url(only-logo-t.png) no-repeat center;background-size:150% auto;filter:drop-shadow(0 0 12px #a855f766)}
+  .ltext{display:flex;flex-direction:column;line-height:1.02}
+  .lname{font-size:22px;font-weight:800;letter-spacing:-.02em;color:#eef1fb}
+  .lname span{background:linear-gradient(120deg,#8b5cff,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .ltag{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;margin-top:4px;color:#828db0}
 
-  header{border-bottom:1px solid var(--line);background:color-mix(in srgb,var(--bg) 80%,transparent);
-    backdrop-filter:blur(12px);position:sticky;top:0;z-index:30}
-  nav{display:flex;align-items:center;justify-content:space-between;height:66px}
-  .demo-badge{font-size:12px;color:var(--warn);border:1px solid var(--line);border-radius:999px;padding:4px 11px;margin-left:6px}
-  .live{font-size:13px;color:var(--tx2)}
+  header{border-bottom:1px solid var(--line);background:#05060ee6;backdrop-filter:blur(14px);position:sticky;top:0;z-index:30}
+  nav{display:flex;align-items:center;justify-content:space-between;height:82px}
+  .demo-badge{font-size:12px;color:var(--warn);border:1px solid var(--line);border-radius:999px;padding:5px 12px}
+  .wallet{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--tx2)}
+  .wchip{font-family:ui-monospace,Menlo,monospace;font-size:12.5px;background:#ffffff0d;border:1px solid var(--line);border-radius:999px;padding:7px 13px;color:var(--tx)}
 
-  main{padding:30px 0 70px}
+  main{padding:34px 0 70px}
+  .card{background:linear-gradient(180deg,#ffffff0a,#ffffff03);border:1px solid var(--line);border-radius:20px;padding:26px}
+  .card h2{font-size:12.5px;color:var(--tx2);font-weight:700;margin-bottom:16px;text-transform:uppercase;letter-spacing:.08em}
+  .center-card{max-width:520px;margin:40px auto;text-align:center}
+  .center-card .big{width:78px;height:70px;margin:0 auto 18px;background:url(only-logo-t.png) no-repeat center;background-size:150% auto;filter:drop-shadow(0 0 16px #a855f77a)}
+  h1{font-size:26px;font-weight:800;letter-spacing:-.02em;margin-bottom:8px}
+  .muted{color:var(--tx2);font-size:14px}
+  .step-pill{display:inline-flex;gap:8px;align-items:center;font-size:12px;color:var(--tx2);border:1px solid var(--line);border-radius:999px;padding:6px 13px;margin-bottom:22px}
+  .step-pill b{color:var(--cyan)}
+
+  label{display:block;font-size:13px;color:var(--tx2);margin:0 0 7px;font-weight:600}
+  input,select{width:100%;padding:13px 15px;border-radius:12px;border:1px solid var(--line);background:#ffffff08;color:var(--tx);font-size:15px;transition:.15s}
+  input:focus,select:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 4px #22d3ee22}
+  input::placeholder{color:#5b6480}
+  .field{margin-bottom:18px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:560px){.row2{grid-template-columns:1fr}}
+  .hint{font-size:12.5px;color:var(--tx2);margin-top:6px}
+
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 22px;border-radius:12px;font-weight:600;font-size:15px;border:1px solid var(--line);background:#ffffff08;color:var(--tx);cursor:pointer;transition:.18s}
+  .btn:hover:not(:disabled){border-color:#ffffff40;transform:translateY(-2px)}
+  .btn.primary{background:linear-gradient(120deg,var(--purple),var(--cyan));color:#040a14;border:none;font-weight:700;box-shadow:0 0 26px #a855f755}
+  .btn.primary:hover:not(:disabled){box-shadow:0 0 40px #22d3ee88}
+  .btn.gold{background:linear-gradient(120deg,var(--gold),#e0a020);color:#3a2600;border:none;font-weight:800}
+  .btn.warn{background:transparent;border-color:var(--warn);color:var(--warn)}
+  .btn.full{width:100%}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+
+  .ben-row{display:grid;grid-template-columns:1fr 92px 42px;gap:10px;margin-bottom:10px;align-items:center}
+  .ben-row input{margin:0}
+  .ben-del{width:42px;height:46px;border-radius:11px;border:1px solid var(--line);background:#ffffff08;color:var(--warn);cursor:pointer;font-size:18px}
+  .ben-del:hover{border-color:var(--warn)}
+  .sharebar{display:flex;justify-content:space-between;font-size:13px;margin-top:6px}
+  .sharebar .bad{color:var(--warn)} .sharebar .good{color:var(--ok)}
+
   .row{display:grid;grid-template-columns:1.25fr 1fr;gap:20px}
   @media(max-width:780px){.row{grid-template-columns:1fr}}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px}
-  .card h2{font-size:13px;color:var(--tx2);font-weight:700;margin-bottom:18px;text-transform:uppercase;letter-spacing:.08em}
-
-  .vaulttop{display:flex;gap:26px;align-items:center}
-  @media(max-width:480px){.vaulttop{flex-direction:column;text-align:center}}
+  .vaulttop{display:flex;gap:24px;align-items:center}
+  @media(max-width:460px){.vaulttop{flex-direction:column;text-align:center}}
   .ring{width:150px;height:150px;flex:0 0 auto;position:relative}
   .ring svg{transform:rotate(-90deg)}
-  .ring .rbg{fill:none;stroke:var(--bg2);stroke-width:11}
+  .ring .rbg{fill:none;stroke:#ffffff12;stroke-width:11}
   .ring .rfg{fill:none;stroke:url(#rg);stroke-width:11;stroke-linecap:round;transition:stroke-dashoffset .5s,stroke .3s}
   .ring .ctr{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-  .ring .ctr .t{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}
-  .ring .ctr .l{font-size:11px;color:var(--tx2);text-transform:uppercase;letter-spacing:.06em}
-
+  .ring .ctr .t{font-size:22px;font-weight:800}.ring .ctr .l{font-size:10.5px;color:var(--tx2);text-transform:uppercase;letter-spacing:.06em}
   .status{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:14px;padding:6px 13px;border-radius:999px;border:1px solid var(--line)}
   .status .d{width:8px;height:8px;border-radius:50%}
   .s-active{color:var(--ok)}.s-active .d{background:var(--ok);box-shadow:0 0 8px var(--ok)}
-  .s-claimable{color:var(--warn)}.s-claimable .d{background:var(--warn);box-shadow:0 0 8px var(--warn)}
+  .s-grace{color:var(--warn)}.s-grace .d{background:var(--warn);box-shadow:0 0 8px var(--warn)}
+  .s-claimable{color:var(--warn)}.s-claimable .d{background:var(--warn)}
   .s-claimed{color:var(--tx2)}.s-claimed .d{background:var(--tx2)}
-  .bal{font-size:38px;font-weight:800;letter-spacing:-.02em;margin:10px 0 2px}
-  .bal small{font-size:17px;color:var(--tx2);font-weight:600}
-  .muted{color:var(--tx2);font-size:13.5px}
+  .bal{font-size:34px;font-weight:800;margin:8px 0 2px}.bal small{font-size:16px;color:var(--tx2);font-weight:600}
 
-  .btns{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:22px}
-  button{font-family:inherit;font-size:14px;font-weight:600;padding:12px 14px;border-radius:11px;
-    border:1px solid var(--line);background:var(--card);color:var(--tx);cursor:pointer;transition:.18s;
-    display:flex;align-items:center;justify-content:center;gap:7px}
-  button:hover:not(:disabled){border-color:var(--acc);transform:translateY(-2px)}
-  button.primary{background:linear-gradient(120deg,var(--acc),var(--acc2));color:#fff;border:none}
-  button.warn{background:transparent;border-color:var(--warn);color:var(--warn)}
-  button.claim{grid-column:1/-1;background:linear-gradient(120deg,var(--gold),#e0a020);color:#3a2600;border:none;font-weight:800}
-  button:disabled{opacity:.4;cursor:not-allowed}
-
-  .heirs{display:flex;flex-direction:column;gap:11px}
-  .heir{display:flex;align-items:center;gap:12px;padding:12px 13px;background:var(--bg2);border-radius:12px}
-  .av{width:38px;height:38px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;font-weight:700;color:#fff;font-size:14px}
-  .heir .nm{font-size:14px;font-weight:600}.heir .addr{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--tx2)}
-  .heir .r{margin-left:auto;text-align:right}.heir .amt{font-weight:700;font-size:14px}.heir .pct{font-size:12px;color:var(--tx2)}
-
-  .log{list-style:none;display:flex;flex-direction:column;gap:10px;max-height:250px;overflow:auto}
-  .log li{font-size:13.5px;color:var(--tx2);display:flex;gap:9px;padding-bottom:10px;border-bottom:1px solid var(--line);animation:fade .4s}
-  @keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1}}
-  .log li b{color:var(--tx);font-weight:600}.log .t{color:var(--acc);flex:0 0 auto;font-variant-numeric:tabular-nums}
-  .payout{background:color-mix(in srgb,var(--gold) 14%,transparent);border:1px solid var(--gold);
-    border-radius:12px;padding:14px 16px;margin-top:16px;font-size:14px;display:none;animation:pop .4s}
-  @keyframes pop{from{opacity:0;transform:scale(.94)}to{opacity:1;transform:scale(1)}}
-
-  .overlay{position:fixed;inset:0;z-index:60;background:#000000aa;backdrop-filter:blur(4px);
-    display:none;align-items:center;justify-content:center;padding:20px}
-  .overlay.on{display:flex;animation:fade .2s}
-  .modal{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;width:100%;max-width:380px;animation:pop .25s}
-  .modal h3{font-size:19px;margin-bottom:6px}.modal p{color:var(--tx2);font-size:14px;margin-bottom:18px}
-  .modal input{width:100%;padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:var(--bg2);
-    color:var(--tx);font-size:20px;font-weight:700;text-align:center}
-  .modal input:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 4px #5b8def25}
-  .modal .mbtns{display:flex;gap:10px;margin-top:18px}.modal .mbtns button{flex:1}
+  .btns{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:20px}
+  .btns .full-col{grid-column:1/-1}
+  .heirs{display:flex;flex-direction:column;gap:10px}
+  .heir{display:flex;align-items:center;gap:11px;padding:11px 12px;background:#ffffff06;border:1px solid var(--line);border-radius:12px}
+  .av{width:34px;height:34px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;font-weight:700;color:#fff;font-size:12px}
+  .heir .addr{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--tx2)}
+  .heir .r{margin-left:auto;text-align:right}.heir .amt{font-weight:700;font-size:13.5px}.heir .pct{font-size:11.5px;color:var(--tx2)}
+  .sched{display:flex;flex-direction:column;gap:9px;font-size:13.5px}
+  .sched .r{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line)}
+  .sched .r span:first-child{color:var(--tx2)}
+  .note-warn{background:color-mix(in srgb,var(--warn) 12%,transparent);border:1px solid var(--warn);border-radius:12px;padding:11px 13px;font-size:13px;margin-top:14px}
+  .log{list-style:none;display:flex;flex-direction:column;gap:9px;max-height:200px;overflow:auto;margin-top:6px}
+  .log li{font-size:13px;color:var(--tx2);display:flex;gap:9px;padding-bottom:9px;border-bottom:1px solid var(--line)}
+  .log li b{color:var(--tx)}.log .t{color:var(--cyan);flex:0 0 auto}
+  .payout{background:color-mix(in srgb,var(--gold) 14%,transparent);border:1px solid var(--gold);border-radius:12px;padding:13px 15px;margin-top:14px;font-size:13.5px;display:none}
+  .hidden{display:none!important}
 </style>
 </head>
 <body>
-<canvas id="bg"></canvas>
+<canvas id="stars"></canvas>
+<div class="neb a"></div><div class="neb b"></div>
 <svg width="0" height="0" style="position:absolute"><defs>
-  <linearGradient id="ivg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b8def"/><stop offset="1" stop-color="#8b5cff"/></linearGradient>
-  <linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b8def"/><stop offset="1" stop-color="#8b5cff"/></linearGradient>
+  <linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#a855f7"/></linearGradient>
 </defs></svg>
 
 <header><div class="wrap"><nav>
-  <a class="logo" href="index.html"><svg viewBox="0 0 48 48"><path d="M24 3l18 7v13c0 11-8 19-18 22C14 42 6 34 6 23V10l18-7z" fill="url(#ivg)"/><path d="M24 17a5 5 0 00-2 9.6V31a2 2 0 004 0v-4.4A5 5 0 0024 17z" fill="#fff"/></svg><b>Inherit<span>Vault</span></b></a>
-  <span class="demo-badge">interactive demo</span>
-  <div style="flex:1"></div>
-  <div class="live">Live contract: <a id="live" target="_blank" rel="noopener">on testnet ↗</a></div>
+  <a class="logo" href="index.html">
+    <span class="licon"></span>
+    <span class="ltext"><span class="lname"><span>Inherit</span>Vault</span><span class="ltag">Lock today. Protect forever.</span></span>
+  </a>
+  <div class="wallet">
+    <span class="demo-badge">interactive demo</span>
+    <span class="wchip hidden" id="wchip"></span>
+  </div>
 </nav></div></header>
 
 <main><div class="wrap">
-  <div class="row">
-    <div class="card">
-      <h2>Your vault</h2>
-      <div class="vaulttop">
-        <div class="ring">
-          <svg viewBox="0 0 150 150"><circle class="rbg" cx="75" cy="75" r="65"/><circle class="rfg" id="rfg" cx="75" cy="75" r="65"/></svg>
-          <div class="ctr"><div class="t" id="count">01:00</div><div class="l" id="ringlab">until claim</div></div>
-        </div>
-        <div>
-          <span id="status" class="status s-active"><span class="d"></span> Active</span>
-          <div class="bal"><span id="bal">5.00</span> <small>XLM</small></div>
-          <div class="muted" id="checkinfo">Last check-in just now</div>
-        </div>
-      </div>
-      <div class="btns">
-        <button class="primary" onclick="checkIn()">✓ Check in</button>
-        <button onclick="openModal('deposit')">↓ Deposit</button>
-        <button onclick="openModal('withdraw')">↑ Withdraw</button>
-        <button class="warn" onclick="goSilent()">Simulate silence</button>
-        <button class="claim" id="claimBtn" onclick="claim()" disabled>Claim &amp; distribute to heirs</button>
-      </div>
-      <div class="payout" id="payout"></div>
-    </div>
 
-    <div class="card">
-      <h2>Beneficiaries</h2>
-      <div class="heirs" id="heirs"></div>
-      <h2 style="margin-top:24px">Activity</h2>
-      <ul class="log" id="log"></ul>
+  <!-- STEP 1: connect -->
+  <section id="screen-connect">
+    <div class="card center-card">
+      <div class="big"></div>
+      <h1>Connect your Stellar wallet</h1>
+      <p class="muted">Connect a wallet to create your inheritance vault. Your keys never leave your wallet.</p>
+      <button class="btn primary" style="margin-top:22px" onclick="connectWallet()">Connect wallet</button>
+      <p class="hint" style="margin-top:14px">Demo: this simulates a Freighter connection. On mainnet it opens your real wallet.</p>
     </div>
-  </div>
+  </section>
+
+  <!-- STEP 2: create vault -->
+  <section id="screen-create" class="hidden">
+    <div class="card" style="max-width:640px;margin:0 auto">
+      <div class="step-pill"><b>Step 1 of 1</b> Set up your vault</div>
+      <h1 style="margin-bottom:4px">Create your inheritance vault</h1>
+      <p class="muted" style="margin-bottom:22px">Lock funds, name who inherits them, and set your check-in schedule.</p>
+
+      <div class="field">
+        <label>Deposit amount (XLM)</label>
+        <input type="number" id="depAmt" min="1" step="1" value="1000" placeholder="e.g. 1000" />
+        <div class="hint">This is locked in your own vault contract. You can withdraw any time while active.</div>
+      </div>
+
+      <div class="field">
+        <label>Beneficiaries (who inherits, and their share)</label>
+        <div id="benList"></div>
+        <button class="btn" style="padding:10px 16px;font-size:13.5px" onclick="addBen()">+ Add beneficiary</button>
+        <div class="sharebar"><span class="muted">Shares must total 100%</span><span id="shareTotal">0%</span></div>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label>Check-in interval</label>
+          <select id="interval">
+            <option value="3">Every 3 months</option>
+            <option value="6" selected>Every 6 months</option>
+            <option value="12">Every 12 months</option>
+          </select>
+          <div class="hint">If no activity from your wallet for this long, the vault becomes claimable.</div>
+        </div>
+        <div class="field">
+          <label>Grace period (daily reminders)</label>
+          <input type="number" id="grace" min="1" max="60" value="7" />
+          <div class="hint">You get daily reminders for this many days before the deadline.</div>
+        </div>
+      </div>
+
+      <button class="btn primary full" id="createBtn" onclick="createVault()">Create vault and lock funds</button>
+    </div>
+  </section>
+
+  <!-- STEP 3: dashboard -->
+  <section id="screen-dash" class="hidden">
+    <div class="row">
+      <div class="card">
+        <h2>Your vault</h2>
+        <div class="vaulttop">
+          <div class="ring">
+            <svg viewBox="0 0 150 150"><circle class="rbg" cx="75" cy="75" r="65"/><circle class="rfg" id="rfg" cx="75" cy="75" r="65"/></svg>
+            <div class="ctr"><div class="t" id="count">--</div><div class="l" id="ringlab">until claim</div></div>
+          </div>
+          <div>
+            <span id="status" class="status s-active"><span class="d"></span> Active</span>
+            <div class="bal"><span id="bal">0</span> <small>XLM</small></div>
+            <div class="muted" id="checkinfo">Last check-in just now</div>
+          </div>
+        </div>
+        <div class="btns">
+          <button class="btn primary" onclick="checkIn()">Check in now</button>
+          <button class="btn" onclick="openDeposit()">Deposit more</button>
+          <button class="btn" onclick="withdraw()">Withdraw</button>
+          <button class="btn warn" onclick="goSilent()">Simulate going silent</button>
+          <button class="btn gold full-col" id="claimBtn" onclick="claim()" disabled>Claim and distribute to heirs</button>
+        </div>
+        <div class="payout" id="payout"></div>
+      </div>
+
+      <div class="card">
+        <h2>Beneficiaries</h2>
+        <div class="heirs" id="heirs"></div>
+        <h2 style="margin-top:22px">Schedule</h2>
+        <div class="sched" id="sched"></div>
+        <div class="note-warn" id="reminderNote"></div>
+        <h2 style="margin-top:22px">Activity</h2>
+        <ul class="log" id="log"></ul>
+      </div>
+    </div>
+  </section>
+
 </div></main>
 
-<div class="overlay" id="overlay">
-  <div class="modal">
-    <h3 id="mtitle">Deposit</h3>
-    <p id="mdesc">How many XLM?</p>
-    <input type="number" id="mamount" min="0" step="0.5" value="5" />
-    <div class="mbtns">
-      <button onclick="closeModal()">Cancel</button>
-      <button class="primary" id="mconfirm">Confirm</button>
-    </div>
-  </div>
-</div>
-
 <script>
-  var LIVE_CONTRACT='CAWHXHUN2UG5C7VQNIO5UAIPIINVBQKGHN5YZN62B3ZF4OKTARLO7FPZ';
-  document.getElementById('live').href='https://stellar.expert/explorer/testnet/contract/'+LIVE_CONTRACT;
+  var DAY=86400000, MONTH=30*DAY;
+  var owner='GA7QYNF7…OWNER…3KD2';
+  var colors=['#22d3ee','#a855f7','#f7931a','#34d399','#f0a93b'];
+  var state=null, benCount=0;
 
-  var INTERVAL=60, C=2*Math.PI*65;
-  document.getElementById('rfg').style.strokeDasharray=C;
+  function el(id){return document.getElementById(id);}
+  function show(id){['connect','create','dash'].forEach(function(s){el('screen-'+s).classList.toggle('hidden',s!==id);});}
 
-  var colors=['#5b8def','#8b5cff','#37c98b','#f0a93b'];
-  var state={ balance:5.0, lastCheckIn:Date.now(), claimed:false,
-    heirs:[ {name:'Wallet A (spouse)',addr:'GBZW…O5QC3',bps:6000},
-            {name:'Wallet B (child)', addr:'GCLD…6FVRF',bps:4000} ] };
+  function connectWallet(){
+    el('wchip').textContent=owner; el('wchip').classList.remove('hidden');
+    show('create'); addBen(); addBen(); updateShares();
+  }
 
+  function addBen(){
+    benCount++;
+    var wrap=document.createElement('div'); wrap.className='ben-row';
+    wrap.innerHTML='<input placeholder="Beneficiary Stellar address (G...)" data-k="addr" />'+
+      '<input type="number" min="0" max="100" placeholder="%" data-k="share" oninput="updateShares()" />'+
+      '<button class="ben-del" title="Remove" onclick="this.parentNode.remove();updateShares()">&times;</button>';
+    el('benList').appendChild(wrap);
+    updateShares();
+  }
+  function beneRows(){return [].slice.call(el('benList').querySelectorAll('.ben-row'));}
+  function updateShares(){
+    var sum=0; beneRows().forEach(function(r){sum+=parseFloat(r.querySelector('[data-k=share]').value)||0;});
+    var t=el('shareTotal'); t.textContent=sum+'%'; t.className=sum===100?'good':'bad';
+    el('createBtn').disabled=!(sum===100);
+    return sum;
+  }
+
+  function createVault(){
+    var benes=[];
+    var ok=true;
+    beneRows().forEach(function(r,i){
+      var addr=r.querySelector('[data-k=addr]').value.trim();
+      var share=parseFloat(r.querySelector('[data-k=share]').value)||0;
+      if(!addr){ok=false;}
+      benes.push({addr:addr||('G...'+(i+1)), share:share});
+    });
+    if(!ok){alert('Please paste a Stellar address for each beneficiary.');return;}
+    if(updateShares()!==100){alert('Shares must total exactly 100%.');return;}
+    var months=parseInt(el('interval').value,10);
+    var grace=parseInt(el('grace').value,10)||7;
+    state={ balance:parseFloat(el('depAmt').value)||0, benes:benes, months:months, grace:grace,
+      lastCheckIn:Date.now(), claimed:false };
+    show('dash');
+    log('<b>Vault created.</b> '+state.balance.toFixed(0)+' XLM locked, '+benes.length+' beneficiaries, '+months+'-month check-in.');
+    render(); if(!window._t){window._t=setInterval(render,1000);}
+  }
+
+  function deadline(){return state.lastCheckIn + state.months*MONTH;}
+  function graceStart(){return deadline() - state.grace*DAY;}
   function now(){return Date.now();}
-  function deadline(){return state.lastCheckIn+INTERVAL*1000;}
-  function timeLeft(){return Math.max(0,Math.round((deadline()-now())/1000));}
-  function claimable(){return !state.claimed&&now()>=deadline();}
-  function fmt(t){var m=Math.floor(t/60),s=t%60;return (m<10?'0':'')+m+':'+(s<10?'0':'')+s;}
+  function daysLeft(){return Math.max(0,Math.ceil((deadline()-now())/DAY));}
+  function claimable(){return !state.claimed && now()>=deadline();}
+  function inGrace(){return !state.claimed && now()>=graceStart() && now()<deadline();}
+
+  function fmtDate(ms){var d=new Date(ms);var mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return mo[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();}
+  function initials(a){return a.replace(/[^A-Za-z0-9]/g,'').slice(0,2).toUpperCase();}
 
   function log(msg){
     var li=document.createElement('li');var d=new Date();
     var s=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)+':'+('0'+d.getSeconds()).slice(-2);
     li.innerHTML='<span class="t">'+s+'</span><span>'+msg+'</span>';
-    var ul=document.getElementById('log');ul.insertBefore(li,ul.firstChild);
+    var ul=el('log');ul.insertBefore(li,ul.firstChild);
   }
-  function initials(n){return n.replace(/[^A-Za-z ]/g,'').split(' ').map(function(w){return w[0];}).slice(0,2).join('').toUpperCase();}
+
   function renderHeirs(){
-    var el=document.getElementById('heirs');el.innerHTML='';
-    state.heirs.forEach(function(h,i){
-      var pct=(h.bps/100).toFixed(0),amt=(state.balance*h.bps/10000);
+    var box=el('heirs');box.innerHTML='';
+    state.benes.forEach(function(b,i){
+      var amt=state.balance*b.share/100;
+      var short=b.addr.length>12?b.addr.slice(0,6)+'…'+b.addr.slice(-4):b.addr;
       var d=document.createElement('div');d.className='heir';
-      d.innerHTML='<div class="av" style="background:'+colors[i%4]+'">'+initials(h.name)+'</div>'+
-        '<div><div class="nm">'+h.name+'</div><div class="addr">'+h.addr+'</div></div>'+
-        '<div class="r"><div class="amt">'+amt.toFixed(2)+' XLM</div><div class="pct">'+pct+'%</div></div>';
-      el.appendChild(d);
+      d.innerHTML='<div class="av" style="background:'+colors[i%5]+'">'+initials(b.addr)+'</div>'+
+        '<div><div style="font-size:13.5px;font-weight:600">Heir '+(i+1)+'</div><div class="addr">'+short+'</div></div>'+
+        '<div class="r"><div class="amt">'+amt.toFixed(2)+' XLM</div><div class="pct">'+b.share+'%</div></div>';
+      box.appendChild(d);
     });
   }
+  function renderSched(){
+    el('sched').innerHTML=
+      '<div class="r"><span>Check-in interval</span><span>Every '+state.months+' months</span></div>'+
+      '<div class="r"><span>Deadline (if no check-in)</span><span>'+fmtDate(deadline())+'</span></div>'+
+      '<div class="r"><span>Grace / reminders</span><span>Daily, last '+state.grace+' days</span></div>'+
+      '<div class="r"><span>Reminders start</span><span>'+fmtDate(graceStart())+'</span></div>';
+    el('reminderNote').innerHTML='Any withdraw or check-in from your wallet resets the timer. If you stay silent past the deadline, your XLM transfers to your beneficiaries automatically.';
+  }
   function render(){
-    document.getElementById('bal').textContent=state.balance.toFixed(2);
-    var st=document.getElementById('status'),cb=document.getElementById('claimBtn'),tl=timeLeft();
-    var rfg=document.getElementById('rfg'),cnt=document.getElementById('count'),lab=document.getElementById('ringlab');
+    if(!state)return;
+    el('bal').textContent=state.balance.toFixed(2);
+    var st=el('status'),cb=el('claimBtn'),cnt=el('count'),lab=el('ringlab'),rfg=el('rfg');
+    var C=2*Math.PI*65; rfg.style.strokeDasharray=C;
+    var total=state.months*MONTH, left=Math.max(0,deadline()-now());
     if(state.claimed){
       st.className='status s-claimed';st.innerHTML='<span class="d"></span> Claimed';
-      cnt.textContent='✓';lab.textContent='distributed';rfg.style.strokeDashoffset=0;rfg.style.stroke='#37c98b';cb.disabled=true;
-      document.getElementById('checkinfo').textContent='Funds distributed to beneficiaries';
+      cnt.textContent='✓';lab.textContent='distributed';rfg.style.strokeDashoffset=0;rfg.style.stroke='#34d399';cb.disabled=true;
+      el('checkinfo').textContent='Funds distributed to beneficiaries';
     }else if(claimable()){
       st.className='status s-claimable';st.innerHTML='<span class="d"></span> Claimable';
-      cnt.textContent='00:00';lab.textContent='ready';rfg.style.strokeDashoffset=0;rfg.style.stroke='var(--warn)';cb.disabled=false;
-      document.getElementById('checkinfo').textContent='Owner went silent past the deadline';
+      cnt.textContent='0';lab.textContent='ready';rfg.style.strokeDashoffset=0;rfg.style.stroke='var(--warn)';cb.disabled=false;
+      el('checkinfo').textContent='You went silent past the deadline';
     }else{
-      st.className='status s-active';st.innerHTML='<span class="d"></span> Active';
-      cnt.textContent=fmt(tl);lab.textContent='until claim';
-      rfg.style.strokeDashoffset=C*(1-tl/INTERVAL);rfg.style.stroke='url(#rg)';cb.disabled=true;
-      var since=Math.round((now()-state.lastCheckIn)/1000);
-      document.getElementById('checkinfo').textContent='Last check-in '+since+'s ago, interval '+INTERVAL+'s';
+      var grace=inGrace();
+      st.className='status '+(grace?'s-grace':'s-active');st.innerHTML='<span class="d"></span> '+(grace?'Grace period':'Active');
+      cnt.textContent=daysLeft();lab.textContent='days left';
+      rfg.style.strokeDashoffset=C*(1-left/total);rfg.style.stroke=grace?'var(--warn)':'url(#rg)';cb.disabled=true;
+      el('checkinfo').textContent=grace?('Reminder: check in within '+daysLeft()+' days'):('Next check-in due in '+daysLeft()+' days');
     }
-    renderHeirs();
+    renderHeirs();renderSched();
   }
 
-  function checkIn(){if(state.claimed)return;state.lastCheckIn=now();log('<b>check_in()</b> countdown reset. You are active.');render();}
-  function goSilent(){if(state.claimed)return;state.lastCheckIn=now()-(INTERVAL+1)*1000;log('<b>Owner goes silent.</b> No check-in past the deadline.');render();}
-
-  var modalMode='deposit';
-  function openModal(mode){
-    if(state.claimed)return;modalMode=mode;
-    document.getElementById('mtitle').textContent=mode==='deposit'?'Deposit XLM':'Withdraw XLM';
-    document.getElementById('mdesc').textContent=mode==='deposit'?'Add funds to the vault.':'Take funds out (also proves life).';
-    document.getElementById('mamount').value=mode==='deposit'?'5':'2';
-    document.getElementById('overlay').classList.add('on');
-    setTimeout(function(){document.getElementById('mamount').focus();},50);
-  }
-  function closeModal(){document.getElementById('overlay').classList.remove('on');}
-  document.getElementById('mconfirm').onclick=function(){
-    var a=parseFloat(document.getElementById('mamount').value);
-    if(!a||a<=0){return;}
-    if(modalMode==='deposit'){state.balance+=a;log('<b>deposit()</b> +'+a.toFixed(2)+' XLM into the vault.');}
-    else{ if(a>state.balance){alert('Not enough balance.');return;} state.balance-=a;state.lastCheckIn=now();
-      log('<b>withdraw()</b> -'+a.toFixed(2)+' XLM (also proves life, timer reset).'); }
-    closeModal();render();
-  };
-  document.getElementById('overlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
-
+  function checkIn(){if(state.claimed)return;state.lastCheckIn=now();log('<b>check_in()</b> proof of life. Timer reset.');render();}
+  function openDeposit(){if(state.claimed)return;var a=parseFloat(prompt('Deposit how many XLM?','500'));if(!a||a<=0)return;state.balance+=a;log('<b>deposit()</b> +'+a.toFixed(0)+' XLM.');render();}
+  function withdraw(){if(state.claimed)return;var a=parseFloat(prompt('Withdraw how many XLM? (also resets your timer)','200'));if(!a||a<=0)return;if(a>state.balance){alert('Not enough balance.');return;}state.balance-=a;state.lastCheckIn=now();log('<b>withdraw()</b> -'+a.toFixed(0)+' XLM (activity, timer reset).');render();}
+  function goSilent(){if(state.claimed)return;state.lastCheckIn=now()-(state.months*MONTH+DAY);log('<b>Owner goes silent.</b> No activity past the deadline.');render();}
   function claim(){
     if(!claimable())return;
     var total=state.balance,dist=0,lines=[];
-    state.heirs.forEach(function(h,i){
-      var amt=i===state.heirs.length-1?(total-dist):Math.floor(total*h.bps/10000*100)/100;
-      dist+=amt;lines.push('<b>'+h.name+'</b> received '+amt.toFixed(2)+' XLM');
+    state.benes.forEach(function(b,i){
+      var amt=i===state.benes.length-1?(total-dist):Math.floor(total*b.share/100*100)/100;
+      dist+=amt;lines.push('Heir '+(i+1)+' received '+amt.toFixed(2)+' XLM');
     });
     state.balance=0;state.claimed=true;
     log('<b>claim()</b> permissionless payout executed. Vault emptied.');
-    var p=document.getElementById('payout');p.style.display='block';
-    p.innerHTML='🎉 <b>Payout complete</b><br>'+lines.join('<br>');
+    var p=el('payout');p.style.display='block';p.innerHTML='🎉 <b>Payout complete</b><br>'+lines.join('<br>');
     render();
   }
 
-  // particle background
-  (function(){var c=document.getElementById('bg'),x=c.getContext('2d'),W,H,ps=[];
+  // starfield
+  (function(){var c=el('stars'),x=c.getContext('2d'),W,H,st=[];
     function size(){W=c.width=innerWidth;H=c.height=innerHeight;}size();addEventListener('resize',size);
-    for(var i=0;i<34;i++)ps.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*2+.6,s:Math.random()*.35+.12,o:Math.random()*.4+.15});
-    function tick(){x.clearRect(0,0,W,H);for(var i=0;i<ps.length;i++){var p=ps[i];p.y-=p.s;if(p.y<-6){p.y=H+6;p.x=Math.random()*W;}
-      x.globalAlpha=p.o;x.fillStyle='#7c76ff';x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fill();}x.globalAlpha=1;requestAnimationFrame(tick);}tick();})();
-
-  log('Vault created, funded with 5.00 XLM, 2 beneficiaries set.');
-  render();setInterval(render,1000);
+    for(var i=0;i<150;i++){var d=Math.random();st.push({x:Math.random()*W,y:Math.random()*H,r:d*1.3+.3,t:Math.random()*6.28,tw:Math.random()*.03+.01,vy:.04+d*.14});}
+    function loop(){x.clearRect(0,0,W,H);for(var i=0;i<st.length;i++){var s=st[i];s.t+=s.tw;s.y+=s.vy;if(s.y>H+2){s.y=-2;s.x=Math.random()*W;}var a=.3+.4*(Math.sin(s.t)*.5+.5);x.globalAlpha=a;x.fillStyle='#dfe7ff';x.beginPath();x.arc(s.x,s.y,s.r,0,7);x.fill();}x.globalAlpha=1;requestAnimationFrame(loop);}loop();
+  })();
 </script>
 </body>
 </html>
