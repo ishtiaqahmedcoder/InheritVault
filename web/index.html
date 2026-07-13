@@ -55,18 +55,23 @@
   .cta{display:flex;gap:14px;flex-wrap:wrap}
   @media(max-width:900px){.cta{justify-content:center}}
 
-  /* 3D coin */
-  .stage{display:flex;justify-content:center;align-items:center;perspective:1000px;height:340px}
-  .coin{position:relative;width:210px;height:210px;transform-style:preserve-3d;
-    animation:spin 6.5s linear infinite}
-  @keyframes spin{from{transform:rotateY(0) rotateX(12deg)}to{transform:rotateY(360deg) rotateX(12deg)}}
-  .disc{position:absolute;inset:0;border-radius:50%;background:
-    radial-gradient(circle at 34% 30%,#ffe9a8,var(--gold) 45%,var(--gold2) 100%);
-    box-shadow:inset 0 0 0 8px #ffffff22, inset 0 0 26px #00000030}
-  .coin .face-mark{position:absolute;inset:0;display:grid;place-items:center;transform:translateZ(15px)}
-  .coin .face-mark svg{width:96px;height:96px;filter:drop-shadow(0 2px 3px #00000030)}
-  .glow{position:absolute;width:300px;height:300px;border-radius:50%;
-    background:radial-gradient(circle,#6b5cff40,transparent 62%);filter:blur(14px);z-index:0}
+  /* 3D coins */
+  .stage{position:relative;perspective:1200px;height:400px}
+  @media(max-width:900px){.stage{height:350px;margin-top:10px}}
+  .cluster{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .18s ease-out}
+  .anchor{position:absolute;transform-style:preserve-3d}
+  .floaty{position:relative;transform-style:preserve-3d;animation:bob 5s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+  .coin3d{position:relative;transform-style:preserve-3d;animation:spin 6s linear infinite}
+  @keyframes spin{from{transform:rotateY(0) rotateX(10deg)}to{transform:rotateY(360deg) rotateX(10deg)}}
+  @keyframes spinrev{from{transform:rotateY(360deg) rotateX(10deg)}to{transform:rotateY(0) rotateX(10deg)}}
+  .disc{position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 0 6px #ffffff22,inset 0 0 22px #00000040}
+  .face-mark{position:absolute;inset:0;display:grid;place-items:center;z-index:2}
+  .glyph{font-weight:900;line-height:1;filter:drop-shadow(0 1px 1px #00000040)}
+  .cglow{position:absolute;inset:-28px;border-radius:50%;filter:blur(24px);z-index:0}
+  .lbl{position:absolute;bottom:-2px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;
+    letter-spacing:.09em;color:var(--tx2);background:var(--card);border:1px solid var(--line);
+    border-radius:999px;padding:3px 10px;white-space:nowrap;z-index:3}
 
   section{padding:80px 0;position:relative;z-index:2}
   .eyebrow{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
@@ -154,14 +159,35 @@
         <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener" class="btn ghost">View the code</a>
       </div>
     </div>
-    <div class="stage">
-      <div class="glow"></div>
-      <div class="coin" id="coin">
-        <div class="face-mark">
-          <svg viewBox="0 0 48 48" fill="none"><path d="M24 6l15 6v11c0 9-6.7 16-15 18.4C15.7 39 9 32 9 23V12l15-6z" fill="#00000018" stroke="#a6741e" stroke-width="1.4"/><path d="M24 18a4.6 4.6 0 00-1.8 8.8V30a1.8 1.8 0 003.6 0v-3.2A4.6 4.6 0 0024 18z" fill="#8a5f18"/></svg>
+    <div class="stage"><div class="cluster" id="cluster">
+      <div class="anchor" style="left:calc(50% - 97px);top:100px">
+        <div class="floaty" style="animation-delay:0s">
+          <div class="cglow" style="background:radial-gradient(circle,#5b8def70,transparent 66%)"></div>
+          <div class="coin3d c-xlm" style="width:194px;height:194px;animation-duration:6.5s">
+            <div class="face-mark"><span class="glyph"><svg width="76" height="76" viewBox="0 0 24 24" fill="none"><path d="M12 2.4c3 2.8 4.5 6.4 4.5 9.7l-1.6 3.5H9.1L7.5 12.1C7.5 8.8 9 5.2 12 2.4Z" fill="#fff"/><circle cx="12" cy="9.4" r="1.8" fill="#26509f"/><path d="M9 15.2l-2.5 2 .3-3.7zM15 15.2l2.5 2-.3-3.7z" fill="#fff"/><path d="M10.7 15.6h2.6L12 19.4z" fill="#ffd06b"/></svg></span></div>
+          </div>
+          <div class="lbl">XLM</div>
         </div>
       </div>
-    </div>
+      <div class="anchor" style="left:-6px;top:24px">
+        <div class="floaty" style="animation-delay:.7s">
+          <div class="cglow" style="background:radial-gradient(circle,#f7931a70,transparent 66%)"></div>
+          <div class="coin3d c-btc" style="width:120px;height:120px;animation-name:spinrev;animation-duration:5.2s">
+            <div class="face-mark"><span class="glyph" style="font-size:52px;color:#8a4e07">&#8383;</span></div>
+          </div>
+          <div class="lbl">BTC</div>
+        </div>
+      </div>
+      <div class="anchor" style="right:-6px;bottom:30px">
+        <div class="floaty" style="animation-delay:1.4s">
+          <div class="cglow" style="background:radial-gradient(circle,#2775ca70,transparent 66%)"></div>
+          <div class="coin3d c-usdc" style="width:120px;height:120px;animation-duration:7.5s">
+            <div class="face-mark"><span class="glyph" style="font-size:46px;color:#123c70">$</span></div>
+          </div>
+          <div class="lbl">USDC</div>
+        </div>
+      </div>
+    </div></div>
   </section>
 </div>
 
@@ -258,16 +284,30 @@
 </div></footer>
 
 <script>
-  // build the 3D coin body from stacked discs
-  (function(){
-    var coin=document.getElementById('coin'), N=18, t=15;
+  // build each 3D coin from stacked discs (BTC, XLM, USDC)
+  [['c-xlm',194,'#e6edff','#5b8def','#26509f'],
+   ['c-btc',120,'#ffe4ad','#f7931a','#a75f08'],
+   ['c-usdc',120,'#d5e6ff','#2775ca','#173f70']].forEach(function(c){
+    var el=document.querySelector('.'+c[0]); if(!el)return;
+    var size=c[1], N=15, t=size*0.085;
     for(var i=-N;i<=N;i++){
       var d=document.createElement('div'); d.className='disc';
-      var shade = 1 - Math.abs(i)/(N*1.6);
+      var sh=1-Math.abs(i)/(N*1.5);
+      d.style.background='radial-gradient(circle at 34% 30%,'+c[2]+','+c[3]+' 46%,'+c[4]+' 100%)';
       d.style.transform='translateZ('+(i/N*t)+'px)';
-      if(Math.abs(i)<N) d.style.filter='brightness('+(0.7+0.3*shade)+')';
-      coin.insertBefore(d, coin.firstChild);
+      if(Math.abs(i)<N) d.style.filter='brightness('+(0.72+0.28*sh)+')';
+      el.insertBefore(d, el.firstChild);
     }
+    var fm=el.querySelector('.face-mark'); fm.style.transform='translateZ('+(t+1)+'px)';
+  });
+
+  // 3D parallax tilt of the coin cluster on mouse move
+  (function(){
+    var cl=document.getElementById('cluster'); if(!cl)return;
+    addEventListener('mousemove',function(e){
+      var rx=((e.clientY/innerHeight)-.5)*-10, ry=((e.clientX/innerWidth)-.5)*14;
+      cl.style.transform='rotateX('+rx.toFixed(2)+'deg) rotateY('+ry.toFixed(2)+'deg)';
+    });
   })();
 
   // live contract link
