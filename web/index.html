@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>InheritVault: on-chain inheritance for Stellar</title>
 <meta name="description" content="A non-custodial dead-man's switch for crypto on Stellar. Check in periodically; if you go silent, your funds pass automatically to the people you chose." />
+<link rel="icon" type="image/png" href="logo-bg-remove.png" />
 <style>
   :root{
     --bg:#05060e; --bg2:#0a0d1a; --card:#0d1120; --card2:#111633;
@@ -26,6 +27,8 @@
 
   .logo{display:flex;align-items:center;gap:11px;font-weight:800;font-size:19px}
   .logo svg{width:36px;height:36px;filter:drop-shadow(0 0 12px #a855f780)}
+  .logo .mark{width:60px;height:38px;flex:0 0 auto;background:url(logo-bg-remove.png) no-repeat;
+    background-size:168% auto;background-position:50% 23%;filter:drop-shadow(0 0 10px #a855f780)}
   .logo b{font-weight:800}
   .logo b span{background:linear-gradient(120deg,var(--cyan),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent}
 
@@ -146,7 +149,7 @@
 
 <header><div class="wrap"><nav>
   <a class="logo" href="#top">
-    <svg viewBox="0 0 48 48" fill="none"><path d="M24 3.2l16.4 9.4v18.8L24 40.8 7.6 31.4V12.6L24 3.2Z" fill="url(#ivg)"/><circle cx="24" cy="23" r="11" fill="none" stroke="#ffffff55" stroke-width="1.3" stroke-dasharray="1.4 2.6"/><circle cx="24" cy="20.6" r="4.3" fill="#fff"/><path d="M21.8 23.3h4.4l1.3 8.1a3.5 3.5 0 0 1-7 0l1.3-8.1Z" fill="#fff"/></svg>
+    <span class="mark"></span>
     <b><span>Inherit</span>Vault</b>
   </a>
   <div class="navlinks">
@@ -261,7 +264,7 @@
 <footer><div class="wrap">
   <div class="foot-top">
     <div class="foot-brand">
-      <a class="logo" href="#top"><svg viewBox="0 0 48 48" fill="none"><path d="M24 3.2l16.4 9.4v18.8L24 40.8 7.6 31.4V12.6L24 3.2Z" fill="url(#ivg)"/><circle cx="24" cy="23" r="11" fill="none" stroke="#ffffff55" stroke-width="1.3" stroke-dasharray="1.4 2.6"/><circle cx="24" cy="20.6" r="4.3" fill="#fff"/><path d="M21.8 23.3h4.4l1.3 8.1a3.5 3.5 0 0 1-7 0l1.3-8.1Z" fill="#fff"/></svg><b><span>Inherit</span>Vault</b></a>
+      <a class="logo" href="#top"><span class="mark"></span><b><span>Inherit</span>Vault</b></a>
       <p>Non-custodial on-chain inheritance for Stellar. Your crypto reaches your family, even if you never come back.</p>
     </div>
     <div class="foot-links">
