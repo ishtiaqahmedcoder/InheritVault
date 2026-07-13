@@ -7,9 +7,9 @@
 <meta name="description" content="A non-custodial dead-man's switch for crypto on Stellar. Check in periodically; if you go silent, your funds pass automatically to the people you chose." />
 <style>
   :root{
-    --bg:#08090d; --bg2:#0e1017; --card:#12151e; --line:#20243250;
+    --bg:#08090d; --bg2:#0e1017; --card:#12151e; --line:#20243255;
     --tx:#eaedf5; --tx2:#98a1b5; --acc:#5b8def; --acc2:#8b5cff;
-    --gold:#f6c453; --gold2:#c98a2b; --ok:#37c98b; --radius:16px; --max:1120px;
+    --ok:#37c98b; --radius:16px; --max:1120px;
   }
   @media (prefers-color-scheme: light){
     :root{ --bg:#f6f8fc; --bg2:#eef2f9; --card:#ffffff; --line:#e4e9f2;
@@ -20,18 +20,16 @@
   body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     background:var(--bg);color:var(--tx);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
   a{color:inherit;text-decoration:none}
-  canvas#bg{position:fixed;inset:0;z-index:0;opacity:.55;pointer-events:none}
+  canvas#bg{position:fixed;inset:0;z-index:0;opacity:.5;pointer-events:none}
   .wrap{max-width:var(--max);margin:0 auto;padding:0 24px;position:relative;z-index:2}
 
-  .logo{display:flex;align-items:center;gap:11px;font-weight:700;font-size:19px;letter-spacing:-.01em}
-  .logo svg{width:34px;height:34px;filter:drop-shadow(0 3px 8px #5b8def40)}
-  .logo b{font-weight:800}
-  .logo b span{background:linear-gradient(120deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .logo{display:flex;align-items:center;gap:11px;font-weight:800;font-size:19px;letter-spacing:-.01em}
+  .logo svg{width:36px;height:36px;filter:drop-shadow(0 4px 10px #6b5cff45)}
+  .logo span{background:linear-gradient(120deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
 
   .btn{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;border-radius:12px;font-weight:600;
     font-size:15px;border:1px solid var(--line);transition:.2s;cursor:pointer;background:transparent;color:inherit}
-  .btn.primary{background:linear-gradient(120deg,var(--acc),var(--acc2));color:#fff;border:none;
-    box-shadow:0 8px 24px #6b5cff35}
+  .btn.primary{background:linear-gradient(120deg,var(--acc),var(--acc2));color:#fff;border:none;box-shadow:0 8px 24px #6b5cff35}
   .btn.primary:hover{transform:translateY(-2px);box-shadow:0 12px 30px #6b5cff55}
   .btn.ghost:hover{border-color:var(--acc);transform:translateY(-2px)}
 
@@ -42,47 +40,40 @@
   .navlinks a{transition:.15s}.navlinks a:hover{color:var(--tx)}
   @media(max-width:820px){.navlinks{display:none}}
 
-  .hero{display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:30px;padding:70px 0 60px}
-  @media(max-width:900px){.hero{grid-template-columns:1fr;text-align:center;padding:44px 0}}
+  .hero{display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:30px;padding:64px 0 56px}
+  @media(max-width:900px){.hero{grid-template-columns:1fr;text-align:center;padding:40px 0}}
   .pill{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--tx2);
     border:1px solid var(--line);border-radius:999px;padding:7px 15px;margin-bottom:24px;background:var(--card)}
-  .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 #37c98b90;animation:pulse 2s infinite}
+  .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);animation:pulse 2s infinite}
   @keyframes pulse{0%{box-shadow:0 0 0 0 #37c98b80}70%{box-shadow:0 0 0 9px #37c98b00}100%{box-shadow:0 0 0 0 #37c98b00}}
   h1{font-size:clamp(36px,5.6vw,62px);line-height:1.05;letter-spacing:-.025em;font-weight:800;margin-bottom:22px}
-  h1 span{background:linear-gradient(120deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  h1 em{font-style:normal;background:linear-gradient(120deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
   .hero p{font-size:clamp(17px,2.2vw,20px);color:var(--tx2);max-width:52ch;margin-bottom:32px}
   @media(max-width:900px){.hero p{margin-left:auto;margin-right:auto}}
   .cta{display:flex;gap:14px;flex-wrap:wrap}
   @media(max-width:900px){.cta{justify-content:center}}
 
-  /* orbiting metallic 3D coins */
-  .stage{position:relative;height:430px}
-  @media(max-width:900px){.stage{height:360px;margin-top:6px}}
-  .orbit-stage{position:absolute;inset:0;transition:transform .2s ease-out}
-  .center{position:absolute;left:50%;top:50%;width:98px;height:98px;margin:-49px 0 0 -49px;
-    display:grid;place-items:center;z-index:55;filter:drop-shadow(0 8px 22px #6b5cff55)}
-  .center svg{width:74px;height:74px}
-  .center::after{content:"";position:absolute;width:158px;height:158px;border-radius:50%;z-index:-1;
-    background:radial-gradient(circle,#6b5cff2e,transparent 66%);animation:pulseC 3s ease-in-out infinite}
-  @keyframes pulseC{0%,100%{transform:scale(1);opacity:.65}50%{transform:scale(1.18);opacity:1}}
-  .orbiter{position:absolute;left:0;top:0;will-change:transform}
-  .coin3d{position:relative;transform-style:preserve-3d;animation:wobble 5s ease-in-out infinite}
-  @keyframes wobble{0%,100%{transform:rotateY(-26deg) rotateX(8deg)}50%{transform:rotateY(26deg) rotateX(-4deg)}}
-  @keyframes wobble2{0%,100%{transform:rotateY(24deg) rotateX(-6deg)}50%{transform:rotateY(-28deg) rotateX(7deg)}}
-  .disc{position:absolute;inset:0;border-radius:50%}
-  .face-mark{position:absolute;inset:0;backface-visibility:hidden;overflow:hidden;border-radius:50%}
-  .face-mark svg{width:100%;height:100%;display:block;filter:drop-shadow(0 0 1px #00000030)}
-  .face-mark::after{content:"";position:absolute;inset:0;pointer-events:none;
-    background:linear-gradient(115deg,transparent 40%,#ffffff70 49%,#ffffff90 51%,transparent 60%);
-    animation:glare 4.5s ease-in-out infinite}
-  @keyframes glare{0%,100%{transform:translateX(-38%)}50%{transform:translateX(38%)}}
+  /* floating brand coins */
+  .stage{position:relative;height:430px;perspective:1100px}
+  @media(max-width:900px){.stage{height:370px;margin-top:6px}}
+  .coins{position:absolute;inset:0;transition:transform .2s ease-out}
+  .cwrap{position:absolute}
+  .coin{position:relative;border-radius:50%;transform-style:preserve-3d;animation:float 6s ease-in-out infinite}
+  @keyframes float{0%,100%{transform:translateY(0) rotateY(-13deg) rotateX(8deg)}50%{transform:translateY(-22px) rotateY(13deg) rotateX(-5deg)}}
+  .coin .face{position:absolute;inset:0;border-radius:50%;display:grid;place-items:center;overflow:hidden}
+  .coin .face>svg{width:54%;height:54%;filter:drop-shadow(0 1px 2px #00000040)}
+  .coin .glare{position:absolute;inset:0;border-radius:50%;pointer-events:none;
+    background:linear-gradient(120deg,transparent 42%,#ffffff55 50%,transparent 58%);animation:glare 5s ease-in-out infinite}
+  @keyframes glare{0%,100%{transform:translateX(-42%)}50%{transform:translateX(42%)}}
+  .coin.btc{background:radial-gradient(circle at 36% 30%,#ffc879,#f7931a 58%,#d97e0a);box-shadow:0 11px 0 #a4620b,0 28px 34px -8px #00000060}
+  .coin.xlm{background:radial-gradient(circle at 36% 30%,#3d4d67,#18233a 58%,#0c1424);box-shadow:0 11px 0 #060b14,0 28px 34px -8px #00000060}
+  .coin.usdt{background:radial-gradient(circle at 36% 30%,#57d7ad,#26a17b 58%,#1a7d5e);box-shadow:0 11px 0 #12684c,0 28px 34px -8px #00000060}
 
   section{padding:80px 0;position:relative;z-index:2}
   .eyebrow{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
     background:linear-gradient(120deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent;text-align:center}
   h2{font-size:clamp(28px,4vw,40px);letter-spacing:-.02em;text-align:center;margin:12px 0;font-weight:800}
   .lead{text-align:center;color:var(--tx2);max-width:58ch;margin:0 auto 52px;font-size:18px}
-
   .reveal{opacity:0;transform:translateY(28px);transition:.7s cubic-bezier(.2,.7,.2,1)}
   .reveal.show{opacity:1;transform:none}
 
@@ -91,56 +82,51 @@
   .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px;transition:.25s}
   .card:hover{transform:translateY(-4px);border-color:var(--acc)}
   .card h3{font-size:19px;margin-bottom:8px;font-weight:700}.card p{color:var(--tx2);font-size:15.5px}
-  .ico{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#5b8def25,#8b5cff25);
-    display:grid;place-items:center;font-size:24px;margin-bottom:18px}
+  .ico{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#5b8def25,#8b5cff25);display:grid;place-items:center;font-size:24px;margin-bottom:18px}
 
   .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:760px;margin:0 auto}
   @media(max-width:700px){.stats{grid-template-columns:1fr}}
   .stat{text-align:center;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:26px}
-  .stat .num{font-size:40px;font-weight:800;background:linear-gradient(120deg,var(--acc),var(--acc2));
-    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .stat .num{font-size:40px;font-weight:800;background:linear-gradient(120deg,var(--acc),var(--acc2));-webkit-background-clip:text;background-clip:text;color:transparent}
   .stat .lab{color:var(--tx2);font-size:14px;margin-top:4px}
 
   .steps{display:grid;gap:16px;max-width:780px;margin:0 auto}
-  .step{display:flex;gap:20px;align-items:flex-start;background:var(--card);border:1px solid var(--line);
-    border-radius:var(--radius);padding:24px 26px;transition:.25s}
+  .step{display:flex;gap:20px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px 26px;transition:.25s}
   .step:hover{transform:translateX(6px);border-color:var(--acc)}
-  .step .n{flex:0 0 auto;width:40px;height:40px;border-radius:12px;
-    background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-weight:800;display:grid;place-items:center;font-size:17px}
+  .step .n{flex:0 0 auto;width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;font-weight:800;display:grid;place-items:center;font-size:17px}
   .step h3{font-size:18px;margin-bottom:3px}.step p{color:var(--tx2);font-size:15px}
 
-  .proof{background:linear-gradient(135deg,var(--card),var(--bg2));border:1px solid var(--line);
-    border-radius:20px;padding:38px;text-align:center;max-width:780px;margin:0 auto}
-  .proof code{display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:13px;
-    background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:9px 13px;margin:10px 0;word-break:break-all}
+  .proof{background:linear-gradient(135deg,var(--card),var(--bg2));border:1px solid var(--line);border-radius:20px;padding:38px;text-align:center;max-width:780px;margin:0 auto}
+  .proof code{display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:13px;background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:9px 13px;margin:10px 0;word-break:break-all}
   .badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px}
   .tag{font-size:12.5px;color:var(--tx2);border:1px solid var(--line);border-radius:999px;padding:6px 13px;background:var(--card)}
 
   form{max-width:520px;margin:0 auto;display:flex;gap:10px;flex-wrap:wrap}
-  input[type=email]{flex:1;min-width:220px;padding:15px 18px;border-radius:12px;border:1px solid var(--line);
-    background:var(--card);color:var(--tx);font-size:15px;transition:.15s}
+  input[type=email]{flex:1;min-width:220px;padding:15px 18px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--tx);font-size:15px;transition:.15s}
   input[type=email]:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 4px #5b8def25}
   .note{text-align:center;color:var(--tx2);font-size:13.5px;margin-top:14px}
   .ok-msg{text-align:center;color:var(--ok);font-weight:600;margin-top:16px;display:none;font-size:17px}
 
-  footer{border-top:1px solid var(--line);padding:40px 0;color:var(--tx2);font-size:14px;position:relative;z-index:2}
-  .footrow{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
-  .disc{max-width:72ch;margin-top:18px;font-size:12.5px;opacity:.75}
+  footer{border-top:1px solid var(--line);margin-top:30px;padding:46px 0 40px;position:relative;z-index:2}
+  .foot-top{display:flex;justify-content:space-between;gap:28px;flex-wrap:wrap;align-items:flex-start}
+  .foot-brand{max-width:36ch}
+  .foot-brand p{color:var(--tx2);font-size:14px;margin-top:12px;line-height:1.6}
+  .foot-links{display:flex;gap:26px;flex-wrap:wrap;font-size:15px;color:var(--tx2)}
+  .foot-links a{transition:.15s}.foot-links a:hover{color:var(--tx)}
+  .foot-bottom{margin-top:30px;padding-top:22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center;color:var(--tx2);font-size:12.5px}
+  .foot-bottom .disc{max-width:78ch;opacity:.85}
 </style>
 </head>
 <body>
 <canvas id="bg"></canvas>
-
 <svg width="0" height="0" style="position:absolute"><defs>
-  <linearGradient id="ivg" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#5b8def"/><stop offset="1" stop-color="#8b5cff"/>
-  </linearGradient>
+  <linearGradient id="ivg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b8def"/><stop offset="1" stop-color="#8b5cff"/></linearGradient>
 </defs></svg>
 
 <header><div class="wrap"><nav>
   <a class="logo" href="#top">
-    <svg viewBox="0 0 48 48" fill="none"><path d="M24 3l18 7v13c0 11-8 19-18 22C14 42 6 34 6 23V10l18-7z" fill="url(#ivg)"/><path d="M24 17a5 5 0 00-2 9.6V31a2 2 0 004 0v-4.4A5 5 0 0024 17z" fill="#fff"/></svg>
-    <b>Inherit<span>Vault</span></b>
+    <svg viewBox="0 0 48 48" fill="none"><path d="M24 3.2l16.4 9.4v18.8L24 40.8 7.6 31.4V12.6L24 3.2Z" fill="url(#ivg)"/><circle cx="24" cy="23" r="11" fill="none" stroke="#ffffff4d" stroke-width="1.3" stroke-dasharray="1.4 2.6"/><circle cx="24" cy="20.6" r="4.3" fill="#fff"/><path d="M21.8 23.3h4.4l1.3 8.1a3.5 3.5 0 0 1-7 0l1.3-8.1Z" fill="#fff"/></svg>
+    <b><span>Inherit</span>Vault</b>
   </a>
   <div class="navlinks">
     <a href="#how">How it works</a><a href="#why">Why Stellar</a>
@@ -151,73 +137,52 @@
 </nav></div></header>
 
 <div class="wrap" id="top">
-  <section class="hero" style="padding-top:64px">
+  <section class="hero" style="padding-top:60px">
     <div>
       <div class="pill"><span class="dot"></span> Live on Stellar testnet</div>
-      <h1>Your crypto should reach your family, <span>even if you never come back.</span></h1>
+      <h1>Your crypto should reach your family, <em>even if you never come back.</em></h1>
       <p>InheritVault is a non-custodial dead-man's switch. Lock your funds, check in
          from time to time, and if you ever go silent your assets pass automatically
          to the people you chose. No lawyer, no company holding your keys.</p>
       <div class="cta">
-        <a href="#waitlist" class="btn primary">Join the waitlist →</a>
+        <a href="#waitlist" class="btn primary">Join the waitlist &#8594;</a>
         <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener" class="btn ghost">View the code</a>
       </div>
     </div>
-    <div class="stage"><div class="orbit-stage" id="orbitStage">
-      <div class="center"><svg viewBox="0 0 48 48"><path d="M24 3l18 7v13c0 11-8 19-18 22C14 42 6 34 6 23V10l18-7z" fill="url(#ivg)"/><path d="M24 17a5 5 0 00-2 9.6V31a2 2 0 004 0v-4.4A5 5 0 0024 17z" fill="#fff"/></svg></div>
-
-      <div class="orbiter"><div class="coin3d c-btc" style="width:130px;height:130px;animation-name:wobble2;animation-duration:4.6s"><div class="face-mark">
-        <svg viewBox="0 0 200 200"><defs><path id="rB" d="M100 100 m0 -78 a78 78 0 1 1 -0.1 0" fill="none"/></defs>
-          <circle cx="100" cy="100" r="98" fill="none" stroke="#00000040" stroke-width="9" stroke-dasharray="2.6 3.2"/>
-          <circle cx="100" cy="100" r="90" fill="none" stroke="#ffffff40" stroke-width="1.5"/>
-          <text font-size="12.5" font-weight="800" fill="#00000055" letter-spacing="2.3"><textPath href="#rB" startOffset="0">BITCOIN &#9733; DIGITAL &#9733; DECENTRALIZED &#9733; PEER TO PEER &#9733; </textPath></text>
-          <circle cx="100" cy="100" r="62" fill="#ffffff14" stroke="#00000028" stroke-width="1.5"/>
-          <text x="100" y="132" font-size="86" font-weight="900" text-anchor="middle" fill="#ffffff40">&#8383;</text>
-          <text x="100" y="130" font-size="86" font-weight="900" text-anchor="middle" fill="#00000058">&#8383;</text>
-        </svg></div></div></div>
-
-      <div class="orbiter"><div class="coin3d c-xlm" style="width:130px;height:130px;animation-duration:6s"><div class="face-mark">
-        <svg viewBox="0 0 200 200"><defs><path id="rX" d="M100 100 m0 -78 a78 78 0 1 1 -0.1 0" fill="none"/></defs>
-          <circle cx="100" cy="100" r="98" fill="none" stroke="#00000038" stroke-width="9" stroke-dasharray="2.6 3.2"/>
-          <circle cx="100" cy="100" r="90" fill="none" stroke="#ffffff55" stroke-width="1.5"/>
-          <text font-size="12" font-weight="800" fill="#00000050" letter-spacing="2.4"><textPath href="#rX" startOffset="0">STELLAR &#9733; SCALABLE &#9733; QUICK &#9733; MICROPAYMENTS &#9733; </textPath></text>
-          <circle cx="100" cy="100" r="62" fill="#ffffff20" stroke="#00000024" stroke-width="1.5"/>
-          <g transform="translate(100 100)"><g transform="translate(-30 -30) scale(2.5)" fill="none">
-            <path d="M6 6.5c4 3.7 6 8.5 6 12.9l-2.1 4.6H8.1L6 19.4C6 15 8 10.2 12 6.5Z" fill="#ffffff40" transform="translate(-0.6 -0.6)"/>
-            <path d="M6 6.5c4 3.7 6 8.5 6 12.9l-2.1 4.6H8.1L6 19.4C6 15 8 10.2 12 6.5Z" fill="#00000052"/>
-            <circle cx="9" cy="12.4" r="2.3" fill="#ffffff45"/>
-            <path d="M4.4 20.2l-3 2.5.4-4.6zM13.6 20.2l3 2.5-.4-4.6z" fill="#00000052"/></g></g>
-        </svg></div></div></div>
-
-      <div class="orbiter"><div class="coin3d c-usdt" style="width:130px;height:130px;animation-name:wobble2;animation-duration:5.6s"><div class="face-mark">
-        <svg viewBox="0 0 200 200"><defs><path id="rU" d="M100 100 m0 -78 a78 78 0 1 1 -0.1 0" fill="none"/></defs>
-          <circle cx="100" cy="100" r="98" fill="none" stroke="#00000038" stroke-width="9" stroke-dasharray="2.6 3.2"/>
-          <circle cx="100" cy="100" r="90" fill="none" stroke="#ffffff45" stroke-width="1.5"/>
-          <text font-size="12.5" font-weight="800" fill="#00000052" letter-spacing="2.6"><textPath href="#rU" startOffset="0">TETHER &#9733; USDT &#9733; DIGITAL MONEY &#9733; STABLE &#9733; </textPath></text>
-          <circle cx="100" cy="100" r="62" fill="#ffffff1c" stroke="#00000026" stroke-width="1.5"/>
-          <g transform="translate(100 106)"><g fill="#00000055"><rect x="-30" y="-42" width="60" height="14" rx="3"/><rect x="-8" y="-40" width="16" height="58" rx="4"/><ellipse cx="0" cy="-16" rx="28" ry="11" fill="none" stroke="#00000055" stroke-width="9"/></g>
-            <g fill="#ffffff35" transform="translate(-0.6 -0.6)"><rect x="-30" y="-42" width="60" height="4" rx="2"/></g></g>
-        </svg></div></div></div>
+    <div class="stage"><div class="coins" id="coins">
+      <div class="cwrap" style="left:0;top:26px">
+        <div class="coin btc" style="width:120px;height:120px;animation-duration:5.4s;animation-delay:.4s">
+          <div class="face"><svg viewBox="0 0 32 32" fill="#fff"><path d="M22.5 14.1c.31-2.06-1.26-3.17-3.4-3.9l.7-2.79-1.7-.42-.68 2.71c-.44-.11-.9-.21-1.36-.32l.68-2.73-1.7-.42-.7 2.79c-.37-.09-.73-.17-1.08-.26l-2.34-.59-.45 1.81s1.26.29 1.23.31c.69.17.81.63.79 1l-1.9 7.62c-.08.21-.3.52-.78.4.02.03-1.23-.31-1.23-.31l-.84 1.94 2.21.55c.41.1.81.21 1.21.31l-.71 2.83 1.7.42.7-2.79c.46.13.91.24 1.35.35l-.69 2.77 1.7.42.71-2.82c2.9.55 5.08.33 6-2.29.74-2.11-.04-3.32-1.56-4.11 1.11-.26 1.94-.98 2.16-2.48zm-3.87 5.44c-.53 2.11-4.08.97-5.23.69l.94-3.74c1.15.29 4.84.85 4.29 3.05zm.53-5.47c-.48 1.92-3.44.95-4.4.71l.85-3.4c.96.24 4.05.69 3.55 2.69z"/></svg></div>
+          <div class="glare"></div>
+        </div>
+      </div>
+      <div class="cwrap" style="left:calc(50% - 78px);top:98px">
+        <div class="coin xlm" style="width:156px;height:156px;animation-duration:6.5s">
+          <div class="face"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2.4c3 2.8 4.5 6.4 4.5 9.7l-1.6 3.5H9.1L7.5 12.1C7.5 8.8 9 5.2 12 2.4Z"/><circle cx="12" cy="9.4" r="1.9" fill="#18233a"/><path d="M9 15.2l-2.5 2 .3-3.7zM15 15.2l2.5 2-.3-3.7z"/><path d="M10.7 15.6h2.6L12 19.6z" fill="#ffd06b"/></svg></div>
+          <div class="glare"></div>
+        </div>
+      </div>
+      <div class="cwrap" style="right:0;top:200px">
+        <div class="coin usdt" style="width:120px;height:120px;animation-duration:6s;animation-delay:1s">
+          <div class="face"><svg viewBox="0 0 32 32" fill="#fff"><path d="M17.9 17.4v-3.08h6.05V10.3H8.06v4.02h6.04v3.08c-4.92.22-8.62 1.2-8.62 2.36 0 1.17 3.7 2.14 8.62 2.36v6.84h3.8v-6.84c4.9-.22 8.6-1.2 8.6-2.36 0-1.17-3.7-2.14-8.6-2.36zm0 4v-.01c-.12.01-.74.05-2.12.05-1.1 0-1.87-.03-2.14-.05v.01c-4.2-.19-7.34-.92-7.34-1.8 0-.88 3.14-1.61 7.34-1.8v2.86c.28.02 1.06.07 2.16.07 1.32 0 1.98-.06 2.1-.07v-2.86c4.2.19 7.32.92 7.32 1.8 0 .88-3.13 1.61-7.32 1.8z"/></svg></div>
+          <div class="glare"></div>
+        </div>
+      </div>
     </div></div>
   </section>
 </div>
 
-<section id="stats">
-  <div class="wrap reveal">
-    <div class="stats">
-      <div class="stat"><div class="num">20%+</div><div class="lab">of all Bitcoin is estimated lost forever</div></div>
-      <div class="stat"><div class="num">60%</div><div class="lab">of holders never shared access with family</div></div>
-      <div class="stat"><div class="num">~5s</div><div class="lab">to settle a payout on Stellar</div></div>
-    </div>
-  </div>
-</section>
+<section id="stats"><div class="wrap reveal"><div class="stats">
+  <div class="stat"><div class="num">20%+</div><div class="lab">of all Bitcoin is estimated lost forever</div></div>
+  <div class="stat"><div class="num">60%</div><div class="lab">of holders never shared access with family</div></div>
+  <div class="stat"><div class="num">~5s</div><div class="lab">to settle a payout on Stellar</div></div>
+</div></div></section>
 
 <section id="problem"><div class="wrap">
   <div class="reveal"><div class="eyebrow">The problem</div>
     <h2>Self-custody has one fatal edge case</h2>
-    <p class="lead">A wallet is controlled entirely by whoever holds the key. When the
-      only person who knows it is gone, the funds are frozen on-chain forever, visible
-      but unreachable.</p></div>
+    <p class="lead">A wallet is controlled entirely by whoever holds the key. When the only
+      person who knows it is gone, the funds are frozen on-chain forever, visible but unreachable.</p></div>
   <div class="grid cols-3 reveal">
     <div class="card"><div class="ico">🔑</div><h3>Keys die with you</h3><p>There is no reset and no recovery. If the key is lost, so is the money.</p></div>
     <div class="card"><div class="ico">👪</div><h3>Families locked out</h3><p>Heirs can see the balance on-chain but have no way to ever reach it.</p></div>
@@ -228,8 +193,8 @@
 <section id="how"><div class="wrap">
   <div class="reveal"><div class="eyebrow">How it works</div>
     <h2>Silence is the only trigger</h2>
-    <p class="lead">The contract never decides that anyone died. It only measures the
-      time since your last check-in. That simplicity is what makes it auditable.</p></div>
+    <p class="lead">The contract never decides that anyone died. It only measures the time
+      since your last check-in. That simplicity is what makes it auditable.</p></div>
   <div class="steps reveal">
     <div class="step"><div class="n">1</div><div><h3>Create your vault</h3><p>Deploy your own vault, lock USDC or XLM, and name your heirs with exact shares.</p></div></div>
     <div class="step"><div class="n">2</div><div><h3>Check in to stay in control</h3><p>A single check-in resets the countdown. Deposit, withdraw, or change heirs any time.</p></div></div>
@@ -241,8 +206,8 @@
 <section id="why"><div class="wrap">
   <div class="reveal"><div class="eyebrow">Why Stellar</div>
     <h2>A new primitive, built for people</h2>
-    <p class="lead">No inheritance vault like this exists on Stellar today. It is a
-      public good that protects ordinary families, not traders.</p></div>
+    <p class="lead">No inheritance vault like this exists on Stellar today. It is a public
+      good that protects ordinary families, not traders.</p></div>
   <div class="grid cols-2 reveal">
     <div class="card"><h3>Non-custodial by design</h3><p>Keys never leave your wallet. The payout is permissionless, so it works even if we disappear.</p></div>
     <div class="card"><h3>Fast and near-free</h3><p>Stellar settles in about five seconds with fees under a cent, exactly what a long-lived vault needs.</p></div>
@@ -259,9 +224,7 @@
   <div class="proof reveal">
     <div style="color:var(--tx2);font-size:14px">Vault contract (testnet)</div>
     <code id="cid">CAWHXHUN2UG5C7VQNIO5UAIPIINVBQKGHN5YZN62B3ZF4OKTARLO7FPZ</code>
-    <div class="badges">
-      <span class="tag">14 unit tests passing</span><span class="tag">Rust / Soroban</span><span class="tag">MIT licensed</span>
-    </div>
+    <div class="badges"><span class="tag">14 unit tests passing</span><span class="tag">Rust / Soroban</span><span class="tag">MIT licensed</span></div>
     <div style="margin-top:20px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
       <a class="btn ghost" id="explorer" target="_blank" rel="noopener">View on Stellar Expert</a>
       <a class="btn ghost" href="app.html">Open the dashboard demo</a>
@@ -284,81 +247,43 @@
 </div></section>
 
 <footer><div class="wrap">
-  <div class="footrow">
-    <a class="logo" href="#top"><svg viewBox="0 0 48 48" fill="none"><path d="M24 3l18 7v13c0 11-8 19-18 22C14 42 6 34 6 23V10l18-7z" fill="url(#ivg)"/><path d="M24 17a5 5 0 00-2 9.6V31a2 2 0 004 0v-4.4A5 5 0 0024 17z" fill="#fff"/></svg><b>Inherit<span>Vault</span></b></a>
-    <div style="display:flex;gap:24px"><a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener">GitHub</a><a href="#how">How it works</a><a href="#waitlist">Waitlist</a></div>
+  <div class="foot-top">
+    <div class="foot-brand">
+      <a class="logo" href="#top"><svg viewBox="0 0 48 48" fill="none"><path d="M24 3.2l16.4 9.4v18.8L24 40.8 7.6 31.4V12.6L24 3.2Z" fill="url(#ivg)"/><circle cx="24" cy="23" r="11" fill="none" stroke="#ffffff4d" stroke-width="1.3" stroke-dasharray="1.4 2.6"/><circle cx="24" cy="20.6" r="4.3" fill="#fff"/><path d="M21.8 23.3h4.4l1.3 8.1a3.5 3.5 0 0 1-7 0l1.3-8.1Z" fill="#fff"/></svg><b><span>Inherit</span>Vault</b></a>
+      <p>Non-custodial on-chain inheritance for Stellar. Your crypto reaches your family, even if you never come back.</p>
+    </div>
+    <div class="foot-links">
+      <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener">GitHub</a>
+      <a href="#how">How it works</a><a href="#why">Why Stellar</a><a href="#waitlist">Waitlist</a>
+    </div>
   </div>
-  <p class="disc">InheritVault is open-source, non-custodial software. It is not a legal
-    will, a bank, or an estate-planning or financial service. On-chain inheritance
-    complements, and does not replace, proper legal documents. Nothing here is legal
-    or financial advice.</p>
+  <div class="foot-bottom">
+    <span>&#169; 2026 InheritVault</span>
+    <span class="disc">Open-source, non-custodial software. Not a legal will, a bank, or an estate-planning or financial service. Nothing here is legal or financial advice.</span>
+  </div>
 </div></footer>
 
 <script>
-  // build each coin body from stacked metallic discs (gold, silver, teal)
-  [['c-btc','#ffe9b0','#efa62a','#9c6410'],
-   ['c-xlm','#f4f6fa','#c2c8d2','#7b828f'],
-   ['c-usdt','#8fe6c9','#26a17b','#0f6b50']].forEach(function(c){
-    var el=document.querySelector('.'+c[0]); if(!el)return;
-    var N=14, t=130*0.09;
-    for(var i=-N;i<=N;i++){
-      var d=document.createElement('div'); d.className='disc';
-      var sh=1-Math.abs(i)/(N*1.5);
-      d.style.background='radial-gradient(circle at 36% 30%,'+c[1]+','+c[2]+' 50%,'+c[3]+' 100%)';
-      d.style.transform='translateZ('+(i/N*t)+'px)';
-      if(Math.abs(i)<N) d.style.filter='brightness('+(0.7+0.3*sh)+')';
-      el.insertBefore(d, el.firstChild);
-    }
-    var fm=el.querySelector('.face-mark'); fm.style.transform='translateZ('+(t+0.5)+'px)';
-  });
-
-  // orbit the coins around the central vault
-  (function(){
-    var st=document.getElementById('orbitStage'); if(!st)return;
-    var obs=[].slice.call(st.querySelectorAll('.orbiter'));
-    var cx,cy,Rx,Ry;
-    function layout(){cx=st.clientWidth/2;cy=st.clientHeight/2;Rx=Math.min(cx-74,195);Ry=Math.min(cy-58,118);}
-    layout(); addEventListener('resize',layout);
-    function frame(ts){
-      var a=ts/4200;
-      obs.forEach(function(o,i){
-        var ang=a+i*(2*Math.PI/obs.length);
-        var x=cx+Rx*Math.cos(ang), y=cy+Ry*Math.sin(ang);
-        var depth=(Math.sin(ang)+1)/2;
-        var s=0.58+0.56*depth;
-        o.style.transform='translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px) translate(-50%,-50%) scale('+s.toFixed(3)+')';
-        o.style.zIndex=(10+Math.round(depth*90));
-        o.style.opacity=(0.5+0.5*depth).toFixed(2);
-      });
-      requestAnimationFrame(frame);
-    }
-    requestAnimationFrame(frame);
-    addEventListener('mousemove',function(e){
-      st.style.transform='translate('+((e.clientX/innerWidth-.5)*16).toFixed(1)+'px,'+((e.clientY/innerHeight-.5)*11).toFixed(1)+'px)';
-    });
-  })();
-
-  // live contract link
   var CID=document.getElementById('cid').textContent.trim();
   document.getElementById('explorer').href='https://stellar.expert/explorer/testnet/contract/'+CID;
 
-  // scroll reveal
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target);}});},{threshold:.15});
   document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
 
-  // floating particle background
+  (function(){
+    var el=document.getElementById('coins'); if(!el)return;
+    addEventListener('mousemove',function(e){
+      el.style.transform='translate('+((e.clientX/innerWidth-.5)*16).toFixed(1)+'px,'+((e.clientY/innerHeight-.5)*11).toFixed(1)+'px)';
+    });
+  })();
+
   (function(){
     var c=document.getElementById('bg'), x=c.getContext('2d'), W,H,ps=[];
-    function size(){W=c.width=innerWidth;H=c.height=innerHeight;}
-    size(); addEventListener('resize',size);
-    for(var i=0;i<46;i++)ps.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*2.4+.6,s:Math.random()*.4+.15,o:Math.random()*.5+.2});
-    function tick(){
-      x.clearRect(0,0,W,H);
-      for(var i=0;i<ps.length;i++){var p=ps[i];p.y-=p.s;if(p.y<-6){p.y=H+6;p.x=Math.random()*W;}
-        var g=x.createLinearGradient(p.x,p.y-p.r,p.x,p.y+p.r);g.addColorStop(0,'#8b5cff');g.addColorStop(1,'#5b8def');
-        x.globalAlpha=p.o;x.fillStyle=g;x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fill();}
-      x.globalAlpha=1;requestAnimationFrame(tick);
-    } tick();
+    function size(){W=c.width=innerWidth;H=c.height=innerHeight;} size(); addEventListener('resize',size);
+    for(var i=0;i<44;i++)ps.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*2.2+.6,s:Math.random()*.35+.14,o:Math.random()*.45+.18});
+    function tick(){x.clearRect(0,0,W,H);for(var i=0;i<ps.length;i++){var p=ps[i];p.y-=p.s;if(p.y<-6){p.y=H+6;p.x=Math.random()*W;}
+      var g=x.createLinearGradient(p.x,p.y-p.r,p.x,p.y+p.r);g.addColorStop(0,'#8b5cff');g.addColorStop(1,'#5b8def');
+      x.globalAlpha=p.o;x.fillStyle=g;x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fill();}x.globalAlpha=1;requestAnimationFrame(tick);}tick();
   })();
 
   function joinWaitlist(e){
