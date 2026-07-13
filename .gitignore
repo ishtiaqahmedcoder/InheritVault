@@ -33,3 +33,8 @@ secrets.json
 # Local preview helpers (machine-specific)
 .claude/
 web/_serve.js
+
+# Image tooling + large source logos
+.imgtools/
+web/only-logo.png
+web/logo.png
