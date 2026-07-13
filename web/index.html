@@ -172,20 +172,12 @@
     <div class="system" id="system">
       <svg class="rings" viewBox="0 0 900 520" preserveAspectRatio="xMidYMid meet">
         <ellipse class="ring" cx="450" cy="260" rx="150" ry="54"/>
-        <ellipse class="ring" cx="450" cy="260" rx="235" ry="84"/>
-        <ellipse class="ring" cx="450" cy="260" rx="320" ry="116"/>
+        <ellipse class="ring" cx="450" cy="260" rx="222" ry="80"/>
+        <ellipse class="ring" cx="450" cy="260" rx="300" ry="108"/>
+        <ellipse class="ring" cx="450" cy="260" rx="378" ry="134"/>
       </svg>
       <div class="core">
         <svg viewBox="0 0 48 48" fill="none"><path d="M24 3.2l16.4 9.4v18.8L24 40.8 7.6 31.4V12.6L24 3.2Z" fill="#ffffff22" stroke="#ffffff88" stroke-width="1.2"/><circle cx="24" cy="20.6" r="4.3" fill="#fff"/><path d="M21.8 23.3h4.4l1.3 8.1a3.5 3.5 0 0 1-7 0l1.3-8.1Z" fill="#fff"/></svg>
-      </div>
-      <div class="planet p-btc" data-ring="0" data-size="52" data-speed="1" style="width:52px;height:52px">
-        <div class="halo"></div><div class="disc"><svg viewBox="0 0 32 32" fill="#fff"><path d="M22.5 14.1c.31-2.06-1.26-3.17-3.4-3.9l.7-2.79-1.7-.42-.68 2.71c-.44-.11-.9-.21-1.36-.32l.68-2.73-1.7-.42-.7 2.79c-.37-.09-.73-.17-1.08-.26l-2.34-.59-.45 1.81s1.26.29 1.23.31c.69.17.81.63.79 1l-1.9 7.62c-.08.21-.3.52-.78.4.02.03-1.23-.31-1.23-.31l-.84 1.94 2.21.55c.41.1.81.21 1.21.31l-.71 2.83 1.7.42.7-2.79c.46.13.91.24 1.35.35l-.69 2.77 1.7.42.71-2.82c2.9.55 5.08.33 6-2.29.74-2.11-.04-3.32-1.56-4.11 1.11-.26 1.94-.98 2.16-2.48zm-3.87 5.44c-.53 2.11-4.08.97-5.23.69l.94-3.74c1.15.29 4.84.85 4.29 3.05zm.53-5.47c-.48 1.92-3.44.95-4.4.71l.85-3.4c.96.24 4.05.69 3.55 2.69z"/></svg></div>
-      </div>
-      <div class="planet p-xlm" data-ring="1" data-size="64" data-speed="-.7" style="width:64px;height:64px">
-        <div class="halo"></div><div class="disc"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2.4c3 2.8 4.5 6.4 4.5 9.7l-1.6 3.5H9.1L7.5 12.1C7.5 8.8 9 5.2 12 2.4Z"/><circle cx="12" cy="9.4" r="1.9" fill="#18233a"/><path d="M9 15.2l-2.5 2 .3-3.7zM15 15.2l2.5 2-.3-3.7z"/><path d="M10.7 15.6h2.6L12 19.6z" fill="#ffd06b"/></svg></div>
-      </div>
-      <div class="planet p-usdt" data-ring="2" data-size="58" data-speed=".5" style="width:58px;height:58px">
-        <div class="halo"></div><div class="disc"><svg viewBox="0 0 32 32" fill="#fff"><path d="M17.9 17.4v-3.08h6.05V10.3H8.06v4.02h6.04v3.08c-4.92.22-8.62 1.2-8.62 2.36 0 1.17 3.7 2.14 8.62 2.36v6.84h3.8v-6.84c4.9-.22 8.6-1.2 8.6-2.36 0-1.17-3.7-2.14-8.6-2.36zm0 4v-.01c-.12.01-.74.05-2.12.05-1.1 0-1.87-.03-2.14-.05v.01c-4.2-.19-7.34-.92-7.34-1.8 0-.88 3.14-1.61 7.34-1.8v2.86c.28.02 1.06.07 2.16.07 1.32 0 1.98-.06 2.1-.07v-2.86c4.2.19 7.32.92 7.32 1.8 0 .88-3.13 1.61-7.32 1.8z"/></svg></div>
       </div>
     </div>
   </section>
@@ -290,23 +282,44 @@
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target);}});},{threshold:.12});
   document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
 
-  // orbital planets (elliptical solar-system motion around the vault core)
+  // orbital planets: a solar system of coins around the vault core
   (function(){
     var sys=document.getElementById('system'); if(!sys)return;
-    var rings=[{rx:150,ry:54},{rx:235,ry:84},{rx:320,ry:116}];
-    var planets=[].slice.call(sys.querySelectorAll('.planet')).map(function(p){
-      return {el:p, ring:+p.dataset.ring, size:+p.dataset.size, speed:+p.dataset.speed, phase:Math.random()*6.28};
+    var rings=[{rx:150,ry:54},{rx:222,ry:80},{rx:300,ry:108},{rx:378,ry:134}];
+    var BTC='<svg viewBox="0 0 32 32" fill="#fff"><path d="M22.5 14.1c.31-2.06-1.26-3.17-3.4-3.9l.7-2.79-1.7-.42-.68 2.71c-.44-.11-.9-.21-1.36-.32l.68-2.73-1.7-.42-.7 2.79c-.37-.09-.73-.17-1.08-.26l-2.34-.59-.45 1.81s1.26.29 1.23.31c.69.17.81.63.79 1l-1.9 7.62c-.08.21-.3.52-.78.4.02.03-1.23-.31-1.23-.31l-.84 1.94 2.21.55c.41.1.81.21 1.21.31l-.71 2.83 1.7.42.7-2.79c.46.13.91.24 1.35.35l-.69 2.77 1.7.42.71-2.82c2.9.55 5.08.33 6-2.29.74-2.11-.04-3.32-1.56-4.11 1.11-.26 1.94-.98 2.16-2.48zm-3.87 5.44c-.53 2.11-4.08.97-5.23.69l.94-3.74c1.15.29 4.84.85 4.29 3.05zm.53-5.47c-.48 1.92-3.44.95-4.4.71l.85-3.4c.96.24 4.05.69 3.55 2.69z"/></svg>';
+    var ROCKET='<svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2.4c3 2.8 4.5 6.4 4.5 9.7l-1.6 3.5H9.1L7.5 12.1C7.5 8.8 9 5.2 12 2.4Z"/><circle cx="12" cy="9.4" r="1.9" fill="#18233a"/><path d="M9 15.2l-2.5 2 .3-3.7zM15 15.2l2.5 2-.3-3.7z"/><path d="M10.7 15.6h2.6L12 19.6z" fill="#ffd06b"/></svg>';
+    var TETHER='<svg viewBox="0 0 32 32" fill="#fff"><path d="M17.9 17.4v-3.08h6.05V10.3H8.06v4.02h6.04v3.08c-4.92.22-8.62 1.2-8.62 2.36 0 1.17 3.7 2.14 8.62 2.36v6.84h3.8v-6.84c4.9-.22 8.6-1.2 8.6-2.36 0-1.17-3.7-2.14-8.6-2.36zm0 4v-.01c-.12.01-.74.05-2.12.05-1.1 0-1.87-.03-2.14-.05v.01c-4.2-.19-7.34-.92-7.34-1.8 0-.88 3.14-1.61 7.34-1.8v2.86c.28.02 1.06.07 2.16.07 1.32 0 1.98-.06 2.1-.07v-2.86c4.2.19 7.32.92 7.32 1.8 0 .88-3.13 1.61-7.32 1.8z"/></svg>';
+    var COINS=[
+      {c1:'#ffca7a',c2:'#f7931a',c3:'#c97b12',halo:'#f7931a',logo:BTC,ring:1,size:54,speed:1},
+      {c1:'#aab8f5',c2:'#627eea',c3:'#3a4fa0',halo:'#627eea',glyph:'Ξ',ring:2,size:58,speed:-0.72},
+      {c1:'#3d4d67',c2:'#18233a',c3:'#0c1424',halo:'#5b8def',logo:ROCKET,ring:0,size:50,speed:0.86},
+      {c1:'#57d7ad',c2:'#26a17b',c3:'#1a7d5e',halo:'#26a17b',logo:TETHER,ring:3,size:56,speed:0.5},
+      {c1:'#8bc0f5',c2:'#2775ca',c3:'#184e86',halo:'#2775ca',glyph:'$',ring:2,size:48,speed:1.05},
+      {c1:'#c9a6ff',c2:'#9945ff',c3:'#5a1f9e',halo:'#9945ff',glyph:'◎',ring:1,size:46,speed:-0.6},
+      {c1:'#ffe07a',c2:'#f0b90b',c3:'#b98c06',halo:'#f0b90b',glyph:'◆',ring:3,size:44,speed:-0.9},
+      {c1:'#7a838f',c2:'#23292f',c3:'#0e1216',halo:'#98a4b3',glyph:'✕',ring:0,size:42,speed:0.66},
+      {c1:'#5f8bff',c2:'#0033ad',c3:'#001f6b',halo:'#3468ff',glyph:'₳',ring:2,size:46,speed:-0.5},
+      {c1:'#e8d08a',c2:'#c2a633',c3:'#8f7a20',halo:'#c2a633',glyph:'Ð',ring:3,size:48,speed:0.78}
+    ];
+    var planets=COINS.map(function(co){
+      var el=document.createElement('div'); el.className='planet';
+      el.style.width=el.style.height=co.size+'px';
+      var logo=co.logo||('<span style="font-weight:800;font-size:'+Math.round(co.size*0.5)+'px;color:#fff;line-height:1">'+co.glyph+'</span>');
+      el.innerHTML='<div class="halo" style="background:radial-gradient(circle,'+co.halo+'99,transparent 66%)"></div>'+
+        '<div class="disc" style="background:radial-gradient(circle at 36% 30%,'+co.c1+','+co.c2+' 60%,'+co.c3+')">'+logo+'</div>';
+      sys.appendChild(el);
+      return {el:el,ring:co.ring,size:co.size,speed:co.speed,phase:Math.random()*6.28};
     });
     function frame(ts){
       var W=sys.clientWidth, H=sys.clientHeight, cx=W/2, cy=H/2, sx=W/900, sy=H/520;
       planets.forEach(function(p){
         var r=rings[p.ring], ang=p.phase+ts/2600*p.speed;
         var x=cx+r.rx*sx*Math.cos(ang), y=cy+r.ry*sy*Math.sin(ang);
-        var depth=(Math.sin(ang)+1)/2;              // 1 = front(bottom), 0 = back(top)
-        var s=0.72+0.5*depth;
+        var depth=(Math.sin(ang)+1)/2;
+        var s=0.7+0.5*depth;
         p.el.style.transform='translate('+(x-p.size/2).toFixed(1)+'px,'+(y-p.size/2).toFixed(1)+'px) scale('+s.toFixed(3)+')';
         p.el.style.zIndex=(depth<.5?5:35);
-        p.el.style.opacity=(0.62+0.38*depth).toFixed(2);
+        p.el.style.opacity=(0.6+0.4*depth).toFixed(2);
       });
       requestAnimationFrame(frame);
     }
