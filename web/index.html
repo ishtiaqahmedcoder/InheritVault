@@ -66,12 +66,16 @@
     background:radial-gradient(circle,#6b5cff2e,transparent 66%);animation:pulseC 3s ease-in-out infinite}
   @keyframes pulseC{0%,100%{transform:scale(1);opacity:.65}50%{transform:scale(1.18);opacity:1}}
   .orbiter{position:absolute;left:0;top:0;will-change:transform}
-  .coin3d{position:relative;transform-style:preserve-3d;animation:spin 5.5s linear infinite}
-  @keyframes spin{from{transform:rotateY(0)}to{transform:rotateY(360deg)}}
-  @keyframes spinrev{from{transform:rotateY(360deg)}to{transform:rotateY(0)}}
+  .coin3d{position:relative;transform-style:preserve-3d;animation:wobble 5s ease-in-out infinite}
+  @keyframes wobble{0%,100%{transform:rotateY(-26deg) rotateX(8deg)}50%{transform:rotateY(26deg) rotateX(-4deg)}}
+  @keyframes wobble2{0%,100%{transform:rotateY(24deg) rotateX(-6deg)}50%{transform:rotateY(-28deg) rotateX(7deg)}}
   .disc{position:absolute;inset:0;border-radius:50%}
-  .face-mark{position:absolute;inset:0;backface-visibility:hidden}
+  .face-mark{position:absolute;inset:0;backface-visibility:hidden;overflow:hidden;border-radius:50%}
   .face-mark svg{width:100%;height:100%;display:block;filter:drop-shadow(0 0 1px #00000030)}
+  .face-mark::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(115deg,transparent 40%,#ffffff70 49%,#ffffff90 51%,transparent 60%);
+    animation:glare 4.5s ease-in-out infinite}
+  @keyframes glare{0%,100%{transform:translateX(-38%)}50%{transform:translateX(38%)}}
 
   section{padding:80px 0;position:relative;z-index:2}
   .eyebrow{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
@@ -162,7 +166,7 @@
     <div class="stage"><div class="orbit-stage" id="orbitStage">
       <div class="center"><svg viewBox="0 0 48 48"><path d="M24 3l18 7v13c0 11-8 19-18 22C14 42 6 34 6 23V10l18-7z" fill="url(#ivg)"/><path d="M24 17a5 5 0 00-2 9.6V31a2 2 0 004 0v-4.4A5 5 0 0024 17z" fill="#fff"/></svg></div>
 
-      <div class="orbiter"><div class="coin3d c-btc" style="width:130px;height:130px;animation-name:spinrev;animation-duration:5s"><div class="face-mark">
+      <div class="orbiter"><div class="coin3d c-btc" style="width:130px;height:130px;animation-name:wobble2;animation-duration:4.6s"><div class="face-mark">
         <svg viewBox="0 0 200 200"><defs><path id="rB" d="M100 100 m0 -78 a78 78 0 1 1 -0.1 0" fill="none"/></defs>
           <circle cx="100" cy="100" r="98" fill="none" stroke="#00000040" stroke-width="9" stroke-dasharray="2.6 3.2"/>
           <circle cx="100" cy="100" r="90" fill="none" stroke="#ffffff40" stroke-width="1.5"/>
@@ -185,7 +189,7 @@
             <path d="M4.4 20.2l-3 2.5.4-4.6zM13.6 20.2l3 2.5-.4-4.6z" fill="#00000052"/></g></g>
         </svg></div></div></div>
 
-      <div class="orbiter"><div class="coin3d c-usdt" style="width:130px;height:130px;animation-duration:5.5s"><div class="face-mark">
+      <div class="orbiter"><div class="coin3d c-usdt" style="width:130px;height:130px;animation-name:wobble2;animation-duration:5.6s"><div class="face-mark">
         <svg viewBox="0 0 200 200"><defs><path id="rU" d="M100 100 m0 -78 a78 78 0 1 1 -0.1 0" fill="none"/></defs>
           <circle cx="100" cy="100" r="98" fill="none" stroke="#00000038" stroke-width="9" stroke-dasharray="2.6 3.2"/>
           <circle cx="100" cy="100" r="90" fill="none" stroke="#ffffff45" stroke-width="1.5"/>
