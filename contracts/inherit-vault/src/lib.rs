@@ -23,8 +23,12 @@ use soroban_sdk::{contract, contracterror, contractimpl, contracttype, token, Ad
 /// Shares are expressed in basis points; they must sum to exactly 100%.
 const BPS_DENOM: u32 = 10_000;
 
-/// Minimum check-in interval: 1 day (seconds). Prevents lock-out footguns.
-const MIN_INTERVAL: u64 = 86_400;
+/// Minimum check-in interval in seconds. This is only a floor that guards
+/// against a zero interval (which would lock the owner out instantly). Sensible
+/// real-world minimums (weeks or months) are recommended and enforced by the
+/// application layer, not baked into the contract, so the primitive stays
+/// flexible (short intervals are useful for testing and special cases).
+const MIN_INTERVAL: u64 = 60;
 
 /// Ledgers per day (~5s close time), used for storage TTL management.
 const DAY_IN_LEDGERS: u32 = 17_280;

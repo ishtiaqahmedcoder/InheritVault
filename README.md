@@ -52,9 +52,10 @@ See [KEEPER.md](KEEPER.md) for the full roadmap and grant plan.
 | `claim()` | anyone | after the deadline, distribute by share |
 | `status`, `deadline`, `is_claimable`, `time_left`, `beneficiaries`, `owner`, `token`, `last_check_in` | anyone | read-only views |
 
-Rules enforced by the contract: shares sum to exactly 10,000 bps; minimum interval
-is 1 day; the rounding remainder goes to the last beneficiary so the vault fully
-empties; a `claimed` flag prevents any second payout.
+Rules enforced by the contract: shares sum to exactly 10,000 bps; a minimum
+interval floor guards against a zero interval (the app recommends long,
+real-world intervals); the rounding remainder goes to the last beneficiary so the
+vault fully empties; a `claimed` flag prevents any second payout.
 
 ## Build and test
 

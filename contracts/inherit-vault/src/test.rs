@@ -98,11 +98,11 @@ fn init_sets_state_and_starts_active() {
 fn init_rejects_short_interval() {
     let v = new_env();
     let a = Address::generate(&v.env);
-    // 1 hour < 1 day minimum.
+    // 30 seconds is below the minimum interval floor.
     let res = v.client.try_init(
         &v.owner,
         &v.token_addr,
-        &3_600,
+        &30,
         &0,
         &vec![&v.env, bene(&a, 10_000)],
     );
