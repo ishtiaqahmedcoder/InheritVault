@@ -27,8 +27,8 @@
 
   .logo{display:flex;align-items:center;gap:11px;font-weight:800;font-size:19px}
   .logo svg{width:36px;height:36px;filter:drop-shadow(0 0 12px #a855f780)}
-  .logo .fulllogo{height:70px;width:auto;display:block;filter:drop-shadow(0 0 16px #a855f766)}
-  @media(max-width:600px){.logo .fulllogo{height:56px}}
+  .logo .fulllogo{height:98px;width:auto;display:block;filter:drop-shadow(0 0 20px #a855f77a)}
+  @media(max-width:600px){.logo .fulllogo{height:70px}}
   .logo b{font-weight:800}
   .logo b span{background:linear-gradient(120deg,var(--cyan),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent}
 
@@ -39,12 +39,13 @@
     box-shadow:0 0 30px #a855f755}
   .btn.primary:hover{box-shadow:0 0 44px #22d3ee88}
 
-  header{position:sticky;top:0;z-index:40;backdrop-filter:blur(16px);
-    background:#05060ecc;border-bottom:1px solid var(--line)}
-  nav{display:flex;align-items:center;justify-content:space-between;height:104px}
-  .navlinks{display:flex;gap:30px;align-items:center;font-size:15px;color:var(--tx2)}
-  .navlinks a:hover{color:var(--tx)}
-  @media(max-width:860px){.navlinks{display:none}}
+  header{position:sticky;top:0;z-index:40;background:transparent}
+  nav{display:flex;align-items:center;justify-content:space-between;height:120px}
+  .navpill{display:flex;gap:4px;align-items:center;background:#0f1330cc;border:1px solid #ffffff20;
+    border-radius:999px;padding:7px 9px;backdrop-filter:blur(14px);box-shadow:0 12px 34px -14px #00000099}
+  .navpill a{font-size:14.5px;color:var(--tx2);padding:9px 17px;border-radius:999px;transition:.16s;white-space:nowrap}
+  .navpill a:hover{color:var(--tx);background:#ffffff14}
+  @media(max-width:900px){.navpill{display:none}}
 
   /* hero */
   .hero{text-align:center;padding:60px 0 20px}
@@ -149,7 +150,7 @@
 
 <header><div class="wrap"><nav>
   <a class="logo" href="#top"><img class="fulllogo" src="logo-bg-remove.png" alt="InheritVault" /></a>
-  <div class="navlinks">
+  <div class="navpill">
     <a href="#how">How it works</a><a href="#why">Why Stellar</a>
     <a href="#proof">Live on testnet</a><a href="#waitlist">Waitlist</a>
     <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener">GitHub</a>
