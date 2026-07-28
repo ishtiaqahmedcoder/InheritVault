@@ -2,7 +2,7 @@
 
 ### On-chain, non-custodial inheritance for the Stellar network
 
-**Version 1.0** · Draft for the Stellar Community Fund and public review
+**Version 1.0**, Draft for the Stellar Community Fund and public review
 
 **Repository:** https://github.com/ishtiaqahmedcoder/InheritVault
 **Live contract (Stellar testnet):** `CAWHXHUN2UG5C7VQNIO5UAIPIINVBQKGHN5YZN62B3ZF4OKTARLO7FPZ`
