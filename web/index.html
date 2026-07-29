@@ -4,153 +4,11 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>InheritVault: on-chain inheritance for Stellar</title>
-<meta name="description" content="A non-custodial dead-man's switch for crypto on Stellar. Check in periodically; if you go silent, your funds pass automatically to the people you chose." />
+<meta name="description" content="A non-custodial dead-man's switch for crypto on Stellar. Check in periodically, if you go silent, your funds pass automatically to the people you chose." />
 <link rel="icon" type="image/png" href="only-logo-t.png" />
-<style>
-  :root{
-    --bg:#05060e; --bg2:#0a0d1a; --card:#0d1120; --card2:#111633;
-    --line:#ffffff14; --tx:#eaeefb; --tx2:#8b93ad;
-    --cyan:#22d3ee; --purple:#a855f7; --blue:#6366f1; --orange:#fb923c;
-    --radius:16px; --max:1140px;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:var(--bg);color:var(--tx);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-  a{color:inherit;text-decoration:none}
-  canvas#stars{position:fixed;inset:0;z-index:0;pointer-events:none}
-  .neb{position:fixed;border-radius:50%;filter:blur(120px);z-index:0;pointer-events:none;opacity:.6}
-  .neb.a{width:620px;height:620px;top:-180px;left:-160px;background:radial-gradient(circle,#6d28d980,transparent 70%)}
-  .neb.b{width:560px;height:560px;top:280px;right:-180px;background:radial-gradient(circle,#0891b280,transparent 70%)}
-  .neb.c{width:520px;height:520px;top:1400px;left:-120px;background:radial-gradient(circle,#4338ca70,transparent 70%)}
-  .wrap{max-width:var(--max);margin:0 auto;padding:0 24px;position:relative;z-index:3}
-
-  .logo{display:flex;align-items:center;gap:14px;text-decoration:none}
-  .logo .licon{width:108px;height:90px;flex:0 0 auto;background:url(only-logo-t.png) no-repeat center;
-    background-size:152% auto;filter:drop-shadow(0 0 14px #a855f766)}
-  .logo .ltext{display:flex;flex-direction:column;line-height:1.02}
-  .logo .lname{font-size:34px;font-weight:800;letter-spacing:-.02em;color:#eef1fb}
-  .logo .lname span{background:linear-gradient(120deg,#8b5cff,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .logo .ltag{font-size:12px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;margin-top:7px;color:#828db0}
-  @media(max-width:600px){.logo{gap:11px}.logo .licon{width:62px;height:62px}.logo .lname{font-size:23px}.logo .ltag{font-size:9.5px;letter-spacing:.15em;margin-top:5px}}
-
-  .btn{display:inline-flex;align-items:center;gap:9px;padding:14px 26px;border-radius:999px;font-weight:600;
-    font-size:15px;border:1px solid var(--line);transition:.2s;cursor:pointer;background:#ffffff08;color:var(--tx)}
-  .btn:hover{border-color:#ffffff40;transform:translateY(-2px)}
-  .btn.primary{background:linear-gradient(120deg,var(--purple),var(--cyan));color:#040a14;border:none;font-weight:700;
-    box-shadow:0 0 30px #a855f755}
-  .btn.primary:hover{box-shadow:0 0 44px #22d3ee88}
-
-  header{position:sticky;top:0;z-index:60;background:#05060ee6;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
-  nav{display:flex;align-items:center;justify-content:space-between;height:116px}
-  .navpill{display:flex;gap:4px;align-items:center;background:#0f1330cc;border:1px solid #ffffff20;
-    border-radius:999px;padding:7px 9px;backdrop-filter:blur(14px);box-shadow:0 12px 34px -14px #00000099}
-  .navpill a{font-size:14.5px;color:var(--tx2);padding:9px 17px;border-radius:999px;transition:.16s;white-space:nowrap}
-  .navpill a:hover{color:var(--tx);background:#ffffff14}
-  .menu-btn{display:none;width:50px;height:50px;flex:0 0 auto;border-radius:14px;background:#0f1330cc;
-    border:1px solid #ffffff20;color:var(--tx);align-items:center;justify-content:center;cursor:pointer;backdrop-filter:blur(14px);transition:.15s}
-  .menu-btn.active{background:#1a2148;border-color:#ffffff45}
-  .mobile-menu{display:none;position:fixed;left:0;right:0;top:0;z-index:55;flex-direction:column;gap:9px;
-    padding:120px 22px 28px;background:#070a14f2;backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
-  .mobile-menu.open{display:flex}
-  .mobile-menu a{padding:15px 18px;border-radius:14px;color:var(--tx);font-size:17px;background:#ffffff0a;border:1px solid var(--line);text-align:center}
-  .mobile-menu a:hover{background:#ffffff16}
-  @media(max-width:900px){.navpill{display:none}.header-cta{display:none}.menu-btn{display:flex}}
-
-  /* hero */
-  .hero{text-align:center;padding:60px 0 20px}
-  .pill{display:inline-flex;align-items:center;gap:9px;font-size:13px;color:var(--tx2);
-    border:1px solid var(--line);border-radius:999px;padding:8px 16px;margin-bottom:30px;background:#ffffff08}
-  .dot{width:7px;height:7px;border-radius:50%;background:#34d399;box-shadow:0 0 10px #34d399;animation:pulse 2s infinite}
-  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-  h1{font-size:clamp(40px,7vw,80px);line-height:1.03;letter-spacing:-.03em;font-weight:800;margin-bottom:24px}
-  h1 em{font-style:normal;background:linear-gradient(120deg,#22d3ee,#a855f7 55%,#fb923c);
-    -webkit-background-clip:text;background-clip:text;color:transparent}
-  .sub{font-size:clamp(17px,2.2vw,21px);color:var(--tx2);max-width:60ch;margin:0 auto 36px}
-  .cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:20px}
-
-  /* orbital system */
-  .system{position:relative;height:520px;margin-top:10px}
-  @media(max-width:760px){.system{height:400px}}
-  .system svg.rings{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-  .system .ring{fill:none;stroke:url(#ringg);stroke-width:1.2;opacity:.5}
-  .core{position:absolute;left:50%;top:50%;width:132px;height:132px;margin:-66px 0 0 -66px;z-index:20;
-    border-radius:50%;display:grid;place-items:center;
-    background:radial-gradient(circle at 40% 35%,#c4b5fd,#7c3aed 45%,#3b1d8f 100%);
-    box-shadow:0 0 60px #a855f7aa,inset 0 0 30px #ffffff30}
-  .core::after{content:"";position:absolute;inset:-26px;border-radius:50%;z-index:-1;
-    background:radial-gradient(circle,#a855f755,transparent 66%);animation:breathe 3.4s ease-in-out infinite}
-  @keyframes breathe{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.18);opacity:1}}
-  .core svg{width:66px;height:66px;filter:drop-shadow(0 0 8px #ffffffaa)}
-  .planet{position:absolute;left:0;top:0;border-radius:50%;will-change:transform;overflow:visible}
-  .planet .disc{position:absolute;inset:0;border-radius:50%;display:grid;place-items:center;overflow:hidden}
-  .planet .disc>svg{width:56%;height:56%;filter:drop-shadow(0 1px 2px #00000050)}
-  .planet .halo{position:absolute;inset:-30%;border-radius:50%;z-index:-1;filter:blur(10px)}
-  .p-btc .disc{background:radial-gradient(circle at 36% 30%,#ffca7a,#f7931a 60%,#c97b12)}
-  .p-btc .halo{background:radial-gradient(circle,#f7931a80,transparent 65%)}
-  .p-xlm .disc{background:radial-gradient(circle at 36% 30%,#3d4d67,#18233a 60%,#0c1424)}
-  .p-xlm .halo{background:radial-gradient(circle,#5b8def80,transparent 65%)}
-  .p-usdt .disc{background:radial-gradient(circle at 36% 30%,#57d7ad,#26a17b 60%,#1a7d5e)}
-  .p-usdt .halo{background:radial-gradient(circle,#26a17b90,transparent 65%)}
-
-  /* sections */
-  section{padding:88px 0;position:relative;z-index:3}
-  .eyebrow{font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;text-align:center;
-    background:linear-gradient(120deg,var(--cyan),var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent}
-  h2{font-size:clamp(28px,4.4vw,44px);letter-spacing:-.02em;text-align:center;margin:12px 0;font-weight:800}
-  .lead{text-align:center;color:var(--tx2);max-width:60ch;margin:0 auto 54px;font-size:18px}
-  .reveal{opacity:0;transform:translateY(30px);transition:.8s cubic-bezier(.2,.7,.2,1)}
-  .reveal.show{opacity:1;transform:none}
-
-  .statband{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;max-width:960px;margin:0 auto;
-    border:1px solid var(--line);border-radius:22px;padding:32px 22px;background:linear-gradient(180deg,#ffffff08,#ffffff03)}
-  @media(max-width:760px){.statband{grid-template-columns:repeat(2,1fr)}}
-  .st{text-align:center}
-  .st .n{font-size:clamp(28px,3.6vw,40px);font-weight:800;background:linear-gradient(120deg,#22d3ee,#a855f7);
-    -webkit-background-clip:text;background-clip:text;color:transparent}
-  .st .l{color:var(--tx2);font-size:13.5px;margin-top:6px}
-
-  .grid{display:grid;gap:20px}.cols-3{grid-template-columns:repeat(3,1fr)}.cols-2{grid-template-columns:repeat(2,1fr)}
-  @media(max-width:820px){.cols-3,.cols-2{grid-template-columns:1fr}}
-  .card{background:linear-gradient(180deg,#ffffff0a,#ffffff03);border:1px solid var(--line);border-radius:20px;
-    padding:30px;transition:.25s;position:relative;overflow:hidden}
-  .card:hover{transform:translateY(-5px);border-color:#a855f760;box-shadow:0 20px 50px -20px #a855f755}
-  .card h3{font-size:19px;margin-bottom:8px;font-weight:700}.card p{color:var(--tx2);font-size:15.5px}
-  .ico{width:54px;height:54px;border-radius:15px;background:linear-gradient(135deg,#22d3ee22,#a855f722);
-    border:1px solid var(--line);display:grid;place-items:center;font-size:24px;margin-bottom:18px}
-
-  .steps{display:grid;gap:16px;max-width:800px;margin:0 auto}
-  .step{display:flex;gap:20px;align-items:flex-start;background:linear-gradient(180deg,#ffffff0a,#ffffff03);
-    border:1px solid var(--line);border-radius:18px;padding:24px 26px;transition:.25s}
-  .step:hover{transform:translateX(6px);border-color:#22d3ee55}
-  .step .n{flex:0 0 auto;width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--purple),var(--cyan));
-    color:#04101a;font-weight:800;display:grid;place-items:center;font-size:17px}
-  .step h3{font-size:18px;margin-bottom:3px}.step p{color:var(--tx2);font-size:15px}
-
-  .proof{background:linear-gradient(135deg,#a855f715,#22d3ee12);border:1px solid var(--line);border-radius:24px;
-    padding:44px;text-align:center;max-width:800px;margin:0 auto;box-shadow:0 0 60px -20px #a855f755}
-  .proof code{display:inline-block;font-family:ui-monospace,Menlo,monospace;font-size:13px;background:#00000040;
-    border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:10px 0;word-break:break-all;color:var(--cyan)}
-  .badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:8px}
-  .tag{font-size:12.5px;color:var(--tx2);border:1px solid var(--line);border-radius:999px;padding:6px 13px;background:#ffffff08}
-
-  form{max-width:520px;margin:0 auto;display:flex;gap:10px;flex-wrap:wrap}
-  input[type=email]{flex:1;min-width:220px;padding:16px 18px;border-radius:999px;border:1px solid var(--line);
-    background:#ffffff08;color:var(--tx);font-size:15px}
-  input[type=email]:focus{outline:none;border-color:var(--cyan);box-shadow:0 0 0 4px #22d3ee25}
-  .note{text-align:center;color:var(--tx2);font-size:13.5px;margin-top:14px}
-  .ok-msg{text-align:center;color:#34d399;font-weight:600;margin-top:16px;display:none;font-size:17px}
-
-  footer{border-top:1px solid var(--line);margin-top:30px;padding:48px 0 40px;position:relative;z-index:3}
-  .foot-top{display:flex;justify-content:space-between;gap:28px;flex-wrap:wrap;align-items:flex-start}
-  .foot-brand{max-width:36ch}.foot-brand p{color:var(--tx2);font-size:14px;margin-top:12px}
-  .foot-links{display:flex;gap:26px;flex-wrap:wrap;font-size:15px;color:var(--tx2)}.foot-links a:hover{color:var(--tx)}
-  .foot-bottom{margin-top:30px;padding-top:22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;
-    gap:16px;flex-wrap:wrap;align-items:center;color:var(--tx2);font-size:12.5px}
-  .foot-bottom .disc{max-width:78ch;opacity:.85}
-</style>
+<link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body class="page-home">
 <canvas id="stars"></canvas>
 <div class="neb a"></div><div class="neb b"></div><div class="neb c"></div>
 <svg width="0" height="0" style="position:absolute"><defs>
@@ -159,16 +17,17 @@
 </defs></svg>
 
 <header><div class="wrap"><nav>
-  <a class="logo" href="#top">
+  <a class="logo" href="index.html">
     <span class="licon"></span>
     <span class="ltext"><span class="lname"><span>Inherit</span>Vault</span><span class="ltag">Lock today. Protect forever.</span></span>
   </a>
   <div class="navpill">
     <a href="#how">How it works</a><a href="#why">Why Stellar</a>
-    <a href="#proof">Live on testnet</a><a href="#waitlist">Waitlist</a>
+    <a href="#proof">Live on testnet</a>
+    <a href="whitepaper.html">Whitepaper</a>
     <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener">GitHub</a>
   </div>
-  <a href="#waitlist" class="btn primary header-cta">Join waitlist</a>
+  <a href="app.html" class="btn primary header-cta">Dashboard</a>
   <button class="menu-btn" id="menuBtn" aria-label="Menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
 </nav></div></header>
 
@@ -176,15 +35,15 @@
   <a href="#how">How it works</a>
   <a href="#why">Why Stellar</a>
   <a href="#proof">Live on testnet</a>
-  <a href="#waitlist">Waitlist</a>
+  <a href="whitepaper.html">Whitepaper</a>
   <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener">GitHub</a>
-  <a href="#waitlist" class="btn primary" style="justify-content:center;margin-top:6px">Join waitlist</a>
+  <a href="app.html" class="btn primary" style="justify-content:center;margin-top:6px">Dashboard</a>
 </div>
 
 <div class="wrap" id="top">
   <section class="hero">
     <div class="pill"><span class="dot"></span> Live on Stellar testnet</div>
-    <h1>Your crypto should <em>outlive you.</em></h1>
+    <h1>Your crypto should <em>outlive you</em></h1>
     <p class="sub">A non-custodial dead-man's switch on Stellar. Lock your funds, check
       in from time to time, and if you ever go silent your assets pass automatically
       to the people you chose. No lawyer, no company holding your keys.</p>
@@ -294,6 +153,7 @@
     <div class="foot-links">
       <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener">GitHub</a>
       <a href="#how">How it works</a><a href="#why">Why Stellar</a><a href="#waitlist">Waitlist</a>
+      <a href="whitepaper.html">Whitepaper</a>
     </div>
   </div>
   <div class="foot-bottom">
