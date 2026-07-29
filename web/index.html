@@ -1,259 +1,381 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>InheritVault: on-chain inheritance for Stellar</title>
-<meta name="description" content="A non-custodial dead-man's switch for crypto on Stellar. Check in periodically, if you go silent, your funds pass automatically to the people you chose." />
-<link rel="icon" type="image/png" href="only-logo-t.png" />
-<link rel="stylesheet" href="style.css" />
-</head>
-<body class="page-home">
-<canvas id="stars"></canvas>
-<div class="neb a"></div><div class="neb b"></div><div class="neb c"></div>
-<svg width="0" height="0" style="position:absolute"><defs>
-  <linearGradient id="ivg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#a855f7"/></linearGradient>
-  <linearGradient id="ringg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee80"/><stop offset="1" stop-color="#a855f780"/></linearGradient>
-</defs></svg>
 
-<header><div class="wrap"><nav>
-  <a class="logo" href="index.html">
-    <span class="licon"></span>
-    <span class="ltext"><span class="lname"><span>Inherit</span>Vault</span><span class="ltag">Lock today. Protect forever.</span></span>
-  </a>
-  <div class="navpill">
-    <a href="#how">How it works</a><a href="#why">Why Stellar</a>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>InheritVault: on-chain inheritance for Stellar</title>
+  <meta name="description"
+    content="A non-custodial dead-man's switch for crypto on Stellar. Check in periodically, if you go silent, your funds pass automatically to the people you chose." />
+  <link rel="icon" type="image/png" href="only-logo-t.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="page-home">
+  <canvas id="stars"></canvas>
+  <div class="neb a"></div>
+  <div class="neb b"></div>
+  <div class="neb c"></div>
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <linearGradient id="ivg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#22d3ee" />
+        <stop offset="1" stop-color="#a855f7" />
+      </linearGradient>
+      <linearGradient id="ringg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#22d3ee80" />
+        <stop offset="1" stop-color="#a855f780" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <header>
+    <div class="wrap">
+      <nav>
+        <a class="logo" href="index.html">
+          <span class="licon"></span>
+          <span class="ltext"><span class="lname"><span>Inherit</span>Vault</span><span class="ltag">Lock today. Protect
+              forever.</span></span>
+        </a>
+        <div class="navpill">
+          <a href="#how">How it works</a><a href="#why">Why Stellar</a>
+          <a href="#proof">Live on testnet</a>
+          <a href="whitepaper.html">Whitepaper</a>
+          <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener">GitHub</a>
+        </div>
+        <a href="app.html" class="btn primary header-cta">Dashboard</a>
+        <button class="menu-btn" id="menuBtn" aria-label="Menu"><svg width="24" height="24" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M4 7h16M4 12h16M4 17h16" />
+          </svg></button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#how">How it works</a>
+    <a href="#why">Why Stellar</a>
     <a href="#proof">Live on testnet</a>
     <a href="whitepaper.html">Whitepaper</a>
     <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener">GitHub</a>
+    <a href="app.html" class="btn primary" style="justify-content:center;margin-top:6px">Dashboard</a>
   </div>
-  <a href="app.html" class="btn primary header-cta">Dashboard</a>
-  <button class="menu-btn" id="menuBtn" aria-label="Menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-</nav></div></header>
 
-<div class="mobile-menu" id="mobileMenu">
-  <a href="#how">How it works</a>
-  <a href="#why">Why Stellar</a>
-  <a href="#proof">Live on testnet</a>
-  <a href="whitepaper.html">Whitepaper</a>
-  <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener">GitHub</a>
-  <a href="app.html" class="btn primary" style="justify-content:center;margin-top:6px">Dashboard</a>
-</div>
+  <div class="wrap" id="top">
+    <section class="hero">
+      <div class="pill"><span class="dot"></span> Live on Stellar testnet</div>
+      <h1>Your crypto should <em>outlive you</em></h1>
+      <p class="sub">A non-custodial dead-man's switch on Stellar. Lock your funds, check
+        in from time to time, and if you ever go silent your assets pass automatically
+        to the people you chose. No lawyer, no company holding your keys.</p>
+      <div class="cta">
+        <a href="#waitlist" class="btn primary">Join the waitlist &#8594;</a>
+        <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener" class="btn">View the
+          code &#8599;</a>
+      </div>
 
-<div class="wrap" id="top">
-  <section class="hero">
-    <div class="pill"><span class="dot"></span> Live on Stellar testnet</div>
-    <h1>Your crypto should <em>outlive you</em></h1>
-    <p class="sub">A non-custodial dead-man's switch on Stellar. Lock your funds, check
-      in from time to time, and if you ever go silent your assets pass automatically
-      to the people you chose. No lawyer, no company holding your keys.</p>
-    <div class="cta">
-      <a href="#waitlist" class="btn primary">Join the waitlist &#8594;</a>
-      <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener" class="btn">View the code &#8599;</a>
-    </div>
+      <div class="system" id="system">
+        <svg class="rings" viewBox="0 0 900 520" preserveAspectRatio="xMidYMid meet">
+          <ellipse class="ring" cx="450" cy="260" rx="150" ry="54" />
+          <ellipse class="ring" cx="450" cy="260" rx="222" ry="80" />
+          <ellipse class="ring" cx="450" cy="260" rx="300" ry="108" />
+          <ellipse class="ring" cx="450" cy="260" rx="378" ry="134" />
+        </svg>
+        <div class="core">
+          <svg viewBox="0 0 48 48" fill="none">
+            <path d="M24 3.2l16.4 9.4v18.8L24 40.8 7.6 31.4V12.6L24 3.2Z" fill="#ffffff22" stroke="#ffffff88"
+              stroke-width="1.2" />
+            <circle cx="24" cy="20.6" r="4.3" fill="#fff" />
+            <path d="M21.8 23.3h4.4l1.3 8.1a3.5 3.5 0 0 1-7 0l1.3-8.1Z" fill="#fff" />
+          </svg>
+        </div>
+      </div>
+    </section>
+  </div>
 
-    <div class="system" id="system">
-      <svg class="rings" viewBox="0 0 900 520" preserveAspectRatio="xMidYMid meet">
-        <ellipse class="ring" cx="450" cy="260" rx="150" ry="54"/>
-        <ellipse class="ring" cx="450" cy="260" rx="222" ry="80"/>
-        <ellipse class="ring" cx="450" cy="260" rx="300" ry="108"/>
-        <ellipse class="ring" cx="450" cy="260" rx="378" ry="134"/>
-      </svg>
-      <div class="core">
-        <svg viewBox="0 0 48 48" fill="none"><path d="M24 3.2l16.4 9.4v18.8L24 40.8 7.6 31.4V12.6L24 3.2Z" fill="#ffffff22" stroke="#ffffff88" stroke-width="1.2"/><circle cx="24" cy="20.6" r="4.3" fill="#fff"/><path d="M21.8 23.3h4.4l1.3 8.1a3.5 3.5 0 0 1-7 0l1.3-8.1Z" fill="#fff"/></svg>
+  <section id="stats" style="padding-top:20px">
+    <div class="wrap reveal">
+      <div class="statband">
+        <div class="st">
+          <div class="n">20%+</div>
+          <div class="l">of all Bitcoin lost forever</div>
+        </div>
+        <div class="st">
+          <div class="n">60%</div>
+          <div class="l">never shared keys with family</div>
+        </div>
+        <div class="st">
+          <div class="n">~5s</div>
+          <div class="l">to settle a payout on Stellar</div>
+        </div>
+        <div class="st">
+          <div class="n">14/14</div>
+          <div class="l">contract tests passing</div>
+        </div>
       </div>
     </div>
   </section>
-</div>
 
-<section id="stats" style="padding-top:20px"><div class="wrap reveal"><div class="statband">
-  <div class="st"><div class="n">20%+</div><div class="l">of all Bitcoin lost forever</div></div>
-  <div class="st"><div class="n">60%</div><div class="l">never shared keys with family</div></div>
-  <div class="st"><div class="n">~5s</div><div class="l">to settle a payout on Stellar</div></div>
-  <div class="st"><div class="n">14/14</div><div class="l">contract tests passing</div></div>
-</div></div></section>
-
-<section id="problem"><div class="wrap">
-  <div class="reveal"><div class="eyebrow">The problem</div>
-    <h2>Self-custody has one fatal edge case</h2>
-    <p class="lead">A wallet is controlled entirely by whoever holds the key. When the only
-      person who knows it is gone, the funds are frozen on-chain forever, visible but unreachable.</p></div>
-  <div class="grid cols-3 reveal">
-    <div class="card"><div class="ico">🔑</div><h3>Keys die with you</h3><p>There is no reset and no recovery. If the key is lost, so is the money.</p></div>
-    <div class="card"><div class="ico">👪</div><h3>Families locked out</h3><p>Heirs can see the balance on-chain but have no way to ever reach it.</p></div>
-    <div class="card"><div class="ico">⚖️</div><h3>A will cannot help</h3><p>A legal will cannot move an on-chain wallet, and probate takes months.</p></div>
-  </div>
-</div></section>
-
-<section id="how"><div class="wrap">
-  <div class="reveal"><div class="eyebrow">How it works</div>
-    <h2>Silence is the only trigger</h2>
-    <p class="lead">The contract never decides that anyone died. It only measures the time
-      since your last check-in. That simplicity is what makes it auditable.</p></div>
-  <div class="steps reveal">
-    <div class="step"><div class="n">1</div><div><h3>Create your vault</h3><p>Deploy your own vault, lock USDC or XLM, and name your heirs with exact shares.</p></div></div>
-    <div class="step"><div class="n">2</div><div><h3>Check in to stay in control</h3><p>A single check-in resets the countdown. Deposit, withdraw, or change heirs any time.</p></div></div>
-    <div class="step"><div class="n">3</div><div><h3>Reminders keep you safe</h3><p>Before every deadline you get reminders, so a payout never triggers by accident.</p></div></div>
-    <div class="step"><div class="n">4</div><div><h3>Heirs are paid automatically</h3><p>If you go silent past the deadline, your funds pass directly to your heirs in one atomic transaction.</p></div></div>
-  </div>
-</div></section>
-
-<section id="why"><div class="wrap">
-  <div class="reveal"><div class="eyebrow">Why Stellar</div>
-    <h2>A new primitive, built for people</h2>
-    <p class="lead">No inheritance vault like this exists on Stellar today. It is a public
-      good that protects ordinary families, not traders.</p></div>
-  <div class="grid cols-2 reveal">
-    <div class="card"><h3>Non-custodial by design</h3><p>Keys never leave your wallet. The payout is permissionless, so it works even if we disappear.</p></div>
-    <div class="card"><h3>Fast and near-free</h3><p>Stellar settles in about five seconds with fees under a cent, exactly what a long-lived vault needs.</p></div>
-    <div class="card"><h3>Exact, locked shares</h3><p>Splits are fixed in the contract, so whoever triggers the payout cannot change who gets what.</p></div>
-    <div class="card"><h3>Open source and audited</h3><p>The contract is small, tested, and gets an independent security audit before mainnet.</p></div>
-  </div>
-</div></section>
-
-<section id="proof"><div class="wrap">
-  <div class="reveal"><div class="eyebrow">Proof</div>
-    <h2>Already live on Stellar testnet</h2>
-    <p class="lead">The core vault is deployed and working today. The full create, fund,
-      check-in, and claim lifecycle runs on-chain.</p></div>
-  <div class="proof reveal">
-    <div style="color:var(--tx2);font-size:14px">Vault contract (testnet)</div>
-    <code id="cid">CAWHXHUN2UG5C7VQNIO5UAIPIINVBQKGHN5YZN62B3ZF4OKTARLO7FPZ</code>
-    <div class="badges"><span class="tag">14 unit tests passing</span><span class="tag">Rust / Soroban</span><span class="tag">MIT licensed</span></div>
-    <div style="margin-top:22px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-      <a class="btn" id="explorer" target="_blank" rel="noopener">View on Stellar Expert &#8599;</a>
-      <a class="btn" href="app.html">Open the dashboard demo &#8594;</a>
+  <section id="problem">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="eyebrow">The problem</div>
+        <h2>Self-custody has one fatal edge case</h2>
+        <p class="lead">A wallet is controlled entirely by whoever holds the key. When the only
+          person who knows it is gone, the funds are frozen on-chain forever, visible but unreachable.</p>
+      </div>
+      <div class="grid cols-3 reveal">
+        <div class="card">
+          <div class="ico">🔑</div>
+          <h3>Keys die with you</h3>
+          <p>There is no reset and no recovery. If the key is lost, so is the money.</p>
+        </div>
+        <div class="card">
+          <div class="ico">👪</div>
+          <h3>Families locked out</h3>
+          <p>Heirs can see the balance on-chain but have no way to ever reach it.</p>
+        </div>
+        <div class="card">
+          <div class="ico">⚖️</div>
+          <h3>A will cannot help</h3>
+          <p>A legal will cannot move an on-chain wallet, and probate takes months.</p>
+        </div>
+      </div>
     </div>
-  </div>
-</div></section>
+  </section>
 
-<section id="waitlist"><div class="wrap">
-  <div class="reveal"><div class="eyebrow">Early access</div>
-    <h2>Be first to protect your family's crypto</h2>
-    <p class="lead">Join the waitlist. We will let you know the moment vaults open on mainnet.</p></div>
-  <div class="reveal">
-    <form id="wl" onsubmit="return joinWaitlist(event)">
-      <input type="email" id="email" placeholder="you@email.com" required />
-      <button class="btn primary" type="submit">Join waitlist</button>
-    </form>
-    <div class="ok-msg" id="ok">You are on the list. Thank you for supporting a safer way to inherit.</div>
-    <p class="note">No spam. We only email you about launch and safety updates.</p>
-  </div>
-</div></section>
-
-<footer><div class="wrap">
-  <div class="foot-top">
-    <div class="foot-brand">
-      <a class="logo" href="#top">
-        <span class="licon"></span>
-        <span class="ltext"><span class="lname"><span>Inherit</span>Vault</span><span class="ltag">Lock today. Protect forever.</span></span>
-      </a>
-      <p>Non-custodial on-chain inheritance for Stellar. Your crypto reaches your family, even if you never come back.</p>
+  <section id="how">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="eyebrow">How it works</div>
+        <h2>Silence is the only trigger</h2>
+        <p class="lead">The contract never decides that anyone died. It only measures the time
+          since your last check-in. That simplicity is what makes it auditable.</p>
+      </div>
+      <div class="steps reveal">
+        <div class="step">
+          <div class="n">1</div>
+          <div>
+            <h3>Create your vault</h3>
+            <p>Deploy your own vault, lock USDC or XLM, and name your heirs with exact shares.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="n">2</div>
+          <div>
+            <h3>Check in to stay in control</h3>
+            <p>A single check-in resets the countdown. Deposit, withdraw, or change heirs any time.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="n">3</div>
+          <div>
+            <h3>Reminders keep you safe</h3>
+            <p>Before every deadline you get reminders, so a payout never triggers by accident.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="n">4</div>
+          <div>
+            <h3>Heirs are paid automatically</h3>
+            <p>If you go silent past the deadline, your funds pass directly to your heirs in one atomic transaction.</p>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="foot-links">
-      <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener">GitHub</a>
-      <a href="#how">How it works</a><a href="#why">Why Stellar</a><a href="#waitlist">Waitlist</a>
-      <a href="whitepaper.html">Whitepaper</a>
+  </section>
+
+  <section id="why">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="eyebrow">Why Stellar</div>
+        <h2>A new primitive, built for people</h2>
+        <p class="lead">No inheritance vault like this exists on Stellar today. It is a public
+          good that protects ordinary families, not traders.</p>
+      </div>
+      <div class="grid cols-2 reveal">
+        <div class="card">
+          <h3>Non-custodial by design</h3>
+          <p>Keys never leave your wallet. The payout is permissionless, so it works even if we disappear.</p>
+        </div>
+        <div class="card">
+          <h3>Fast and near-free</h3>
+          <p>Stellar settles in about five seconds with fees under a cent, exactly what a long-lived vault needs.</p>
+        </div>
+        <div class="card">
+          <h3>Exact, locked shares</h3>
+          <p>Splits are fixed in the contract, so whoever triggers the payout cannot change who gets what.</p>
+        </div>
+        <div class="card">
+          <h3>Open source and audited</h3>
+          <p>The contract is small, tested, and gets an independent security audit before mainnet.</p>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="foot-bottom">
-    <span>&#169; 2026 InheritVault</span>
-    <span class="disc">Open-source, non-custodial software. Not a legal will, a bank, or an estate-planning or financial service. Nothing here is legal or financial advice.</span>
-  </div>
-</div></footer>
+  </section>
 
-<script>
-  var CID=document.getElementById('cid').textContent.trim();
-  document.getElementById('explorer').href='https://stellar.expert/explorer/testnet/contract/'+CID;
+  <section id="proof">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="eyebrow">Proof</div>
+        <h2>Already live on Stellar testnet</h2>
+        <p class="lead">The core vault is deployed and working today. The full create, fund,
+          check-in, and claim lifecycle runs on-chain.</p>
+      </div>
+      <div class="proof reveal">
+        <div style="color:var(--tx2);font-size:14px">Vault contract (testnet)</div>
+        <code id="cid">CAWHXHUN2UG5C7VQNIO5UAIPIINVBQKGHN5YZN62B3ZF4OKTARLO7FPZ</code>
+        <div class="badges"><span class="tag">14 unit tests passing</span><span class="tag">Rust / Soroban</span><span
+            class="tag">MIT licensed</span></div>
+        <div style="margin-top:22px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+          <a class="btn" id="explorer" target="_blank" rel="noopener">View on Stellar Expert &#8599;</a>
+          <a class="btn" href="app.html">Open the dashboard demo &#8594;</a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target);}});},{threshold:.12});
-  document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+  <section id="waitlist">
+    <div class="wrap">
+      <div class="reveal">
+        <div class="eyebrow">Early access</div>
+        <h2>Be first to protect your family's crypto</h2>
+        <p class="lead">Join the waitlist. We will let you know the moment vaults open on mainnet.</p>
+      </div>
+      <div class="reveal">
+        <form id="wl" onsubmit="return joinWaitlist(event)">
+          <input type="email" id="email" placeholder="you@email.com" required />
+          <button class="btn primary" type="submit">Join waitlist</button>
+        </form>
+        <div class="ok-msg" id="ok">You are on the list. Thank you for supporting a safer way to inherit.</div>
+        <p class="note">No spam. We only email you about launch and safety updates.</p>
+      </div>
+    </div>
+  </section>
 
-  (function(){
-    var mb=document.getElementById('menuBtn'), mm=document.getElementById('mobileMenu'); if(!mb)return;
-    mb.addEventListener('click',function(){mm.classList.toggle('open');mb.classList.toggle('active');});
-    mm.addEventListener('click',function(e){if(e.target===mm){mm.classList.remove('open');mb.classList.remove('active');}});
-    mm.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){mm.classList.remove('open');mb.classList.remove('active');});});
-  })();
+  <footer>
+    <div class="wrap">
+      <div class="foot-top">
+        <div class="foot-brand">
+          <a class="logo" href="#top">
+            <span class="licon"></span>
+            <span class="ltext"><span class="lname"><span>Inherit</span>Vault</span><span class="ltag">Lock today.
+                Protect forever.</span></span>
+          </a>
+          <p>Non-custodial on-chain inheritance for Stellar. Your crypto reaches your family, even if you never come
+            back.</p>
+        </div>
+        <div class="foot-links">
+          <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener">GitHub</a>
+          <a href="#how">How it works</a><a href="#why">Why Stellar</a><a href="#waitlist">Waitlist</a>
+          <a href="whitepaper.html">Whitepaper</a>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>&#169; 2026 InheritVault</span>
+        <span class="disc">Open-source, non-custodial software. Not a legal will, a bank, or an estate-planning or
+          financial service. Nothing here is legal or financial advice.</span>
+      </div>
+    </div>
+  </footer>
 
-  // orbital planets: a solar system of coins around the vault core
-  (function(){
-    var sys=document.getElementById('system'); if(!sys)return;
-    var rings=[{rx:150,ry:54},{rx:222,ry:80},{rx:300,ry:108},{rx:378,ry:134}];
-    var BTC='<svg viewBox="0 0 32 32" fill="#fff"><path d="M22.5 14.1c.31-2.06-1.26-3.17-3.4-3.9l.7-2.79-1.7-.42-.68 2.71c-.44-.11-.9-.21-1.36-.32l.68-2.73-1.7-.42-.7 2.79c-.37-.09-.73-.17-1.08-.26l-2.34-.59-.45 1.81s1.26.29 1.23.31c.69.17.81.63.79 1l-1.9 7.62c-.08.21-.3.52-.78.4.02.03-1.23-.31-1.23-.31l-.84 1.94 2.21.55c.41.1.81.21 1.21.31l-.71 2.83 1.7.42.7-2.79c.46.13.91.24 1.35.35l-.69 2.77 1.7.42.71-2.82c2.9.55 5.08.33 6-2.29.74-2.11-.04-3.32-1.56-4.11 1.11-.26 1.94-.98 2.16-2.48zm-3.87 5.44c-.53 2.11-4.08.97-5.23.69l.94-3.74c1.15.29 4.84.85 4.29 3.05zm.53-5.47c-.48 1.92-3.44.95-4.4.71l.85-3.4c.96.24 4.05.69 3.55 2.69z"/></svg>';
-    var ROCKET='<svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2.4c3 2.8 4.5 6.4 4.5 9.7l-1.6 3.5H9.1L7.5 12.1C7.5 8.8 9 5.2 12 2.4Z"/><circle cx="12" cy="9.4" r="1.9" fill="#18233a"/><path d="M9 15.2l-2.5 2 .3-3.7zM15 15.2l2.5 2-.3-3.7z"/><path d="M10.7 15.6h2.6L12 19.6z" fill="#ffd06b"/></svg>';
-    var TETHER='<svg viewBox="0 0 32 32" fill="#fff"><path d="M17.9 17.4v-3.08h6.05V10.3H8.06v4.02h6.04v3.08c-4.92.22-8.62 1.2-8.62 2.36 0 1.17 3.7 2.14 8.62 2.36v6.84h3.8v-6.84c4.9-.22 8.6-1.2 8.6-2.36 0-1.17-3.7-2.14-8.6-2.36zm0 4v-.01c-.12.01-.74.05-2.12.05-1.1 0-1.87-.03-2.14-.05v.01c-4.2-.19-7.34-.92-7.34-1.8 0-.88 3.14-1.61 7.34-1.8v2.86c.28.02 1.06.07 2.16.07 1.32 0 1.98-.06 2.1-.07v-2.86c4.2.19 7.32.92 7.32 1.8 0 .88-3.13 1.61-7.32 1.8z"/></svg>';
-    var COINS=[
-      {c1:'#ffca7a',c2:'#f7931a',c3:'#c97b12',halo:'#f7931a',logo:BTC,ring:1},
-      {c1:'#aab8f5',c2:'#627eea',c3:'#3a4fa0',halo:'#627eea',glyph:'Ξ',ring:2},
-      {c1:'#3d4d67',c2:'#18233a',c3:'#0c1424',halo:'#5b8def',logo:ROCKET,ring:0},
-      {c1:'#57d7ad',c2:'#26a17b',c3:'#1a7d5e',halo:'#26a17b',logo:TETHER,ring:3},
-      {c1:'#8bc0f5',c2:'#2775ca',c3:'#184e86',halo:'#2775ca',glyph:'$',ring:2},
-      {c1:'#c9a6ff',c2:'#9945ff',c3:'#5a1f9e',halo:'#9945ff',glyph:'◎',ring:1},
-      {c1:'#ffe07a',c2:'#f0b90b',c3:'#b98c06',halo:'#f0b90b',glyph:'◆',ring:3},
-      {c1:'#7a838f',c2:'#23292f',c3:'#0e1216',halo:'#98a4b3',glyph:'✕',ring:0},
-      {c1:'#5f8bff',c2:'#0033ad',c3:'#001f6b',halo:'#3468ff',glyph:'₳',ring:2},
-      {c1:'#e8d08a',c2:'#c2a633',c3:'#8f7a20',halo:'#c2a633',glyph:'Ð',ring:3}
-    ];
-    var SIZE=50, speeds=[0.9,0.7,0.55,0.44], counts={}, idx={};
-    COINS.forEach(function(c){counts[c.ring]=(counts[c.ring]||0)+1;});
-    var planets=COINS.map(function(co){
-      var n=counts[co.ring]; idx[co.ring]=idx[co.ring]||0; var pi=idx[co.ring]++;
-      var el=document.createElement('div'); el.className='planet';
-      el.style.width=el.style.height=SIZE+'px';
-      var logo=co.logo||('<span style="font-weight:800;font-size:'+Math.round(SIZE*0.5)+'px;color:#fff;line-height:1">'+co.glyph+'</span>');
-      el.innerHTML='<div class="halo" style="background:radial-gradient(circle,'+co.halo+'99,transparent 66%)"></div>'+
-        '<div class="disc" style="background:radial-gradient(circle at 36% 30%,'+co.c1+','+co.c2+' 60%,'+co.c3+')">'+logo+'</div>';
-      sys.appendChild(el);
-      return {el:el,ring:co.ring,size:SIZE,speed:speeds[co.ring],phase:(pi/n)*Math.PI*2};
-    });
-    function frame(ts){
-      var W=sys.clientWidth, H=sys.clientHeight, cx=W/2, cy=H/2, sx=W/900, sy=H/520;
-      planets.forEach(function(p){
-        var r=rings[p.ring], ang=p.phase+ts/2600*p.speed;
-        var x=cx+r.rx*sx*Math.cos(ang), y=cy+r.ry*sy*Math.sin(ang);
-        var depth=(Math.sin(ang)+1)/2;
-        var s=0.7+0.5*depth;
-        p.el.style.transform='translate('+(x-p.size/2).toFixed(1)+'px,'+(y-p.size/2).toFixed(1)+'px) scale('+s.toFixed(3)+')';
-        p.el.style.zIndex=(depth<.5?5:35);
-        p.el.style.opacity=(0.6+0.4*depth).toFixed(2);
+  <script>
+    var CID = document.getElementById('cid').textContent.trim();
+    document.getElementById('explorer').href = 'https://stellar.expert/explorer/testnet/contract/' + CID;
+
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('show'); io.unobserve(e.target); } }); }, { threshold: .12 });
+    document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+
+    (function () {
+      var mb = document.getElementById('menuBtn'), mm = document.getElementById('mobileMenu'); if (!mb) return;
+      mb.addEventListener('click', function () { mm.classList.toggle('open'); mb.classList.toggle('active'); });
+      mm.addEventListener('click', function (e) { if (e.target === mm) { mm.classList.remove('open'); mb.classList.remove('active'); } });
+      mm.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { mm.classList.remove('open'); mb.classList.remove('active'); }); });
+    })();
+
+    // orbital planets: a solar system of coins around the vault core
+    (function () {
+      var sys = document.getElementById('system'); if (!sys) return;
+      var rings = [{ rx: 150, ry: 54 }, { rx: 222, ry: 80 }, { rx: 300, ry: 108 }, { rx: 378, ry: 134 }];
+      var BTC = '<svg viewBox="0 0 32 32" fill="#fff"><path d="M22.5 14.1c.31-2.06-1.26-3.17-3.4-3.9l.7-2.79-1.7-.42-.68 2.71c-.44-.11-.9-.21-1.36-.32l.68-2.73-1.7-.42-.7 2.79c-.37-.09-.73-.17-1.08-.26l-2.34-.59-.45 1.81s1.26.29 1.23.31c.69.17.81.63.79 1l-1.9 7.62c-.08.21-.3.52-.78.4.02.03-1.23-.31-1.23-.31l-.84 1.94 2.21.55c.41.1.81.21 1.21.31l-.71 2.83 1.7.42.7-2.79c.46.13.91.24 1.35.35l-.69 2.77 1.7.42.71-2.82c2.9.55 5.08.33 6-2.29.74-2.11-.04-3.32-1.56-4.11 1.11-.26 1.94-.98 2.16-2.48zm-3.87 5.44c-.53 2.11-4.08.97-5.23.69l.94-3.74c1.15.29 4.84.85 4.29 3.05zm.53-5.47c-.48 1.92-3.44.95-4.4.71l.85-3.4c.96.24 4.05.69 3.55 2.69z"/></svg>';
+      var ROCKET = '<svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2.4c3 2.8 4.5 6.4 4.5 9.7l-1.6 3.5H9.1L7.5 12.1C7.5 8.8 9 5.2 12 2.4Z"/><circle cx="12" cy="9.4" r="1.9" fill="#18233a"/><path d="M9 15.2l-2.5 2 .3-3.7zM15 15.2l2.5 2-.3-3.7z"/><path d="M10.7 15.6h2.6L12 19.6z" fill="#ffd06b"/></svg>';
+      var TETHER = '<svg viewBox="0 0 32 32" fill="#fff"><path d="M17.9 17.4v-3.08h6.05V10.3H8.06v4.02h6.04v3.08c-4.92.22-8.62 1.2-8.62 2.36 0 1.17 3.7 2.14 8.62 2.36v6.84h3.8v-6.84c4.9-.22 8.6-1.2 8.6-2.36 0-1.17-3.7-2.14-8.6-2.36zm0 4v-.01c-.12.01-.74.05-2.12.05-1.1 0-1.87-.03-2.14-.05v.01c-4.2-.19-7.34-.92-7.34-1.8 0-.88 3.14-1.61 7.34-1.8v2.86c.28.02 1.06.07 2.16.07 1.32 0 1.98-.06 2.1-.07v-2.86c4.2.19 7.32.92 7.32 1.8 0 .88-3.13 1.61-7.32 1.8z"/></svg>';
+      var COINS = [
+        { c1: '#ffca7a', c2: '#f7931a', c3: '#c97b12', halo: '#f7931a', logo: BTC, ring: 1 },
+        { c1: '#aab8f5', c2: '#627eea', c3: '#3a4fa0', halo: '#627eea', glyph: 'Ξ', ring: 2 },
+        { c1: '#3d4d67', c2: '#18233a', c3: '#0c1424', halo: '#5b8def', logo: ROCKET, ring: 0 },
+        { c1: '#57d7ad', c2: '#26a17b', c3: '#1a7d5e', halo: '#26a17b', logo: TETHER, ring: 3 },
+        { c1: '#8bc0f5', c2: '#2775ca', c3: '#184e86', halo: '#2775ca', glyph: '$', ring: 2 },
+        { c1: '#c9a6ff', c2: '#9945ff', c3: '#5a1f9e', halo: '#9945ff', glyph: '◎', ring: 1 },
+        { c1: '#ffe07a', c2: '#f0b90b', c3: '#b98c06', halo: '#f0b90b', glyph: '◆', ring: 3 },
+        { c1: '#7a838f', c2: '#23292f', c3: '#0e1216', halo: '#98a4b3', glyph: '✕', ring: 0 },
+        { c1: '#5f8bff', c2: '#0033ad', c3: '#001f6b', halo: '#3468ff', glyph: '₳', ring: 2 },
+        { c1: '#e8d08a', c2: '#c2a633', c3: '#8f7a20', halo: '#c2a633', glyph: 'Ð', ring: 3 }
+      ];
+      var SIZE = 50, speeds = [0.9, 0.7, 0.55, 0.44], counts = {}, idx = {};
+      COINS.forEach(function (c) { counts[c.ring] = (counts[c.ring] || 0) + 1; });
+      var planets = COINS.map(function (co) {
+        var n = counts[co.ring]; idx[co.ring] = idx[co.ring] || 0; var pi = idx[co.ring]++;
+        var el = document.createElement('div'); el.className = 'planet';
+        el.style.width = el.style.height = SIZE + 'px';
+        var logo = co.logo || ('<span style="font-weight:800;font-size:' + Math.round(SIZE * 0.5) + 'px;color:#fff;line-height:1">' + co.glyph + '</span>');
+        el.innerHTML = '<div class="halo" style="background:radial-gradient(circle,' + co.halo + '99,transparent 66%)"></div>' +
+          '<div class="disc" style="background:radial-gradient(circle at 36% 30%,' + co.c1 + ',' + co.c2 + ' 60%,' + co.c3 + ')">' + logo + '</div>';
+        sys.appendChild(el);
+        return { el: el, ring: co.ring, size: SIZE, speed: speeds[co.ring], phase: (pi / n) * Math.PI * 2 };
       });
+      function frame(ts) {
+        var W = sys.clientWidth, H = sys.clientHeight, cx = W / 2, cy = H / 2, sx = W / 900, sy = H / 520;
+        planets.forEach(function (p) {
+          var r = rings[p.ring], ang = p.phase + ts / 2600 * p.speed;
+          var x = cx + r.rx * sx * Math.cos(ang), y = cy + r.ry * sy * Math.sin(ang);
+          var depth = (Math.sin(ang) + 1) / 2;
+          var s = 0.7 + 0.5 * depth;
+          p.el.style.transform = 'translate(' + (x - p.size / 2).toFixed(1) + 'px,' + (y - p.size / 2).toFixed(1) + 'px) scale(' + s.toFixed(3) + ')';
+          p.el.style.zIndex = (depth < .5 ? 5 : 35);
+          p.el.style.opacity = (0.6 + 0.4 * depth).toFixed(2);
+        });
+        requestAnimationFrame(frame);
+      }
       requestAnimationFrame(frame);
+    })();
+
+    // starfield + occasional shooting star
+    (function () {
+      var c = document.getElementById('stars'), x = c.getContext('2d'), W, H, st = [], sh = [];
+      function size() { W = c.width = innerWidth; H = c.height = innerHeight; }
+      size(); addEventListener('resize', size);
+      for (var i = 0; i < 230; i++) { var d = Math.random(); st.push({ x: Math.random() * W, y: Math.random() * H, r: d * 1.4 + .35, t: Math.random() * 6.28, tw: Math.random() * .04 + .01, vx: (Math.random() - .5) * .10, vy: .05 + d * .20 }); }
+      var tick = 0;
+      function shoot() { var sy = Math.random() * H * .5; sh.push({ x: -40, y: sy, vx: 6 + Math.random() * 4, vy: 1.6 + Math.random() * 1.4, life: 0 }); }
+      function loop() {
+        x.clearRect(0, 0, W, H); tick++;
+        for (var i = 0; i < st.length; i++) {
+          var s = st[i]; s.t += s.tw; s.x += s.vx; s.y += s.vy;
+          if (s.y > H + 2) { s.y = -2; s.x = Math.random() * W; } if (s.x < -2) s.x = W + 2; else if (s.x > W + 2) s.x = -2;
+          var a = .35 + .45 * (Math.sin(s.t) * .5 + .5);
+          x.globalAlpha = a; x.fillStyle = '#dfe7ff'; x.beginPath(); x.arc(s.x, s.y, s.r, 0, 7); x.fill();
+        }
+        if (tick % 150 === 0) shoot();
+        for (var j = sh.length - 1; j >= 0; j--) {
+          var m = sh[j]; m.x += m.vx; m.y += m.vy; m.life++;
+          var g = x.createLinearGradient(m.x, m.y, m.x - 60, m.y - 16); g.addColorStop(0, '#ffffffdd'); g.addColorStop(1, '#ffffff00');
+          x.globalAlpha = 1; x.strokeStyle = g; x.lineWidth = 2; x.beginPath(); x.moveTo(m.x, m.y); x.lineTo(m.x - 60, m.y - 16); x.stroke();
+          if (m.x > W + 80 || m.life > 200) sh.splice(j, 1);
+        }
+        x.globalAlpha = 1; requestAnimationFrame(loop);
+      } loop();
+    })();
+
+    function joinWaitlist(e) {
+      e.preventDefault();
+      var email = document.getElementById('email').value.trim(); if (!email) return false;
+      try { var l = JSON.parse(localStorage.getItem('iv_waitlist') || '[]'); l.push({ email: email, at: new Date().toISOString() }); localStorage.setItem('iv_waitlist', JSON.stringify(l)); } catch (_) { }
+      document.getElementById('wl').style.display = 'none';
+      document.getElementById('ok').style.display = 'block';
+      return false;
     }
-    requestAnimationFrame(frame);
-  })();
-
-  // starfield + occasional shooting star
-  (function(){
-    var c=document.getElementById('stars'), x=c.getContext('2d'), W,H,st=[],sh=[];
-    function size(){W=c.width=innerWidth;H=c.height=innerHeight;}
-    size(); addEventListener('resize',size);
-    for(var i=0;i<230;i++){var d=Math.random();st.push({x:Math.random()*W,y:Math.random()*H,r:d*1.4+.35,t:Math.random()*6.28,tw:Math.random()*.04+.01,vx:(Math.random()-.5)*.10,vy:.05+d*.20});}
-    var tick=0;
-    function shoot(){var sy=Math.random()*H*.5;sh.push({x:-40,y:sy,vx:6+Math.random()*4,vy:1.6+Math.random()*1.4,life:0});}
-    function loop(){
-      x.clearRect(0,0,W,H); tick++;
-      for(var i=0;i<st.length;i++){var s=st[i];s.t+=s.tw;s.x+=s.vx;s.y+=s.vy;
-        if(s.y>H+2){s.y=-2;s.x=Math.random()*W;} if(s.x<-2)s.x=W+2; else if(s.x>W+2)s.x=-2;
-        var a=.35+.45*(Math.sin(s.t)*.5+.5);
-        x.globalAlpha=a;x.fillStyle='#dfe7ff';x.beginPath();x.arc(s.x,s.y,s.r,0,7);x.fill();}
-      if(tick%150===0)shoot();
-      for(var j=sh.length-1;j>=0;j--){var m=sh[j];m.x+=m.vx;m.y+=m.vy;m.life++;
-        var g=x.createLinearGradient(m.x,m.y,m.x-60,m.y-16);g.addColorStop(0,'#ffffffdd');g.addColorStop(1,'#ffffff00');
-        x.globalAlpha=1;x.strokeStyle=g;x.lineWidth=2;x.beginPath();x.moveTo(m.x,m.y);x.lineTo(m.x-60,m.y-16);x.stroke();
-        if(m.x>W+80||m.life>200)sh.splice(j,1);}
-      x.globalAlpha=1;requestAnimationFrame(loop);
-    } loop();
-  })();
-
-  function joinWaitlist(e){
-    e.preventDefault();
-    var email=document.getElementById('email').value.trim(); if(!email)return false;
-    try{var l=JSON.parse(localStorage.getItem('iv_waitlist')||'[]');l.push({email:email,at:new Date().toISOString()});localStorage.setItem('iv_waitlist',JSON.stringify(l));}catch(_){}
-    document.getElementById('wl').style.display='none';
-    document.getElementById('ok').style.display='block';
-    return false;
-  }
-</script>
+  </script>
 </body>
+
 </html>

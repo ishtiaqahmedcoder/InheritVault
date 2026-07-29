@@ -1,283 +1,314 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>InheritVault dashboard</title>
-<link rel="icon" type="image/png" href="only-logo-t.png" />
-<link rel="stylesheet" href="style.css" />
-</head>
-<body class="page-app">
-<canvas id="stars"></canvas>
-<div class="neb a"></div><div class="neb b"></div>
-<svg width="0" height="0" style="position:absolute"><defs>
-  <linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#a855f7"/></linearGradient>
-</defs></svg>
 
-<header><div class="wrap"><nav>
-  <a class="logo" href="index.html">
-    <span class="licon"></span>
-    <span class="ltext"><span class="lname"><span>Inherit</span>Vault</span><span class="ltag">Lock today. Protect forever.</span></span>
-  </a>
-  <div class="navpill">
-    <a href="index.html#how">How it works</a><a href="index.html#why">Why Stellar</a>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>InheritVault dashboard</title>
+  <link rel="icon" type="image/png" href="only-logo-t.png" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="page-app">
+  <canvas id="stars"></canvas>
+  <div class="neb a"></div>
+  <div class="neb b"></div>
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#22d3ee" />
+        <stop offset="1" stop-color="#a855f7" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <header>
+    <div class="wrap">
+      <nav>
+        <a class="logo" href="index.html">
+          <span class="licon"></span>
+          <span class="ltext"><span class="lname"><span>Inherit</span>Vault</span><span class="ltag">Lock today. Protect
+              forever.</span></span>
+        </a>
+        <div class="navpill">
+          <a href="index.html#how">How it works</a><a href="index.html#why">Why Stellar</a>
+          <a href="index.html#proof">Live on testnet</a>
+          <a href="whitepaper.html">Whitepaper</a>
+          <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener">GitHub</a>
+        </div>
+        <div class="wallet">
+          <button class="btn primary header-cta" id="headerConnectBtn" onclick="connectWallet()">Connect wallet</button>
+          <span class="wchip hidden" id="wchip"></span>
+        </div>
+        <button class="menu-btn" id="menuBtn" aria-label="Menu"><svg width="24" height="24" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M4 7h16M4 12h16M4 17h16" />
+          </svg></button>
+      </nav>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html#how">How it works</a>
+    <a href="index.html#why">Why Stellar</a>
     <a href="index.html#proof">Live on testnet</a>
     <a href="whitepaper.html">Whitepaper</a>
     <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener">GitHub</a>
   </div>
-  <div class="wallet">
-    <button class="btn primary header-cta" id="headerConnectBtn" onclick="connectWallet()">Connect wallet</button>
-    <span class="wchip hidden" id="wchip"></span>
-  </div>
-  <button class="menu-btn" id="menuBtn" aria-label="Menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-</nav></div></header>
-
-<div class="mobile-menu" id="mobileMenu">
-  <a href="index.html#how">How it works</a>
-  <a href="index.html#why">Why Stellar</a>
-  <a href="index.html#proof">Live on testnet</a>
-  <a href="whitepaper.html">Whitepaper</a>
-  <a href="https://github.com/ishtiaqahmedcoder/InheritVault" target="_blank" rel="noopener">GitHub</a>
-</div>
 
 
-<main><div class="wrap">
+  <main>
+    <div class="wrap">
 
-  <!-- STEP 1: connect -->
-  <section id="screen-connect">
-    <div class="card center-card">
-      <div class="big"></div>
-      <h1>Connect your Stellar wallet</h1>
-      <p class="muted">Connect a wallet to create your inheritance vault. Your keys never leave your wallet.</p>
-      <button class="btn primary" style="margin-top:22px" onclick="connectWallet()">Connect wallet</button>
-      <p class="hint" style="margin-top:14px">Demo: this simulates a Freighter connection. On mainnet it opens your real wallet.</p>
-    </div>
-  </section>
-
-  <!-- STEP 2: create vault -->
-  <section id="screen-create" class="hidden">
-    <div class="card" style="max-width:640px;margin:0 auto">
-      <div class="step-pill"><b>Step 1 of 1</b> Set up your vault</div>
-      <h1 style="margin-bottom:4px">Create your inheritance vault</h1>
-      <p class="muted" style="margin-bottom:22px">Lock funds, name who inherits them, and set your check-in schedule.</p>
-
-      <div class="field">
-        <label>Deposit amount (XLM)</label>
-        <input type="number" id="depAmt" min="1" step="1" value="1000" placeholder="e.g. 1000" />
-        <div class="hint">This is locked in your own vault contract. You can withdraw any time while active.</div>
-      </div>
-
-      <div class="field">
-        <label>Beneficiaries (who inherits, and their share)</label>
-        <div id="benList"></div>
-        <button class="btn" style="padding:10px 16px;font-size:13.5px" onclick="addBen()">+ Add beneficiary</button>
-        <div class="sharebar"><span class="muted">Shares must total 100%</span><span id="shareTotal">0%</span></div>
-      </div>
-
-      <div class="row2">
-        <div class="field">
-          <label>Check-in interval</label>
-          <select id="interval">
-            <option value="3">Every 3 months</option>
-            <option value="6" selected>Every 6 months</option>
-            <option value="12">Every 12 months</option>
-          </select>
-          <div class="hint">If no activity from your wallet for this long, the vault becomes claimable.</div>
+      <!-- STEP 1: connect -->
+      <section id="screen-connect">
+        <div class="card center-card">
+          <div class="big"></div>
+          <h1>Connect your Stellar wallet</h1>
+          <p class="muted">Connect a wallet to create your inheritance vault. Your keys never leave your wallet.</p>
+          <button class="btn primary" style="margin-top:22px" onclick="connectWallet()">Connect wallet</button>
+          <p class="hint" style="margin-top:14px">Demo: this simulates a Freighter connection. On mainnet it opens your
+            real wallet.</p>
         </div>
-        <div class="field">
-          <label>Grace period (daily reminders)</label>
-          <input type="number" id="grace" min="1" max="60" value="7" />
-          <div class="hint">You get daily reminders for this many days before the deadline.</div>
-        </div>
-      </div>
+      </section>
 
-      <button class="btn primary full" id="createBtn" onclick="createVault()">Create vault and lock funds</button>
-    </div>
-  </section>
+      <!-- STEP 2: create vault -->
+      <section id="screen-create" class="hidden">
+        <div class="card" style="max-width:640px;margin:0 auto">
+          <div class="step-pill"><b>Step 1 of 1</b> Set up your vault</div>
+          <h1 style="margin-bottom:4px">Create your inheritance vault</h1>
+          <p class="muted" style="margin-bottom:22px">Lock funds, name who inherits them, and set your check-in
+            schedule.</p>
 
-  <!-- STEP 3: dashboard -->
-  <section id="screen-dash" class="hidden">
-    <div class="row">
-      <div class="card">
-        <h2>Your vault</h2>
-        <div class="vaulttop">
-          <div class="ring">
-            <svg viewBox="0 0 150 150"><circle class="rbg" cx="75" cy="75" r="65"/><circle class="rfg" id="rfg" cx="75" cy="75" r="65"/></svg>
-            <div class="ctr"><div class="t" id="count">--</div><div class="l" id="ringlab">until claim</div></div>
+          <div class="field">
+            <label>Deposit amount (XLM)</label>
+            <input type="number" id="depAmt" min="1" step="1" value="1000" placeholder="e.g. 1000" />
+            <div class="hint">This is locked in your own vault contract. You can withdraw any time while active.</div>
           </div>
-          <div>
-            <span id="status" class="status s-active"><span class="d"></span> Active</span>
-            <div class="bal"><span id="bal">0</span> <small>XLM</small></div>
-            <div class="muted" id="checkinfo">Last check-in just now</div>
+
+          <div class="field">
+            <label>Beneficiaries (who inherits, and their share)</label>
+            <div id="benList"></div>
+            <button class="btn" style="padding:10px 16px;font-size:13.5px" onclick="addBen()">+ Add beneficiary</button>
+            <div class="sharebar"><span class="muted">Shares must total 100%</span><span id="shareTotal">0%</span></div>
+          </div>
+
+          <div class="row2">
+            <div class="field">
+              <label>Check-in interval</label>
+              <select id="interval">
+                <option value="3">Every 3 months</option>
+                <option value="6" selected>Every 6 months</option>
+                <option value="12">Every 12 months</option>
+              </select>
+              <div class="hint">If no activity from your wallet for this long, the vault becomes claimable.</div>
+            </div>
+            <div class="field">
+              <label>Grace period (daily reminders)</label>
+              <input type="number" id="grace" min="1" max="60" value="7" />
+              <div class="hint">You get daily reminders for this many days before the deadline.</div>
+            </div>
+          </div>
+
+          <button class="btn primary full" id="createBtn" onclick="createVault()">Create vault and lock funds</button>
+        </div>
+      </section>
+
+      <!-- STEP 3: dashboard -->
+      <section id="screen-dash" class="hidden">
+        <div class="row">
+          <div class="card">
+            <h2>Your vault</h2>
+            <div class="vaulttop">
+              <div class="ring">
+                <svg viewBox="0 0 150 150">
+                  <circle class="rbg" cx="75" cy="75" r="65" />
+                  <circle class="rfg" id="rfg" cx="75" cy="75" r="65" />
+                </svg>
+                <div class="ctr">
+                  <div class="t" id="count">--</div>
+                  <div class="l" id="ringlab">until claim</div>
+                </div>
+              </div>
+              <div>
+                <span id="status" class="status s-active"><span class="d"></span> Active</span>
+                <div class="bal"><span id="bal">0</span> <small>XLM</small></div>
+                <div class="muted" id="checkinfo">Last check-in just now</div>
+              </div>
+            </div>
+            <div class="btns">
+              <button class="btn primary" onclick="checkIn()">Check in now</button>
+              <button class="btn" onclick="openDeposit()">Deposit more</button>
+              <button class="btn" onclick="withdraw()">Withdraw</button>
+              <button class="btn warn" onclick="goSilent()">Simulate going silent</button>
+              <button class="btn gold full-col" id="claimBtn" onclick="claim()" disabled>Claim and distribute to
+                heirs</button>
+            </div>
+            <div class="payout" id="payout"></div>
+          </div>
+
+          <div class="card">
+            <h2>Beneficiaries</h2>
+            <div class="heirs" id="heirs"></div>
+            <h2 style="margin-top:22px">Schedule</h2>
+            <div class="sched" id="sched"></div>
+            <div class="note-warn" id="reminderNote"></div>
+            <h2 style="margin-top:22px">Activity</h2>
+            <ul class="log" id="log"></ul>
           </div>
         </div>
-        <div class="btns">
-          <button class="btn primary" onclick="checkIn()">Check in now</button>
-          <button class="btn" onclick="openDeposit()">Deposit more</button>
-          <button class="btn" onclick="withdraw()">Withdraw</button>
-          <button class="btn warn" onclick="goSilent()">Simulate going silent</button>
-          <button class="btn gold full-col" id="claimBtn" onclick="claim()" disabled>Claim and distribute to heirs</button>
-        </div>
-        <div class="payout" id="payout"></div>
-      </div>
+      </section>
 
-      <div class="card">
-        <h2>Beneficiaries</h2>
-        <div class="heirs" id="heirs"></div>
-        <h2 style="margin-top:22px">Schedule</h2>
-        <div class="sched" id="sched"></div>
-        <div class="note-warn" id="reminderNote"></div>
-        <h2 style="margin-top:22px">Activity</h2>
-        <ul class="log" id="log"></ul>
-      </div>
     </div>
-  </section>
+  </main>
 
-</div></main>
+  <script>
+    var DAY = 86400000, MONTH = 30 * DAY;
+    var owner = 'GA7QYNF7…OWNER…3KD2';
+    var colors = ['#22d3ee', '#a855f7', '#f7931a', '#34d399', '#f0a93b'];
+    var state = null, benCount = 0;
 
-<script>
-  var DAY=86400000, MONTH=30*DAY;
-  var owner='GA7QYNF7…OWNER…3KD2';
-  var colors=['#22d3ee','#a855f7','#f7931a','#34d399','#f0a93b'];
-  var state=null, benCount=0;
+    function el(id) { return document.getElementById(id); }
+    function show(id) { ['connect', 'create', 'dash'].forEach(function (s) { el('screen-' + s).classList.toggle('hidden', s !== id); }); }
 
-  function el(id){return document.getElementById(id);}
-  function show(id){['connect','create','dash'].forEach(function(s){el('screen-'+s).classList.toggle('hidden',s!==id);});}
-
-  function connectWallet(){
-    el('wchip').textContent=owner; el('wchip').classList.remove('hidden');
-    var hcb=el('headerConnectBtn'); if(hcb){hcb.classList.add('hidden');}
-    show('create'); addBen(); addBen(); updateShares();
-  }
-
-  function addBen(){
-    benCount++;
-    var wrap=document.createElement('div'); wrap.className='ben-row';
-    wrap.innerHTML='<input placeholder="Beneficiary Stellar address (G...)" data-k="addr" />'+
-      '<input type="number" min="0" max="100" placeholder="%" data-k="share" oninput="updateShares()" />'+
-      '<button class="ben-del" title="Remove" onclick="this.parentNode.remove();updateShares()">&times;</button>';
-    el('benList').appendChild(wrap);
-    updateShares();
-  }
-  function beneRows(){return [].slice.call(el('benList').querySelectorAll('.ben-row'));}
-  function updateShares(){
-    var sum=0; beneRows().forEach(function(r){sum+=parseFloat(r.querySelector('[data-k=share]').value)||0;});
-    var t=el('shareTotal'); t.textContent=sum+'%'; t.className=sum===100?'good':'bad';
-    el('createBtn').disabled=!(sum===100);
-    return sum;
-  }
-
-  function createVault(){
-    var benes=[];
-    var ok=true;
-    beneRows().forEach(function(r,i){
-      var addr=r.querySelector('[data-k=addr]').value.trim();
-      var share=parseFloat(r.querySelector('[data-k=share]').value)||0;
-      if(!addr){ok=false;}
-      benes.push({addr:addr||('G...'+(i+1)), share:share});
-    });
-    if(!ok){alert('Please paste a Stellar address for each beneficiary.');return;}
-    if(updateShares()!==100){alert('Shares must total exactly 100%.');return;}
-    var months=parseInt(el('interval').value,10);
-    var grace=parseInt(el('grace').value,10)||7;
-    state={ balance:parseFloat(el('depAmt').value)||0, benes:benes, months:months, grace:grace,
-      lastCheckIn:Date.now(), claimed:false };
-    show('dash');
-    log('<b>Vault created.</b> '+state.balance.toFixed(0)+' XLM locked, '+benes.length+' beneficiaries, '+months+'-month check-in.');
-    render(); if(!window._t){window._t=setInterval(render,1000);}
-  }
-
-  function deadline(){return state.lastCheckIn + state.months*MONTH;}
-  function graceStart(){return deadline() - state.grace*DAY;}
-  function now(){return Date.now();}
-  function daysLeft(){return Math.max(0,Math.ceil((deadline()-now())/DAY));}
-  function claimable(){return !state.claimed && now()>=deadline();}
-  function inGrace(){return !state.claimed && now()>=graceStart() && now()<deadline();}
-
-  function fmtDate(ms){var d=new Date(ms);var mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return mo[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();}
-  function initials(a){return a.replace(/[^A-Za-z0-9]/g,'').slice(0,2).toUpperCase();}
-
-  function log(msg){
-    var li=document.createElement('li');var d=new Date();
-    var s=('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2)+':'+('0'+d.getSeconds()).slice(-2);
-    li.innerHTML='<span class="t">'+s+'</span><span>'+msg+'</span>';
-    var ul=el('log');ul.insertBefore(li,ul.firstChild);
-  }
-
-  function renderHeirs(){
-    var box=el('heirs');box.innerHTML='';
-    state.benes.forEach(function(b,i){
-      var amt=state.balance*b.share/100;
-      var short=b.addr.length>12?b.addr.slice(0,6)+'…'+b.addr.slice(-4):b.addr;
-      var d=document.createElement('div');d.className='heir';
-      d.innerHTML='<div class="av" style="background:'+colors[i%5]+'">'+initials(b.addr)+'</div>'+
-        '<div><div style="font-size:13.5px;font-weight:600">Heir '+(i+1)+'</div><div class="addr">'+short+'</div></div>'+
-        '<div class="r"><div class="amt">'+amt.toFixed(2)+' XLM</div><div class="pct">'+b.share+'%</div></div>';
-      box.appendChild(d);
-    });
-  }
-  function renderSched(){
-    el('sched').innerHTML=
-      '<div class="r"><span>Check-in interval</span><span>Every '+state.months+' months</span></div>'+
-      '<div class="r"><span>Deadline (if no check-in)</span><span>'+fmtDate(deadline())+'</span></div>'+
-      '<div class="r"><span>Grace / reminders</span><span>Daily, last '+state.grace+' days</span></div>'+
-      '<div class="r"><span>Reminders start</span><span>'+fmtDate(graceStart())+'</span></div>';
-    el('reminderNote').innerHTML='Any withdraw or check-in from your wallet resets the timer. If you stay silent past the deadline, your XLM transfers to your beneficiaries automatically.';
-  }
-  function render(){
-    if(!state)return;
-    el('bal').textContent=state.balance.toFixed(2);
-    var st=el('status'),cb=el('claimBtn'),cnt=el('count'),lab=el('ringlab'),rfg=el('rfg');
-    var C=2*Math.PI*65; rfg.style.strokeDasharray=C;
-    var total=state.months*MONTH, left=Math.max(0,deadline()-now());
-    if(state.claimed){
-      st.className='status s-claimed';st.innerHTML='<span class="d"></span> Claimed';
-      cnt.textContent='✓';lab.textContent='distributed';rfg.style.strokeDashoffset=0;rfg.style.stroke='#34d399';cb.disabled=true;
-      el('checkinfo').textContent='Funds distributed to beneficiaries';
-    }else if(claimable()){
-      st.className='status s-claimable';st.innerHTML='<span class="d"></span> Claimable';
-      cnt.textContent='0';lab.textContent='ready';rfg.style.strokeDashoffset=0;rfg.style.stroke='var(--warn)';cb.disabled=false;
-      el('checkinfo').textContent='You went silent past the deadline';
-    }else{
-      var grace=inGrace();
-      st.className='status '+(grace?'s-grace':'s-active');st.innerHTML='<span class="d"></span> '+(grace?'Grace period':'Active');
-      cnt.textContent=daysLeft();lab.textContent='days left';
-      rfg.style.strokeDashoffset=C*(1-left/total);rfg.style.stroke=grace?'var(--warn)':'url(#rg)';cb.disabled=true;
-      el('checkinfo').textContent=grace?('Reminder: check in within '+daysLeft()+' days'):('Next check-in due in '+daysLeft()+' days');
+    function connectWallet() {
+      el('wchip').textContent = owner; el('wchip').classList.remove('hidden');
+      var hcb = el('headerConnectBtn'); if (hcb) { hcb.classList.add('hidden'); }
+      show('create'); addBen(); addBen(); updateShares();
     }
-    renderHeirs();renderSched();
-  }
 
-  function checkIn(){if(state.claimed)return;state.lastCheckIn=now();log('<b>check_in()</b> proof of life. Timer reset.');render();}
-  function openDeposit(){if(state.claimed)return;var a=parseFloat(prompt('Deposit how many XLM?','500'));if(!a||a<=0)return;state.balance+=a;log('<b>deposit()</b> +'+a.toFixed(0)+' XLM.');render();}
-  function withdraw(){if(state.claimed)return;var a=parseFloat(prompt('Withdraw how many XLM? (also resets your timer)','200'));if(!a||a<=0)return;if(a>state.balance){alert('Not enough balance.');return;}state.balance-=a;state.lastCheckIn=now();log('<b>withdraw()</b> -'+a.toFixed(0)+' XLM (activity, timer reset).');render();}
-  function goSilent(){if(state.claimed)return;state.lastCheckIn=now()-(state.months*MONTH+DAY);log('<b>Owner goes silent.</b> No activity past the deadline.');render();}
-  function claim(){
-    if(!claimable())return;
-    var total=state.balance,dist=0,lines=[];
-    state.benes.forEach(function(b,i){
-      var amt=i===state.benes.length-1?(total-dist):Math.floor(total*b.share/100*100)/100;
-      dist+=amt;lines.push('Heir '+(i+1)+' received '+amt.toFixed(2)+' XLM');
-    });
-    state.balance=0;state.claimed=true;
-    log('<b>claim()</b> permissionless payout executed. Vault emptied.');
-    var p=el('payout');p.style.display='block';p.innerHTML='🎉 <b>Payout complete</b><br>'+lines.join('<br>');
-    render();
-  }
+    function addBen() {
+      benCount++;
+      var wrap = document.createElement('div'); wrap.className = 'ben-row';
+      wrap.innerHTML = '<input placeholder="Beneficiary Stellar address (G...)" data-k="addr" />' +
+        '<input type="number" min="0" max="100" placeholder="%" data-k="share" oninput="updateShares()" />' +
+        '<button class="ben-del" title="Remove" onclick="this.parentNode.remove();updateShares()">&times;</button>';
+      el('benList').appendChild(wrap);
+      updateShares();
+    }
+    function beneRows() { return [].slice.call(el('benList').querySelectorAll('.ben-row')); }
+    function updateShares() {
+      var sum = 0; beneRows().forEach(function (r) { sum += parseFloat(r.querySelector('[data-k=share]').value) || 0; });
+      var t = el('shareTotal'); t.textContent = sum + '%'; t.className = sum === 100 ? 'good' : 'bad';
+      el('createBtn').disabled = !(sum === 100);
+      return sum;
+    }
 
-  // starfield
-  (function(){var c=el('stars'),x=c.getContext('2d'),W,H,st=[];
-    function size(){W=c.width=innerWidth;H=c.height=innerHeight;}size();addEventListener('resize',size);
-    for(var i=0;i<150;i++){var d=Math.random();st.push({x:Math.random()*W,y:Math.random()*H,r:d*1.3+.3,t:Math.random()*6.28,tw:Math.random()*.03+.01,vy:.04+d*.14});}
-    function loop(){x.clearRect(0,0,W,H);for(var i=0;i<st.length;i++){var s=st[i];s.t+=s.tw;s.y+=s.vy;if(s.y>H+2){s.y=-2;s.x=Math.random()*W;}var a=.3+.4*(Math.sin(s.t)*.5+.5);x.globalAlpha=a;x.fillStyle='#dfe7ff';x.beginPath();x.arc(s.x,s.y,s.r,0,7);x.fill();}x.globalAlpha=1;requestAnimationFrame(loop);}loop();
-  })();
+    function createVault() {
+      var benes = [];
+      var ok = true;
+      beneRows().forEach(function (r, i) {
+        var addr = r.querySelector('[data-k=addr]').value.trim();
+        var share = parseFloat(r.querySelector('[data-k=share]').value) || 0;
+        if (!addr) { ok = false; }
+        benes.push({ addr: addr || ('G...' + (i + 1)), share: share });
+      });
+      if (!ok) { alert('Please paste a Stellar address for each beneficiary.'); return; }
+      if (updateShares() !== 100) { alert('Shares must total exactly 100%.'); return; }
+      var months = parseInt(el('interval').value, 10);
+      var grace = parseInt(el('grace').value, 10) || 7;
+      state = {
+        balance: parseFloat(el('depAmt').value) || 0, benes: benes, months: months, grace: grace,
+        lastCheckIn: Date.now(), claimed: false
+      };
+      show('dash');
+      log('<b>Vault created.</b> ' + state.balance.toFixed(0) + ' XLM locked, ' + benes.length + ' beneficiaries, ' + months + '-month check-in.');
+      render(); if (!window._t) { window._t = setInterval(render, 1000); }
+    }
 
-  (function(){
-    var mb=document.getElementById('menuBtn'), mm=document.getElementById('mobileMenu'); if(!mb)return;
-    mb.addEventListener('click',function(){mm.classList.toggle('open');mb.classList.toggle('active');});
-    mm.addEventListener('click',function(e){if(e.target===mm){mm.classList.remove('open');mb.classList.remove('active');}});
-    mm.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){mm.classList.remove('open');mb.classList.remove('active');});});
-  })();
-</script>
+    function deadline() { return state.lastCheckIn + state.months * MONTH; }
+    function graceStart() { return deadline() - state.grace * DAY; }
+    function now() { return Date.now(); }
+    function daysLeft() { return Math.max(0, Math.ceil((deadline() - now()) / DAY)); }
+    function claimable() { return !state.claimed && now() >= deadline(); }
+    function inGrace() { return !state.claimed && now() >= graceStart() && now() < deadline(); }
+
+    function fmtDate(ms) { var d = new Date(ms); var mo = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; return mo[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear(); }
+    function initials(a) { return a.replace(/[^A-Za-z0-9]/g, '').slice(0, 2).toUpperCase(); }
+
+    function log(msg) {
+      var li = document.createElement('li'); var d = new Date();
+      var s = ('0' + d.getHours()).slice(-2) + ':' + ('0' + d.getMinutes()).slice(-2) + ':' + ('0' + d.getSeconds()).slice(-2);
+      li.innerHTML = '<span class="t">' + s + '</span><span>' + msg + '</span>';
+      var ul = el('log'); ul.insertBefore(li, ul.firstChild);
+    }
+
+    function renderHeirs() {
+      var box = el('heirs'); box.innerHTML = '';
+      state.benes.forEach(function (b, i) {
+        var amt = state.balance * b.share / 100;
+        var short = b.addr.length > 12 ? b.addr.slice(0, 6) + '…' + b.addr.slice(-4) : b.addr;
+        var d = document.createElement('div'); d.className = 'heir';
+        d.innerHTML = '<div class="av" style="background:' + colors[i % 5] + '">' + initials(b.addr) + '</div>' +
+          '<div><div style="font-size:13.5px;font-weight:600">Heir ' + (i + 1) + '</div><div class="addr">' + short + '</div></div>' +
+          '<div class="r"><div class="amt">' + amt.toFixed(2) + ' XLM</div><div class="pct">' + b.share + '%</div></div>';
+        box.appendChild(d);
+      });
+    }
+    function renderSched() {
+      el('sched').innerHTML =
+        '<div class="r"><span>Check-in interval</span><span>Every ' + state.months + ' months</span></div>' +
+        '<div class="r"><span>Deadline (if no check-in)</span><span>' + fmtDate(deadline()) + '</span></div>' +
+        '<div class="r"><span>Grace / reminders</span><span>Daily, last ' + state.grace + ' days</span></div>' +
+        '<div class="r"><span>Reminders start</span><span>' + fmtDate(graceStart()) + '</span></div>';
+      el('reminderNote').innerHTML = 'Any withdraw or check-in from your wallet resets the timer. If you stay silent past the deadline, your XLM transfers to your beneficiaries automatically.';
+    }
+    function render() {
+      if (!state) return;
+      el('bal').textContent = state.balance.toFixed(2);
+      var st = el('status'), cb = el('claimBtn'), cnt = el('count'), lab = el('ringlab'), rfg = el('rfg');
+      var C = 2 * Math.PI * 65; rfg.style.strokeDasharray = C;
+      var total = state.months * MONTH, left = Math.max(0, deadline() - now());
+      if (state.claimed) {
+        st.className = 'status s-claimed'; st.innerHTML = '<span class="d"></span> Claimed';
+        cnt.textContent = '✓'; lab.textContent = 'distributed'; rfg.style.strokeDashoffset = 0; rfg.style.stroke = '#34d399'; cb.disabled = true;
+        el('checkinfo').textContent = 'Funds distributed to beneficiaries';
+      } else if (claimable()) {
+        st.className = 'status s-claimable'; st.innerHTML = '<span class="d"></span> Claimable';
+        cnt.textContent = '0'; lab.textContent = 'ready'; rfg.style.strokeDashoffset = 0; rfg.style.stroke = 'var(--warn)'; cb.disabled = false;
+        el('checkinfo').textContent = 'You went silent past the deadline';
+      } else {
+        var grace = inGrace();
+        st.className = 'status ' + (grace ? 's-grace' : 's-active'); st.innerHTML = '<span class="d"></span> ' + (grace ? 'Grace period' : 'Active');
+        cnt.textContent = daysLeft(); lab.textContent = 'days left';
+        rfg.style.strokeDashoffset = C * (1 - left / total); rfg.style.stroke = grace ? 'var(--warn)' : 'url(#rg)'; cb.disabled = true;
+        el('checkinfo').textContent = grace ? ('Reminder: check in within ' + daysLeft() + ' days') : ('Next check-in due in ' + daysLeft() + ' days');
+      }
+      renderHeirs(); renderSched();
+    }
+
+    function checkIn() { if (state.claimed) return; state.lastCheckIn = now(); log('<b>check_in()</b> proof of life. Timer reset.'); render(); }
+    function openDeposit() { if (state.claimed) return; var a = parseFloat(prompt('Deposit how many XLM?', '500')); if (!a || a <= 0) return; state.balance += a; log('<b>deposit()</b> +' + a.toFixed(0) + ' XLM.'); render(); }
+    function withdraw() { if (state.claimed) return; var a = parseFloat(prompt('Withdraw how many XLM? (also resets your timer)', '200')); if (!a || a <= 0) return; if (a > state.balance) { alert('Not enough balance.'); return; } state.balance -= a; state.lastCheckIn = now(); log('<b>withdraw()</b> -' + a.toFixed(0) + ' XLM (activity, timer reset).'); render(); }
+    function goSilent() { if (state.claimed) return; state.lastCheckIn = now() - (state.months * MONTH + DAY); log('<b>Owner goes silent.</b> No activity past the deadline.'); render(); }
+    function claim() {
+      if (!claimable()) return;
+      var total = state.balance, dist = 0, lines = [];
+      state.benes.forEach(function (b, i) {
+        var amt = i === state.benes.length - 1 ? (total - dist) : Math.floor(total * b.share / 100 * 100) / 100;
+        dist += amt; lines.push('Heir ' + (i + 1) + ' received ' + amt.toFixed(2) + ' XLM');
+      });
+      state.balance = 0; state.claimed = true;
+      log('<b>claim()</b> permissionless payout executed. Vault emptied.');
+      var p = el('payout'); p.style.display = 'block'; p.innerHTML = '🎉 <b>Payout complete</b><br>' + lines.join('<br>');
+      render();
+    }
+
+    // starfield
+    (function () {
+      var c = el('stars'), x = c.getContext('2d'), W, H, st = [];
+      function size() { W = c.width = innerWidth; H = c.height = innerHeight; } size(); addEventListener('resize', size);
+      for (var i = 0; i < 150; i++) { var d = Math.random(); st.push({ x: Math.random() * W, y: Math.random() * H, r: d * 1.3 + .3, t: Math.random() * 6.28, tw: Math.random() * .03 + .01, vy: .04 + d * .14 }); }
+      function loop() { x.clearRect(0, 0, W, H); for (var i = 0; i < st.length; i++) { var s = st[i]; s.t += s.tw; s.y += s.vy; if (s.y > H + 2) { s.y = -2; s.x = Math.random() * W; } var a = .3 + .4 * (Math.sin(s.t) * .5 + .5); x.globalAlpha = a; x.fillStyle = '#dfe7ff'; x.beginPath(); x.arc(s.x, s.y, s.r, 0, 7); x.fill(); } x.globalAlpha = 1; requestAnimationFrame(loop); } loop();
+    })();
+
+    (function () {
+      var mb = document.getElementById('menuBtn'), mm = document.getElementById('mobileMenu'); if (!mb) return;
+      mb.addEventListener('click', function () { mm.classList.toggle('open'); mb.classList.toggle('active'); });
+      mm.addEventListener('click', function (e) { if (e.target === mm) { mm.classList.remove('open'); mb.classList.remove('active'); } });
+      mm.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { mm.classList.remove('open'); mb.classList.remove('active'); }); });
+    })();
+  </script>
 </body>
+
 </html>
