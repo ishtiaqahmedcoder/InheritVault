@@ -9,7 +9,7 @@
 
 ---
 
-## 💡 What it does
+## What it does
 
 Each user deploys their own personal vault contract and deposits USDC or XLM. The contract tracks one thing: **the time since the owner's last check-in**.
 
@@ -19,7 +19,7 @@ Each user deploys their own personal vault contract and deposits USDC or XLM. Th
 
 ---
 
-## ✨ Features
+## Features
 
 * **Non-Custodial:** Keys never leave your wallet.
 * **Safety Buffer (Grace Period):** A daily reminder grace period ensures that a single missed check-in won't trigger a payout.
@@ -29,7 +29,7 @@ Each user deploys their own personal vault contract and deposits USDC or XLM. Th
 
 ---
 
-## 🛠️ Tech Stack & Structure
+## Tech Stack & Structure
 
 * **Smart Contracts:** Written in Rust for the **Stellar / Soroban** smart contract platform.
 * **Frontend:** Interactive mockup dashboard & landing page built with vanilla HTML/JS/CSS.
@@ -53,7 +53,7 @@ InheritVault/
 
 ---
 
-## 🚀 Running the Project Locally
+## Running the Project Locally
 
 ### 1. Smart Contract (Rust / Soroban)
 
@@ -107,7 +107,7 @@ If your local `.test` domain is not resolving, start a quick local server using 
 
 ---
 
-## 📝 Smart Contract API
+## Smart Contract API
 
 | Function | Caller | Purpose |
 |---|---|---|
@@ -120,10 +120,3 @@ If your local `.test` domain is not resolving, start a quick local server using 
 | `claim()` | Anyone | After silence deadline passes, distribute funds to heirs |
 
 ---
-
-## ⚖️ License
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
-> [!CAUTION]
-> **Disclaimer:** InheritVault is open-source, non-custodial software. It is not a legal will, a bank, or an estate-planning service. On-chain inheritance complements, and does not replace, proper legal and estate planning.
