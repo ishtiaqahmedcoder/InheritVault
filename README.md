@@ -1,4 +1,4 @@
-# InheritVault 🔐
+# InheritVault
 
 > **A non-custodial, on-chain inheritance vault (a "dead-man's switch") for Stellar and Soroban.**
 > Lock your funds, check in periodically, and if you ever go silent, your assets pass automatically to the people you chose—with no lawyer, no custodians, and no companies holding your keys.
