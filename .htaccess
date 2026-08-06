@@ -1,0 +1,7 @@
+RewriteEngine On
+
+# 1. Do not rewrite if the request is already for the /web directory
+RewriteCond %{REQUEST_URI} !^/web/
+
+# 2. Rewrite all other requests to the /web directory
+RewriteRule ^(.*)$ web/$1 [L]
